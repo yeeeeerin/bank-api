@@ -5,7 +5,7 @@ import com.depromeet.bank.dto.TokenDto;
 
 public interface MemberService {
 
-    void createMember(TokenDto dto);
+    String createMember(TokenDto dto);
 
 
 }
