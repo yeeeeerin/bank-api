@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController("/members")
 public class MemberController {
 
-    final MemberService memberService;
+    private final MemberService memberService;
 
     public MemberController(MemberService memberService){
         this.memberService = memberService;

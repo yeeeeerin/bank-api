@@ -8,11 +8,11 @@ import lombok.Setter;
 @Getter
 public class ResponseDto<T> {
 
-    int status;
+    private int status;
 
-    String message;
+    private String message;
 
-    T response;
+    private T response;
 
     public ResponseDto(int status, String message) {
         this.status = status;

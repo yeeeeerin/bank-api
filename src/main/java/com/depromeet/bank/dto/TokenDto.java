@@ -11,6 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TokenDto {
 
-    String token;
+    private String token;
 
 }
