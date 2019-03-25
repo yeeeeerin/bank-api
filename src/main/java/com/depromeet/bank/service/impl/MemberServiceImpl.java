@@ -9,6 +9,7 @@ import com.depromeet.bank.utils.JwtFactory;
 import com.depromeet.bank.vo.SocialMemberVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -21,6 +22,7 @@ public class MemberServiceImpl implements MemberService {
     private final JwtFactory jwtFactory;
 
     @Override
+    @Transactional
     public String createMember(TokenDto dto) {
 
         SocialMemberVo memberVo = socialFetchService.getSocialUserInfo(dto);
