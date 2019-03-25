@@ -29,6 +29,7 @@ public class JwtFactory {
         token = JWT.create()
                 .withIssuer(jwtSettings.getTokenIssuer())
                 .withClaim("USERNAME", member.getName())
+                .withClaim("ID",member.getId())
                 .sign(Algorithm.HMAC256(jwtSettings.getTokenSigningKey()));
 
         log.info("token -- " + token);
@@ -52,7 +53,7 @@ public class JwtFactory {
 
         Map<String, Claim> claims = decodedJWT.getClaims();
 
-        return claims.get("USERNAME").asString();
+        return claims.get("ID").asString();
     }
 
     private String tokenExtractor(String header){
