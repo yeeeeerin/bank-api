@@ -10,6 +10,8 @@ import com.depromeet.bank.vo.SocialMemberVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
@@ -23,10 +25,18 @@ public class MemberServiceImpl implements MemberService {
 
         SocialMemberVo memberVo = socialFetchService.getSocialUserInfo(dto);
 
-        Member member = new Member();
-        member.setName(memberVo.getUserName());
-        member.setProfileHref(memberVo.getProfileHref());
-        member.setSocialId(memberVo.getId());
+
+        Member member;
+
+        Optional<Member> memberOptional = memberRepository.findBySocialId(memberVo.getUserId());
+        if(memberOptional.isPresent()){
+            member = memberOptional.get();
+        }else {
+            member = new Member();
+            member.setName(memberVo.getUserName());
+            member.setProfileHref(memberVo.getProfileHref());
+            member.setSocialId(memberVo.getId());
+        }
 
         memberRepository.save(member);
 
@@ -35,4 +45,6 @@ public class MemberServiceImpl implements MemberService {
         return jwt;
 
     }
+
+
 }

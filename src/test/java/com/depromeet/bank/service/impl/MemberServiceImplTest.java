@@ -30,15 +30,24 @@ public class MemberServiceImplTest {
 
     @Before
     public void setup() {
-        this.tokenDto = new TokenDto( "KeA8P6SgKrzQM2rs0XQ7oybYyJndSAR9Qxk7sgopyNoAAAFpr8kSpg");
+        this.tokenDto = new TokenDto( "x6n6QvcJhH-nJPHgaasGzgDjUbLofvh-pZjBywopyNkAAAFpskMpHg");
     }
 
     @Test
     public void createMemberTest(){
+        
+        // given
         memberService.createMember(tokenDto);
-        Member member = memberRepository.findByName("이예린").get();
 
+        // when
+        Member member = memberRepository.findByName("이예린").get();
+        memberService.createMember(tokenDto);
+
+        // then
         assertThat(member.getName(),is("이예린"));
+        assertThat(memberRepository.findAll().size(),is(1));
 
     }
+
+
 }
