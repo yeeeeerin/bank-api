@@ -25,7 +25,7 @@ public class MemberController {
 
 
         ResponseDto<TokenDto> responseDto = new ResponseDto<>(200,"회원가입에 성공하였습니다.");
-        responseDto.setResponse(tokenDto);
+        responseDto.setResponse(responseTokenDto);
         return responseDto;
 
     }
