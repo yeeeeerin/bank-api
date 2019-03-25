@@ -15,12 +15,13 @@ public class SocialFetchServiceImplTest {
 
     @Before
     public void setup() {
-        this.tokenDto = new TokenDto( "KeA8P6SgKrzQM2rs0XQ7oybYyJndSAR9Qxk7sgopyNoAAAFpr8kSpg");
+        this.tokenDto = new TokenDto("KeA8P6SgKrzQM2rs0XQ7oybYyJndSAR9Qxk7sgopyNoAAAFpr8kSpg");
     }
+
     @Test
     public void service_social() {
 
-        SocialMemberVo socialMemberVo= service.getSocialUserInfo(this.tokenDto);
+        SocialMemberVo socialMemberVo = service.getSocialUserInfo(this.tokenDto);
         assertThat(socialMemberVo.getUserName(), is("이예린"));
     }
 

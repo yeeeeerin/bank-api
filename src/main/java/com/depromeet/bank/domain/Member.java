@@ -13,7 +13,8 @@ import javax.persistence.Id;
 @Getter
 public class Member {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
     private Long socialId;

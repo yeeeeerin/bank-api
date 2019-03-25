@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -29,7 +30,7 @@ public class JwtFactory {
         token = JWT.create()
                 .withIssuer(jwtSettings.getTokenIssuer())
                 .withClaim("USERNAME", member.getName())
-                .withClaim("ID",member.getId())
+                .withClaim("ID", member.getId())
                 .sign(Algorithm.HMAC256(jwtSettings.getTokenSigningKey()));
 
         log.info("token -- " + token);
@@ -38,7 +39,7 @@ public class JwtFactory {
 
     }
 
-    public String decodeToken(String header) {
+    public Optional<String> decodeToken(String header) {
 
         String token = tokenExtractor(header);
 
@@ -48,25 +49,25 @@ public class JwtFactory {
         try {
             decodedJWT = verifier.verify(token);
         } catch (Exception e) {
-            return null;
+            return Optional.empty();
         }
 
         Map<String, Claim> claims = decodedJWT.getClaims();
 
-        return claims.get("ID").asString();
+        return Optional.of(claims.get("ID").asString());
     }
 
-    private String tokenExtractor(String header){
+    private String tokenExtractor(String header) {
         if (StringUtils.isEmpty(header)) {
-            throw new RuntimeException("Authorization header가 없습니다.");
+            throw new IllegalArgumentException("Authorization header가 없습니다.");
         }
 
-        if (header.length() < HEADER_PREFIX.length()) {
-            throw new RuntimeException("authorization header size가 옳지 않습니다.");
+        if (header.length() < HEADER_PREFIX.length() && header.length() > HEADER_PREFIX.length()) {
+            throw new IllegalArgumentException("authorization header size가 옳지 않습니다.");
         }
 
         if (!header.startsWith(HEADER_PREFIX)) {
-            throw new RuntimeException("올바른 header형식이 아닙니다.");
+            throw new IllegalArgumentException("올바른 header형식이 아닙니다.");
         }
 
         return header.substring(HEADER_PREFIX.length());

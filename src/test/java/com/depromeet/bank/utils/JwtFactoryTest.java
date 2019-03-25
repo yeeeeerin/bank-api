@@ -7,17 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Optional;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class JwtFactoryTest {
-    
-    @Autowired
-    JwtFactory jwtFactory;
 
-    String token;
+    @Autowired
+    private JwtFactory jwtFactory;
+
+    private String token;
 
 
     @Before
@@ -27,7 +29,7 @@ public class JwtFactoryTest {
 
 
     @Test(expected = RuntimeException.class)
-    public void decodeExceptionTest(){
+    public void decodeExceptionTest() {
         //given
         String exceptionToken = "gg";
 
@@ -39,14 +41,14 @@ public class JwtFactoryTest {
 
 
     @Test
-    public void decodeTest(){
+    public void decodeTest() {
         //given
 
         //when
-        String resutl = jwtFactory.decodeToken(token);
+        Optional<String> result = jwtFactory.decodeToken(token);
 
         //then
-        assertThat(resutl,is("이예린"));
+        assertThat(result.get(), is("이예린"));
     }
 
 }

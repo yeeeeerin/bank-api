@@ -27,18 +27,14 @@ public class MemberServiceImpl implements MemberService {
 
         SocialMemberVo memberVo = socialFetchService.getSocialUserInfo(dto);
 
-
-        Member member;
-
-        Optional<Member> memberOptional = memberRepository.findBySocialId(memberVo.getUserId());
-        if(memberOptional.isPresent()){
-            member = memberOptional.get();
-        }else {
-            member = new Member();
-            member.setName(memberVo.getUserName());
-            member.setProfileHref(memberVo.getProfileHref());
-            member.setSocialId(memberVo.getId());
-        }
+        Member member = memberRepository.findBySocialId(memberVo.getUserId())
+                .orElseGet(() -> {
+                    Member member1 = new Member();
+                    member1.setName(memberVo.getUserName());
+                    member1.setProfileHref(memberVo.getProfileHref());
+                    member1.setSocialId(memberVo.getId());
+                    return member1;
+                });
 
         memberRepository.save(member);
 
