@@ -9,23 +9,23 @@ import java.util.Map;
 public class SocialMemberVo {
 
     @JsonProperty("id")
-    Long id;
+    private Long id;
     @JsonProperty("properties")
-    Map<String, String> properties;
+    private Map<String, String> properties;
     @JsonProperty("kakao_account")
-    Map<String, Object> account;
+    private Map<String, Object> account;
 
 
     public Long getUserId() {
-        return this.getId();
+        return this.id;
     }
 
     public String getUserName() {
-        return this.getProperties().get("nickname");
+        return this.properties.get("nickname");
     }
 
     public String getProfileHref() {
-        return this.getProperties().get("profile_image");
+        return this.properties.get("profile_image");
     }
 
 }

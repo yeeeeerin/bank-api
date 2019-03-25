@@ -5,10 +5,10 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.auth0.jwt.interfaces.Verification;
+import com.depromeet.bank.config.JwtConfig;
 import com.depromeet.bank.domain.Member;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -17,12 +17,13 @@ import java.util.Optional;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtFactory {
 
-    public static final String HEADER_PREFIX = "Bearer ";
+    private static final String HEADER_PREFIX = "Bearer ";
 
-    @Autowired
-    private JwtSettings jwtSettings;
+    private final JWTVerifier jwtVerifier;
+    private final JwtConfig.JwtSettings jwtSettings;
 
     public String generateToken(Member member) {
         String token;
@@ -43,18 +44,20 @@ public class JwtFactory {
 
         String token = tokenExtractor(header);
 
-        Verification verification = JWT.require(Algorithm.HMAC256(jwtSettings.getTokenSigningKey()));
-        JWTVerifier verifier = verification.build();
         DecodedJWT decodedJWT;
         try {
-            decodedJWT = verifier.verify(token);
+            decodedJWT = jwtVerifier.verify(token);
         } catch (Exception e) {
             return Optional.empty();
         }
 
         Map<String, Claim> claims = decodedJWT.getClaims();
-
-        return Optional.of(claims.get("ID").asString());
+        Claim idClaim = claims.get("ID");
+        if (idClaim == null) {
+            log.warn("Failed to decode jwt token. header:" + header);
+            return Optional.empty();
+        }
+        return Optional.of(idClaim.asString());
     }
 
     private String tokenExtractor(String header) {
@@ -62,8 +65,8 @@ public class JwtFactory {
             throw new IllegalArgumentException("Authorization header가 없습니다.");
         }
 
-        if (header.length() < HEADER_PREFIX.length() && header.length() > HEADER_PREFIX.length()) {
-            throw new IllegalArgumentException("authorization header size가 옳지 않습니다.");
+        if (header.length() < HEADER_PREFIX.length()) {
+            throw new IllegalArgumentException("authorization header size가 옳지 않습니다. header의 길이는 " +  HEADER_PREFIX.length() + " 보다 크거나 같아야 합니다.");
         }
 
         if (!header.startsWith(HEADER_PREFIX)) {
