@@ -22,17 +22,17 @@ public class SocialFetchServiceImpl implements SocialFetchService {
 
         HttpEntity<String> entity = new HttpEntity<>("parameters", createHeader(dto.getToken()));
 
-        return restTemplate.exchange(KakaoProviders.KAKAO.getUserinfoEndpoint(), HttpMethod.GET,entity,SocialMemberVo.class).getBody();
+        return restTemplate.exchange(KakaoProviders.KAKAO.getUserinfoEndpoint(), HttpMethod.GET, entity, SocialMemberVo.class).getBody();
     }
 
-    private HttpHeaders createHeader(String token){
+    private HttpHeaders createHeader(String token) {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Authorization",createHeaderContent(token));
+        httpHeaders.add("Authorization", createHeaderContent(token));
         return httpHeaders;
 
     }
 
-    private String createHeaderContent(String token){
+    private String createHeaderContent(String token) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(HEADER_PREFIX);
         stringBuilder.append(token);

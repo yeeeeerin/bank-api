@@ -11,9 +11,9 @@ public class SocialMemberVo {
     @JsonProperty("id")
     Long id;
     @JsonProperty("properties")
-    Map<String,String> properties;
+    Map<String, String> properties;
     @JsonProperty("kakao_account")
-    Map<String,Object> account;
+    Map<String, Object> account;
 
 
     public Long getUserId() {

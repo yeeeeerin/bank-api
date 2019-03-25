@@ -7,14 +7,14 @@ import org.springframework.stereotype.Component;
 
 
 @Getter
-public enum  KakaoProviders  {
+public enum KakaoProviders {
 
-    KAKAO("KAKAO","https://kapi.kakao.com/v2/user/me");
+    KAKAO("KAKAO", "https://kapi.kakao.com/v2/user/me");
 
     private String name;
     private String userinfoEndpoint;
 
-    KakaoProviders(String name,String userinfoEndpoint){
+    KakaoProviders(String name, String userinfoEndpoint) {
         this.name = name;
         this.userinfoEndpoint = userinfoEndpoint;
     }
