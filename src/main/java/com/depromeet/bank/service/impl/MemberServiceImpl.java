@@ -8,8 +8,14 @@ import com.depromeet.bank.service.SocialFetchService;
 import com.depromeet.bank.utils.JwtFactory;
 import com.depromeet.bank.vo.SocialMemberVo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,5 +46,19 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<Member> getMembers(Pageable pageable) {
+        Assert.notNull(pageable, "'pageable' must not be null");
+        return memberRepository.findAll(pageable).stream()
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Member> getMember(Long memberId) {
+        Assert.notNull(memberId, "'memberId' must not be null");
+        return memberRepository.findById(memberId);
+    }
 
 }

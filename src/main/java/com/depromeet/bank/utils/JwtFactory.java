@@ -40,9 +40,15 @@ public class JwtFactory {
 
     }
 
-    public Optional<String> decodeToken(String header) {
+    public Optional<Long> decodeToken(String header) {
 
-        String token = tokenExtractor(header);
+        String token;
+        try {
+            token = tokenExtractor(header);
+        } catch (IllegalArgumentException ex) {
+            log.warn("Failed to extract token from header. header:" + header, ex);
+            return Optional.empty();
+        }
 
         DecodedJWT decodedJWT;
         try {
@@ -57,7 +63,7 @@ public class JwtFactory {
             log.warn("Failed to decode jwt token. header:" + header);
             return Optional.empty();
         }
-        return Optional.of(idClaim.asString());
+        return Optional.of(idClaim.asLong());
     }
 
     private String tokenExtractor(String header) {
@@ -66,7 +72,7 @@ public class JwtFactory {
         }
 
         if (header.length() < HEADER_PREFIX.length()) {
-            throw new IllegalArgumentException("authorization header size가 옳지 않습니다. header의 길이는 " +  HEADER_PREFIX.length() + " 보다 크거나 같아야 합니다.");
+            throw new IllegalArgumentException("authorization header size가 옳지 않습니다. header의 길이는 " + HEADER_PREFIX.length() + " 보다 크거나 같아야 합니다.");
         }
 
         if (!header.startsWith(HEADER_PREFIX)) {

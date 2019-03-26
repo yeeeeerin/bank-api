@@ -1,6 +1,7 @@
 package com.depromeet.bank.helper;
 
 
+import com.depromeet.bank.domain.Member;
 import com.depromeet.bank.vo.SocialMemberVo;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -20,5 +21,13 @@ public final class TestHelper {
         propertyMap.put("profile_image", imageUrl);
         ReflectionTestUtils.setField(socialMemberVo, "properties", propertyMap);
         return socialMemberVo;
+    }
+
+    public static Member createMember(Long socialId, String name, String profileHref) {
+        Member member = new Member();
+        member.setSocialId(socialId);
+        member.setName(name);
+        member.setProfileHref(profileHref);
+        return member;
     }
 }
