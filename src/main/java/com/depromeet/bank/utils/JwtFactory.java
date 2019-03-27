@@ -40,7 +40,18 @@ public class JwtFactory {
 
     }
 
-    public Optional<Long> decodeToken(String header) {
+    public Optional<Long> getMemberId(String token) {
+        if (StringUtils.isEmpty(token)) {
+            return Optional.empty();
+        }
+        try {
+            return decodeToken(token);
+        } catch (NumberFormatException ex) {
+            return Optional.empty();
+        }
+    }
+
+    private Optional<Long> decodeToken(String header) {
 
         String token;
         try {
@@ -81,5 +92,6 @@ public class JwtFactory {
 
         return header.substring(HEADER_PREFIX.length());
     }
+
 
 }

@@ -1,8 +1,8 @@
-POST http://localhost:8080/members/1/accounts/create
+POST http://localhost:8080/members/accounts/create
 Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5ZXJpbiIsIlVTRVJOQU1FIjoi7J207JiI66awIiwiSUQiOjF9.7sl8zOjlnZ2Lup9Am8ihPgfGzyvcBQ_OU3C437lawt8
 
 {
-  "member_id": 1,
   "name": "계좌계좌",
   "rate": 0.03
 }

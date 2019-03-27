@@ -7,7 +7,6 @@ import lombok.Setter;
 @Setter
 public class AccountDto {
 
-    private Long memberId;
     private String name;
     private Double rate;
 

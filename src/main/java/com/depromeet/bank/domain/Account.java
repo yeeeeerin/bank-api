@@ -3,7 +3,6 @@ package com.depromeet.bank.domain;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -26,7 +25,6 @@ public class Account {
     private Double rate;        //이율
 
     @CreatedDate
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createDateTime;
 
     //todo 상품이 어떻게 만들어지냐에 따라 다를것 같아서 보류

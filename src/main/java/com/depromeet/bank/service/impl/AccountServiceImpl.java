@@ -21,10 +21,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public void createAccount(AccountDto accountDto) throws IllegalAccessException {
+    public void createAccount(AccountDto accountDto, Long memberId) throws IllegalAccessException {
 
         //member가 존재하는지 확인
-        Member member = memberRepository.findById(accountDto.getMemberId())
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalAccessException("회원이 존재하지 않음"));
 
         Account account = new Account();

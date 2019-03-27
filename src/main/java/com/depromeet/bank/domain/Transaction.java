@@ -1,13 +1,12 @@
 package com.depromeet.bank.domain;
 
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-class Transaction {
+public class Transaction {
 
     @Id
     @GeneratedValue
@@ -16,7 +15,6 @@ class Transaction {
     private Integer amount;
 
     @CreatedDate
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dateTime;
 
     @Enumerated(EnumType.STRING)

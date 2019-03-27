@@ -1,8 +1,8 @@
-POST http://localhost:8080/members/join
+POST http://localhost:8080/members
 Content-Type: application/json
 
 {
-  "token": "knDGfSFFe3JgoAbgi2UWGk73nS-Ex6tw7EFBdQo9dRoAAAFpvzXlNw"
+  "token": "UloBHd9EEbW17zUxJj8UEYFbGtLhKg5_mYRrYwo9dVoAAAFpv-X3zQ"
 }
 
 ###

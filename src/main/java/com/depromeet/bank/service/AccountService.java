@@ -4,6 +4,6 @@ import com.depromeet.bank.dto.AccountDto;
 
 public interface AccountService {
 
-    void createAccount(AccountDto accountDto) throws IllegalAccessException;
+    void createAccount(AccountDto accountDto, Long memberId) throws IllegalAccessException;
 
 }

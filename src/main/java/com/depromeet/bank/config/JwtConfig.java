@@ -20,6 +20,7 @@ public class JwtConfig {
     @Value("${jwt.tokenSigningKey}")
     private String tokenSigningKey;
 
+
     @Bean
     public JWTVerifier jwtVerifier() {
         Verification verification = JWT.require(Algorithm.HMAC256(tokenSigningKey));
@@ -30,6 +31,7 @@ public class JwtConfig {
     public JwtSettings jwtSettings() {
         return JwtSettings.of(tokenIssuer, tokenSigningKey);
     }
+
 
     @Getter
     public static class JwtSettings {
