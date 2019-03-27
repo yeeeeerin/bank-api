@@ -4,6 +4,8 @@ import com.depromeet.bank.dto.ResponseDto;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.exception.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class ApiControllerAdvice {
+    public static final Logger log =  LoggerFactory.getLogger(ApiControllerAdvice.class);
 
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
