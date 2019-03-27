@@ -1,9 +1,9 @@
 package com.depromeet.bank.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,11 +13,14 @@ class Transaction {
     @GeneratedValue
     private Long id;
 
-    private int amount;
+    private Integer amount;
 
+    @CreatedDate
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dateTime;
 
-    //이넘으로 거래가 출금인지 입금인지 구분하기
+    @Enumerated(EnumType.STRING)
+    private TransactClassify transactClassify;
 
     @ManyToOne
     private Account account;

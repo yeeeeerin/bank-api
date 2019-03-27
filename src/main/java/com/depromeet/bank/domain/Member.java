@@ -4,12 +4,9 @@ package com.depromeet.bank.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Setter
@@ -26,7 +23,8 @@ public class Member {
 
     private String profileHref;
 
-    @OneToMany(mappedBy = "member")
-    private List<Account> accounts = new ArrayList<>();
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private Set<Account> accounts = new HashSet<>();
+
 
 }

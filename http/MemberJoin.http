@@ -2,7 +2,7 @@ POST http://localhost:8080/members/join
 Content-Type: application/json
 
 {
-  "token" : "x6n6QvcJhH-nJPHgaasGzgDjUbLofvh-pZjBywopyNkAAAFpskMpHg"
+  "token": "knDGfSFFe3JgoAbgi2UWGk73nS-Ex6tw7EFBdQo9dRoAAAFpvzXlNw"
 }
 
 ###
