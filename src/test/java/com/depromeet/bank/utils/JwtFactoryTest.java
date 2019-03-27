@@ -39,15 +39,16 @@ public class JwtFactoryTest {
     }
 
 
-    @Test(expected = RuntimeException.class)
-    public void decodeExceptionTest() {
+    @Test
+    public void decodeFailTest() {
         //given
         String exceptionToken = "gg";
 
         //when
-        jwtFactory.decodeToken(exceptionToken);
+        Optional<Long> result = jwtFactory.decodeToken(exceptionToken);
 
         //then
+        assertThat(result.isPresent(), is(false));
     }
 
 
@@ -62,13 +63,13 @@ public class JwtFactoryTest {
         claimMap.put("ID", mockClaim);
         when(mockDecodedJWT.getClaims()).thenReturn(claimMap);
 
-        when(mockClaim.asString()).thenReturn("이예린");
+        when(mockClaim.asLong()).thenReturn(1L);
 
         //when
-        Optional<String> result = jwtFactory.decodeToken(token);
+        Optional<Long> result = jwtFactory.decodeToken(token);
 
         //then
-        assertThat(result.orElse(""), is("이예린"));
+        assertThat(result.orElse(0L), is(1L));
     }
 
 }

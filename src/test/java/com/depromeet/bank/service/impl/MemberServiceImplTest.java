@@ -53,7 +53,7 @@ public class MemberServiceImplTest {
                 memberRepository,
                 jwtFactory);
         this.tokenDto = new TokenDto("x6n6QvcJhH-nJPHgaasGzgDjUbLofvh-pZjBywopyNkAAAFpskMpHg");
-        member = createMember();
+        member = TestHelper.createMember(MEMBER_KAKAO_ID, MEMBER_NAME, MEMBER_PROFILE_HREF);
     }
 
     @Test(expected = HttpClientErrorException.class)
@@ -96,12 +96,6 @@ public class MemberServiceImplTest {
         assertThat(result, is(TOKEN_OF_YERIN));
     }
 
-    private Member createMember() {
-        Member member1 = new Member();
-        member1.setName(MEMBER_NAME);
-        member1.setProfileHref(MEMBER_PROFILE_HREF);
-        member1.setSocialId(MEMBER_KAKAO_ID);
-        return member1;
-    }
+
 
 }
