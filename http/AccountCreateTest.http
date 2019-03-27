@@ -1,0 +1,10 @@
+POST http://localhost:8080/members/1/accounts/create
+Content-Type: application/json
+
+{
+  "member_id": 1,
+  "name": "계좌계좌",
+  "rate": 0.03
+}
+
+###
