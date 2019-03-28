@@ -1,6 +1,7 @@
 package com.depromeet.bank.helper;
 
 
+import com.depromeet.bank.domain.Account;
 import com.depromeet.bank.domain.Member;
 import com.depromeet.bank.vo.SocialMemberVo;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -29,5 +30,13 @@ public final class TestHelper {
         member.setName(name);
         member.setProfileHref(profileHref);
         return member;
+    }
+
+    public static Account createAccount(String name, Integer balance, Double rate) {
+        return Account.builder()
+                .name(name)
+                .balance(balance)
+                .rate(rate)
+                .build();
     }
 }

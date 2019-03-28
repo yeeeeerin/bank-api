@@ -1,7 +1,10 @@
 package com.depromeet.bank.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -10,8 +13,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Setter
 @Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Account {
 
     @Id
@@ -28,7 +33,6 @@ public class Account {
     private LocalDateTime createDateTime;
 
     //todo 상품이 어떻게 만들어지냐에 따라 다를것 같아서 보류
-    //@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     //private LocalDateTime expireDateTime;
 
     @ManyToOne
@@ -36,6 +40,7 @@ public class Account {
     private Member member;
 
     @OneToMany(mappedBy = "account")
+    @JsonIgnore
     private Set<Transaction> transactions = new HashSet<>();
 
 
