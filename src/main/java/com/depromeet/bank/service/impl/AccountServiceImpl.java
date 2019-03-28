@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +29,9 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public void createAccount(AccountDto accountDto, Long memberId) throws IllegalAccessException {
 
-        //member가 존재하는지 확인
+        Assert.notNull(memberId, "'memberId' must not be null");
+        Assert.notNull(accountDto, "'accountDto' must not be null");
+
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalAccessException("회원이 존재하지 않음"));
 
@@ -44,11 +47,13 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Account> getAccount(Long memberId, int page) throws IllegalAccessException {
 
-        //member가 존재하는지 확인
-        Member member = memberRepository.findById(memberId)
+        Assert.notNull(memberId, "'memberId' must not be null");
+        Assert.notNull(page, "'page' must not be null");
+
+        memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalAccessException("회원이 존재하지 않음"));
 
         Pageable pageable = PageRequest.of(page, 10);
@@ -56,6 +61,13 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findAllByMember_Id(memberId, pageable).stream()
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    @Transactional
+    public void deleteAccount(Long accountId) {
+        Assert.notNull(accountId, "'accountId' must not be null");
+        accountRepository.deleteById(accountId);
     }
 
 }

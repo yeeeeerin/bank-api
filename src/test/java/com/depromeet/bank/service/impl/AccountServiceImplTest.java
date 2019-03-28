@@ -29,24 +29,29 @@ public class AccountServiceImplTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
     private AccountService accountService;
+
     private Member member;
     private Account account;
 
     @Before
     public void setup() {
-        accountService = new AccountServiceImpl(accountRepository, memberRepository);
         member = TestHelper.createMember(1L, "yerin", "http://test.png");
-        account = TestHelper.createAccount("하나계좌", 0, 0.0);
+        memberRepository.save(member);
+
+        for (int i = 0; i < 20; i++) {
+            account = TestHelper.createAccount("하나계좌", 0, 0.0, member);
+            accountRepository.save(account);
+        }
     }
 
-    //todo 테스트 성공시키기
+
     @Test
     public void 계좌_페이징_테스트() throws IllegalAccessException {
-        memberRepository.save(member);
-        accountRepository.save(account);
 
         List<Account> accountList = accountService.getAccount(member.getId(), 0);
-        assertThat(accountList.size(), is(1));
+        assertThat(accountList.size(), is(10));
+
     }
 }

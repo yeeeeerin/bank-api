@@ -11,4 +11,6 @@ public interface AccountService {
 
     List<Account> getAccount(Long memberId, int page) throws IllegalAccessException;
 
+    void deleteAccount(Long accountId);
+
 }
