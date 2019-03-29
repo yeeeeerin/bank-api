@@ -2,7 +2,9 @@ package com.depromeet.bank.dto;
 
 import com.depromeet.bank.domain.Instrument;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.util.Assert;
 
@@ -10,6 +12,7 @@ import java.time.ZonedDateTime;
 
 @Getter
 @ToString
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InstrumentResponse {
     private Long id;
     private String name;

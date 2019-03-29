@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-public class IntrumentController {
+public class InstrumentController {
 
     private final InstrumentService instrumentService;
 

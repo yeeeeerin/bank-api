@@ -1,7 +1,9 @@
 package com.depromeet.bank.dto;
 
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
@@ -9,6 +11,7 @@ import java.util.Optional;
 
 @Setter
 @Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ResponseDto<T> {
 
     private int status;
