@@ -1,14 +1,13 @@
 package com.depromeet.bank.dto;
 
 import com.depromeet.bank.domain.Instrument;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.util.Assert;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 @Getter
 @ToString
@@ -17,10 +16,9 @@ public class InstrumentResponse {
     private Long id;
     private String name;
     private String description;
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
-    private ZonedDateTime expiredAt;
+    private LocalDateTime expiredAt;
 
-    private InstrumentResponse(Long id, String name, String description, ZonedDateTime expiredAt) {
+    private InstrumentResponse(Long id, String name, String description, LocalDateTime expiredAt) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -32,7 +30,7 @@ public class InstrumentResponse {
         Long id = instrument.getId();
         String name = instrument.getName();
         String description = instrument.getDescription();
-        ZonedDateTime expiredAt = instrument.getExpiredAt();
+        LocalDateTime expiredAt = instrument.getExpiredAt().toLocalDateTime().plusHours(9);
         return new InstrumentResponse(id, name, description, expiredAt);
     }
 }

@@ -26,6 +26,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -79,7 +80,7 @@ public class InstrumentTest {
                 .andExpect(jsonPath("$.response.name").value(request.getName()))
                 .andExpect(jsonPath("$.response.description").value(request.getDescription()))
                 .andExpect(jsonPath("$.response.expiredAt")
-                        .value(request.getExpiredAt().toInstant().toEpochMilli() / 1000));
+                        .value(request.getExpiredAt().toLocalDateTime().toString()));
     }
 
     @Test
@@ -97,6 +98,7 @@ public class InstrumentTest {
         mockMvc.perform(get("/instruments")
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader))
                 // then
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.response").isArray())
                 .andExpect(jsonPath("$.response.[0]").exists())
@@ -186,7 +188,7 @@ public class InstrumentTest {
         assertThat(instrumentResponse.getId()).isEqualTo(instrumentId);
         assertThat(instrumentResponse.getName()).isEqualTo("afterName");
         assertThat(instrumentResponse.getDescription()).isEqualTo(request.getDescription());
-        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt());
+        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt().toLocalDateTime());
     }
 
     @Test
@@ -215,7 +217,7 @@ public class InstrumentTest {
         assertThat(instrumentResponse.getId()).isEqualTo(instrumentId);
         assertThat(instrumentResponse.getName()).isEqualTo(request.getName());
         assertThat(instrumentResponse.getDescription()).isEqualTo("afterDescription");
-        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt());
+        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt().toLocalDateTime());
     }
 
     @Test
@@ -244,7 +246,7 @@ public class InstrumentTest {
         assertThat(instrumentResponse.getId()).isEqualTo(instrumentId);
         assertThat(instrumentResponse.getName()).isEqualTo(request.getName());
         assertThat(instrumentResponse.getDescription()).isEqualTo(request.getDescription());
-        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt());
+        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt().toLocalDateTime());
     }
 
     @Test
@@ -273,7 +275,7 @@ public class InstrumentTest {
         assertThat(instrumentResponse.getId()).isEqualTo(instrumentId);
         assertThat(instrumentResponse.getName()).isEqualTo(request.getName());
         assertThat(instrumentResponse.getDescription()).isEqualTo(request.getDescription());
-        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt());
+        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt().toLocalDateTime());
     }
 
     @Test
