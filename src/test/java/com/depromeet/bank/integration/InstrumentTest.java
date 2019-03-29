@@ -1,4 +1,4 @@
-package com.depromeet.bank.controller;
+package com.depromeet.bank.integration;
 
 import com.depromeet.bank.domain.Member;
 import com.depromeet.bank.dto.InstrumentRequest;
@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Transactional
-public class InstrumentControllerTest {
+public class InstrumentTest {
     private static final TypeReference<ResponseDto<List<InstrumentResponse>>> TYPE_REFERENCE_IR_LIST =
             new TypeReference<ResponseDto<List<InstrumentResponse>>>() {
             };
