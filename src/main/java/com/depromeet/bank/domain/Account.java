@@ -43,6 +43,7 @@ public class Account {
 
     @OneToMany(mappedBy = "account")
     @JsonIgnore
+    @Builder.Default
     private Set<Transaction> transactions = new HashSet<>();
 
 
