@@ -22,7 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SuppressWarnings("NonAsciiCharacters")
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -60,10 +59,10 @@ public class GetMembersTest {
     @Test
     public void 회원_목록_조회__토큰이_유효하지_않은_경우__401_응답() throws Exception {
         // given
-        String invalidAuthentication = "invalidToken";
+        String invalidAuthorization = "invalidToken";
         // when
         mockMvc.perform(get("/members")
-                .header("authentication", invalidAuthentication))
+                .header("authorization", invalidAuthorization))
                 // then
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
@@ -73,10 +72,10 @@ public class GetMembersTest {
     @Test
     public void 회원_목록_조회__조건에_맞는_회원이_없으면_빈_리스트로_응답() throws Exception {
         // given
-        String authentication = "Bearer " + jwtFactory.generateToken(haeseong);
+        String authorization = "Bearer " + jwtFactory.generateToken(haeseong);
         // when
         mockMvc.perform(get("/members?size=10&page=10")
-                .header("authentication", authentication))
+                .header("authorization", authorization))
                 // then
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -88,10 +87,10 @@ public class GetMembersTest {
     @Test
     public void 회원_목록_조회__성공() throws Exception {
         // given
-        String authentication = "Bearer " + jwtFactory.generateToken(haeseong);
+        String authorization = "Bearer " + jwtFactory.generateToken(haeseong);
         // when
         mockMvc.perform(get("/members")
-                .header("authentication", authentication))
+                .header("authorization", authorization))
                 // then
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -105,10 +104,10 @@ public class GetMembersTest {
     @Test
     public void 회원_조회__토큰이_유효하지_않으면_401_응답() throws Exception {
         // given
-        String invalidAuthentication = "Bearer ";
+        String invalidAuthorization = "Bearer ";
         // when
         mockMvc.perform(get("/members/{memberId}", haeseong.getId())
-                .header("authentication", invalidAuthentication))
+                .header("authorization", invalidAuthorization))
                 // then
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
@@ -119,11 +118,11 @@ public class GetMembersTest {
     @Test
     public void 회원_조회__주어진_id_의_회원이_없으면_404_응답() throws Exception {
         // given
-        String authentication = "Bearer " + jwtFactory.generateToken(haeseong);
+        String authorization = "Bearer " + jwtFactory.generateToken(haeseong);
         Long notExistMemberId = 12345678901L;
         // when
         mockMvc.perform(get("/members/{memberId}", notExistMemberId)
-                .header("authentication", authentication))
+                .header("authorization", authorization))
                 // then
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -134,10 +133,10 @@ public class GetMembersTest {
     @Test
     public void 회원_조회__다른회원_조회_성공() throws Exception {
         // given
-        String authentication = "Bearer " + jwtFactory.generateToken(haeseong);
+        String authorization = "Bearer " + jwtFactory.generateToken(haeseong);
         // when
         mockMvc.perform(get("/members/{memberId}", yerin.getId())
-                .header("authentication", authentication))
+                .header("authorization", authorization))
                 // then
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -148,10 +147,10 @@ public class GetMembersTest {
     @Test
     public void 자기자신_조회__토큰이_유효하지_않은_경우_401_응답() throws Exception {
         // given
-        String invalidAuthentication = "Bearer ";
+        String invalidAuthorization = "Bearer ";
         // when
         mockMvc.perform(get("/members/me")
-                .header("authentication", invalidAuthentication))
+                .header("authorization", invalidAuthorization))
                 // then
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
@@ -162,10 +161,10 @@ public class GetMembersTest {
     @Test
     public void 자기자신_조회__성공() throws Exception {
         // given
-        String authentication = "Bearer " + jwtFactory.generateToken(haeseong);
+        String authorization = "Bearer " + jwtFactory.generateToken(haeseong);
         // when
         mockMvc.perform(get("/members/me")
-                .header("authentication", authentication))
+                .header("authorization", authorization))
                 // then
                 .andDo(print())
                 .andExpect(status().isOk())

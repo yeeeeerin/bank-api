@@ -6,6 +6,7 @@ import com.depromeet.bank.helper.TestHelper;
 import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.MemberRepository;
 import com.depromeet.bank.service.AccountService;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,7 @@ import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Slf4j
 public class AccountServiceImplTest {
 
     @Autowired
@@ -41,16 +43,22 @@ public class AccountServiceImplTest {
         memberRepository.save(member);
 
         for (int i = 0; i < 20; i++) {
-            account = TestHelper.createAccount("하나계좌", 0, 0.0, member);
+            account = TestHelper.createAccount("하나계좌", 0L, 0.0, member);
             accountRepository.save(account);
         }
+        log.info("date : " + String.valueOf(account.getCreatedAt()));
+
     }
 
 
     @Test
-    public void 계좌_페이징_테스트() throws IllegalAccessException {
+    public void 계좌_페이징_테스트() {
+        //given
 
+        //when
         List<Account> accountList = accountService.getAccount(member.getId(), 0);
+
+        //then
         assertThat(accountList.size(), is(10));
 
     }

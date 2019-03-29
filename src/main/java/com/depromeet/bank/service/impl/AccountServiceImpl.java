@@ -3,6 +3,7 @@ package com.depromeet.bank.service.impl;
 import com.depromeet.bank.domain.Account;
 import com.depromeet.bank.domain.Member;
 import com.depromeet.bank.dto.AccountDto;
+import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.MemberRepository;
 import com.depromeet.bank.service.AccountService;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -27,34 +29,33 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public void createAccount(AccountDto accountDto, Long memberId) throws IllegalAccessException {
+    public Optional<Account> createAccount(AccountDto accountDto, Long memberId) {
 
         Assert.notNull(memberId, "'memberId' must not be null");
         Assert.notNull(accountDto, "'accountDto' must not be null");
 
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalAccessException("회원이 존재하지 않음"));
+                .orElseThrow(() -> new NotFoundException("회원이 존재하지 않습니다"));
 
         Account account = Account.builder()
                 .member(member)
                 .name(accountDto.getName())
-                .balance(0)
+                .balance(0L)
                 .rate(accountDto.getRate())
                 .build();
 
         accountRepository.save(account);
 
+        return Optional.of(account);
+
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Account> getAccount(Long memberId, int page) throws IllegalAccessException {
+    public List<Account> getAccount(Long memberId, int page) {
 
         Assert.notNull(memberId, "'memberId' must not be null");
         Assert.notNull(page, "'page' must not be null");
-
-        memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalAccessException("회원이 존재하지 않음"));
 
         Pageable pageable = PageRequest.of(page, 10);
 

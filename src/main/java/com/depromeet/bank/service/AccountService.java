@@ -4,12 +4,13 @@ import com.depromeet.bank.domain.Account;
 import com.depromeet.bank.dto.AccountDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AccountService {
 
-    void createAccount(AccountDto accountDto, Long memberId) throws IllegalAccessException;
+    Optional<Account> createAccount(AccountDto accountDto, Long memberId);
 
-    List<Account> getAccount(Long memberId, int page) throws IllegalAccessException;
+    List<Account> getAccount(Long memberId, int page);
 
     void deleteAccount(Long accountId);
 

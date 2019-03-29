@@ -32,7 +32,7 @@ public final class TestHelper {
         return member;
     }
 
-    public static Account createAccount(String name, Integer balance, Double rate, Member member) {
+    public static Account createAccount(String name, Long balance, Double rate, Member member) {
         return Account.builder()
                 .name(name)
                 .balance(balance)

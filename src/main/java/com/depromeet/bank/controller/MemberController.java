@@ -56,6 +56,17 @@ public class MemberController {
         return ResponseDto.of(HttpStatus.OK, "회원 조회에 성공했습니다.", memberResponses);
     }
 
+    @GetMapping("/members/{memberId:\\d+}")
+    public ResponseDto<MemberResponse> getMember(@RequestHeader(required = false, defaultValue = "") String authorization,
+                                                 @PathVariable Long memberId) {
+        Long memberIdFromToken = jwtFactory.getMemberId(authorization)
+                .orElseThrow(() -> new UnauthorizedException("토큰이 유효하지 않습니다."));
+
+        Member member = memberService.getMember(memberId).orElseThrow(() -> new NotFoundException("회원이 없습니다."));
+        MemberResponse memberResponse = MemberResponse.from(member);
+        return ResponseDto.of(HttpStatus.OK, "회원 조회에 성공했습니다. ", memberResponse);
+    }
+
 
     @GetMapping("/members/me")
     public ResponseDto<MemberResponse> getMe(@RequestHeader(required = false, defaultValue = "") String authorization) {
