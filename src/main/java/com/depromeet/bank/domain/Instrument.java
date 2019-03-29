@@ -39,15 +39,21 @@ public class Instrument {
     }
 
     public Instrument update(InstrumentValue instrumentValue) {
-        Optional.ofNullable(instrumentValue)
-                .map(InstrumentValue::getName)
-                .ifPresent(name -> this.name = name);
-        Optional.ofNullable(instrumentValue)
-                .map(InstrumentValue::getDescription)
-                .ifPresent(description -> this.description = description);
-        Optional.ofNullable(instrumentValue)
-                .map(InstrumentValue::getExpiredAt)
-                .ifPresent(expiredAt -> this.expiredAt = expiredAt);
+        if (instrumentValue == null) {
+            return this;
+        }
+        String requestedName = instrumentValue.getName();
+        if (requestedName != null) {
+            this.name = requestedName;
+        }
+        String requestedDescription = instrumentValue.getDescription();
+        if (requestedDescription != null) {
+            this.description = requestedDescription;
+        }
+        ZonedDateTime requestedExpiredAt = instrumentValue.getExpiredAt();
+        if (requestedExpiredAt != null) {
+            this.expiredAt = requestedExpiredAt;
+        }
         return this;
     }
 }
