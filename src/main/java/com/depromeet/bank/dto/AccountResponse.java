@@ -2,11 +2,13 @@ package com.depromeet.bank.dto;
 
 import com.depromeet.bank.domain.Account;
 import lombok.Builder;
+import lombok.Getter;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 
 @Builder
+@Getter
 public class AccountResponse {
 
     private Long id;
