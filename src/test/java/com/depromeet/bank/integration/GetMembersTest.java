@@ -66,7 +66,6 @@ public class GetMembersTest {
         mockMvc.perform(get("/api/members")
                 .header(AUTHORIZATION_HEADER_NAME, invalidAuthorization))
                 // then
-                .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.response").doesNotExist());
     }
@@ -79,7 +78,6 @@ public class GetMembersTest {
         mockMvc.perform(get("/api/members?size=10&page=10")
                 .header(AUTHORIZATION_HEADER_NAME, authorization))
                 // then
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value(200))
                 .andExpect(jsonPath("$.response").isArray())
@@ -94,7 +92,6 @@ public class GetMembersTest {
         mockMvc.perform(get("/api/members")
                 .header(AUTHORIZATION_HEADER_NAME, authorization))
                 // then
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value(200))
                 .andExpect(jsonPath("$.response").isArray())
@@ -111,7 +108,6 @@ public class GetMembersTest {
         mockMvc.perform(get("/api/members/{memberId}", haeseong.getId())
                 .header(AUTHORIZATION_HEADER_NAME, invalidAuthorization))
                 // then
-                .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.status").value(401))
                 .andExpect(jsonPath("$.response").doesNotExist());
@@ -126,7 +122,6 @@ public class GetMembersTest {
         mockMvc.perform(get("/api/members/{memberId}", notExistMemberId)
                 .header(AUTHORIZATION_HEADER_NAME, authorization))
                 // then
-                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.response").doesNotExist());
@@ -140,7 +135,6 @@ public class GetMembersTest {
         mockMvc.perform(get("/api/members/{memberId}", yerin.getId())
                 .header(AUTHORIZATION_HEADER_NAME, authorization))
                 // then
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value(200))
                 .andExpect(jsonPath("$.response.id").value(yerin.getId()));
@@ -167,7 +161,6 @@ public class GetMembersTest {
         mockMvc.perform(get("/api/members/me")
                 .header("authorization", authorization))
                 // then
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value(200))
                 .andExpect(jsonPath("$.response.id").value(haeseong.getId()));

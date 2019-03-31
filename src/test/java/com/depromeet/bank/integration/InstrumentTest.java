@@ -98,7 +98,6 @@ public class InstrumentTest {
         mockMvc.perform(get("/api/instruments")
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader))
                 // then
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.response").isArray())
                 .andExpect(jsonPath("$.response.[0]").exists())
