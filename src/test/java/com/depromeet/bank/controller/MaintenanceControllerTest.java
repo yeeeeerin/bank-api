@@ -21,8 +21,7 @@ public class MaintenanceControllerTest {
 
     @Test
     public void healthCheck() throws Exception {
-        mockMvc.perform(get("/monitor/l7check"))
-                .andDo(print())
+        mockMvc.perform(get("/api/monitor/l7check"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value("OK"));
     }
