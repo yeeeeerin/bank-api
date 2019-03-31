@@ -9,14 +9,12 @@ import com.depromeet.bank.config.JwtConfig;
 import com.depromeet.bank.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class JwtFactory {
 
@@ -24,6 +22,7 @@ public class JwtFactory {
 
     private final JWTVerifier jwtVerifier;
     private final JwtConfig.JwtSettings jwtSettings;
+
 
     public String generateToken(Member member) {
         String token;
