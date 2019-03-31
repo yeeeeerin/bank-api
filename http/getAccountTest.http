@@ -1,4 +1,4 @@
-GET http://localhost:8080/accounts?page=0
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5ZXJpbiIsIlVTRVJOQU1FIjoi7J207JiI66awIiwiSUQiOjF9.7sl8zOjlnZ2Lup9Am8ihPgfGzyvcBQ_OU3C437lawt8
+GET http://localhost:8080/members
+Authorization: Bearer aaa
 
 ###

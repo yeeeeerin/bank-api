@@ -25,7 +25,10 @@ public class Account {
     @GeneratedValue
     private Long id;
 
+    //형용사 + 명사로 랜덤하게
     private String name;
+
+    //todo 계좌번호
 
     private Long balance;    //잔고
 
