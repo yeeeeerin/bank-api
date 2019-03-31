@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.ZonedDateTime;
-import java.util.Optional;
 
 @Entity
 @Data
@@ -24,7 +23,7 @@ public class Instrument {
     }
 
     private Instrument(String name, String description, ZonedDateTime expiredAt) {
-        this.id = null;
+        id = null;
         this.name = name;
         this.description = description;
         this.expiredAt = expiredAt;
@@ -38,21 +37,22 @@ public class Instrument {
         return new Instrument(name, description, expiredAt);
     }
 
+    //todo 뭔가 전 방법이 더 괜찮은거같아여ㅠㅠ
     public Instrument update(InstrumentValue instrumentValue) {
         if (instrumentValue == null) {
             return this;
         }
         String requestedName = instrumentValue.getName();
         if (requestedName != null) {
-            this.name = requestedName;
+            name = requestedName;
         }
         String requestedDescription = instrumentValue.getDescription();
         if (requestedDescription != null) {
-            this.description = requestedDescription;
+            description = requestedDescription;
         }
         ZonedDateTime requestedExpiredAt = instrumentValue.getExpiredAt();
         if (requestedExpiredAt != null) {
-            this.expiredAt = requestedExpiredAt;
+            expiredAt = requestedExpiredAt;
         }
         return this;
     }

@@ -27,6 +27,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
+    private final String charSet = "9876543210";
+
     private final AccountRepository accountRepository;
     private final MemberRepository memberRepository;
 
@@ -47,6 +49,7 @@ public class AccountServiceImpl implements AccountService {
                 .balance(0L)
                 .rate(accountDto.getRate())
                 .build();
+
 
         accountRepository.save(account);
 
@@ -89,8 +92,23 @@ public class AccountServiceImpl implements AccountService {
 
     private String createAccountNumber() {
         UUID uuid = UUID.randomUUID();
-        //todo 어떻게 계좌번호를 생성할까?
-        return "";
+        String accountNumber = encode(uuid.getMostSignificantBits());
+        log.info("id : " + accountNumber);
+        return accountNumber;
+    }
+
+    private String encode(long num) {
+        num = Math.abs(num);
+        String encodedString = "";
+        int j = (int) Math.ceil(Math.log(num) / Math.log(charSet.length()));
+        if (num % 91 == 0 || num == 1) {
+            j = j + 1;
+        }
+        for (int i = 0; i < j; i++) {
+            encodedString += charSet.charAt((int) (num % charSet.length()));
+            num /= charSet.length();
+        }
+        return encodedString;
     }
 
 }
