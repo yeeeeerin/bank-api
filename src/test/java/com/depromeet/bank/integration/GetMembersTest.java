@@ -28,6 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 public class GetMembersTest {
 
+    private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -61,8 +63,8 @@ public class GetMembersTest {
         // given
         String invalidAuthorization = "invalidToken";
         // when
-        mockMvc.perform(get("/members")
-                .header("authorization", invalidAuthorization))
+        mockMvc.perform(get("/api/members")
+                .header(AUTHORIZATION_HEADER_NAME, invalidAuthorization))
                 // then
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
@@ -74,8 +76,8 @@ public class GetMembersTest {
         // given
         String authorization = "Bearer " + jwtFactory.generateToken(haeseong);
         // when
-        mockMvc.perform(get("/members?size=10&page=10")
-                .header("authorization", authorization))
+        mockMvc.perform(get("/api/members?size=10&page=10")
+                .header(AUTHORIZATION_HEADER_NAME, authorization))
                 // then
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -89,8 +91,8 @@ public class GetMembersTest {
         // given
         String authorization = "Bearer " + jwtFactory.generateToken(haeseong);
         // when
-        mockMvc.perform(get("/members")
-                .header("authorization", authorization))
+        mockMvc.perform(get("/api/members")
+                .header(AUTHORIZATION_HEADER_NAME, authorization))
                 // then
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -106,8 +108,8 @@ public class GetMembersTest {
         // given
         String invalidAuthorization = "Bearer ";
         // when
-        mockMvc.perform(get("/members/{memberId}", haeseong.getId())
-                .header("authorization", invalidAuthorization))
+        mockMvc.perform(get("/api/members/{memberId}", haeseong.getId())
+                .header(AUTHORIZATION_HEADER_NAME, invalidAuthorization))
                 // then
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
@@ -121,8 +123,8 @@ public class GetMembersTest {
         String authorization = "Bearer " + jwtFactory.generateToken(haeseong);
         Long notExistMemberId = 12345678901L;
         // when
-        mockMvc.perform(get("/members/{memberId}", notExistMemberId)
-                .header("authorization", authorization))
+        mockMvc.perform(get("/api/members/{memberId}", notExistMemberId)
+                .header(AUTHORIZATION_HEADER_NAME, authorization))
                 // then
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -135,8 +137,8 @@ public class GetMembersTest {
         // given
         String authorization = "Bearer " + jwtFactory.generateToken(haeseong);
         // when
-        mockMvc.perform(get("/members/{memberId}", yerin.getId())
-                .header("authorization", authorization))
+        mockMvc.perform(get("/api/members/{memberId}", yerin.getId())
+                .header(AUTHORIZATION_HEADER_NAME, authorization))
                 // then
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -149,10 +151,9 @@ public class GetMembersTest {
         // given
         String invalidAuthorization = "Bearer ";
         // when
-        mockMvc.perform(get("/members/me")
-                .header("authorization", invalidAuthorization))
+        mockMvc.perform(get("/api/members/me")
+                .header(AUTHORIZATION_HEADER_NAME, invalidAuthorization))
                 // then
-                .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.status").value(401))
                 .andExpect(jsonPath("$.response").doesNotExist());
@@ -163,7 +164,7 @@ public class GetMembersTest {
         // given
         String authorization = "Bearer " + jwtFactory.generateToken(haeseong);
         // when
-        mockMvc.perform(get("/members/me")
+        mockMvc.perform(get("/api/members/me")
                 .header("authorization", authorization))
                 // then
                 .andDo(print())

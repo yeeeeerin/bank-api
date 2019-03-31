@@ -18,15 +18,13 @@ import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
+@RequestMapping("/api")
 public class MemberController {
 
     private final MemberService memberService;
-    private final JwtFactory jwtFactory;
 
-    public MemberController(MemberService memberService,
-                            JwtFactory jwtFactory) {
+    public MemberController(MemberService memberService) {
         this.memberService = memberService;
-        this.jwtFactory = jwtFactory;
     }
 
     @PostMapping("/members/login")

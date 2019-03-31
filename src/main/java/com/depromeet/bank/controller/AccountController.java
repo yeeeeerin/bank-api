@@ -7,15 +7,18 @@ import com.depromeet.bank.dto.ResponseDto;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.service.AccountService;
 import com.depromeet.bank.utils.JwtFactory;
+import io.swagger.annotations.ApiImplicitParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api")
 public class AccountController {
 
     private final AccountService accountService;
