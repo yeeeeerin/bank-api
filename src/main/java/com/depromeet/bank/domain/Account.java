@@ -27,6 +27,8 @@ public class Account {
 
     private String name;
 
+    private String accountNumber;
+
     private Long balance;    //잔고
 
     private Double rate;     //이율

@@ -2,6 +2,8 @@ package com.depromeet.bank.service.impl;
 
 import com.depromeet.bank.domain.Account;
 import com.depromeet.bank.domain.Member;
+import com.depromeet.bank.domain.naming.AdjectiveName;
+import com.depromeet.bank.domain.naming.NounName;
 import com.depromeet.bank.dto.AccountDto;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.repository.AccountRepository;
@@ -17,6 +19,7 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -39,7 +42,8 @@ public class AccountServiceImpl implements AccountService {
 
         Account account = Account.builder()
                 .member(member)
-                .name(accountDto.getName())
+                .name(naming(accountDto.getName()))
+                .accountNumber(createAccountNumber())
                 .balance(0L)
                 .rate(accountDto.getRate())
                 .build();
@@ -69,6 +73,24 @@ public class AccountServiceImpl implements AccountService {
     public void deleteAccount(Long accountId) {
         Assert.notNull(accountId, "'accountId' must not be null");
         accountRepository.deleteById(accountId);
+    }
+
+    private String naming(String name) {
+
+        return Optional.of(name)
+                .filter(s -> {
+                    if (!s.isEmpty()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }).orElse(AdjectiveName.getRandom() + " " + NounName.getRandom());
+    }
+
+    private String createAccountNumber() {
+        UUID uuid = UUID.randomUUID();
+        //todo 어떻게 계좌번호를 생성할까?
+        return "";
     }
 
 }
