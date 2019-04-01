@@ -24,8 +24,7 @@ public class MemberController {
     private final MemberService memberService;
     private final JwtFactory jwtFactory;
 
-    public MemberController(MemberService memberService,
-                            JwtFactory jwtFactory) {
+    public MemberController(MemberService memberService, JwtFactory jwtFactory) {
         this.memberService = memberService;
         this.jwtFactory = jwtFactory;
     }
