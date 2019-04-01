@@ -23,11 +23,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
-<<<<<<< HEAD
-    public MemberController(MemberService memberService, JwtFactory jwtFactory) {
-=======
     public MemberController(MemberService memberService) {
->>>>>>> eb26b46c8a27929220f4b40b4c670c6a4a3e6b71
         this.memberService = memberService;
     }
 
