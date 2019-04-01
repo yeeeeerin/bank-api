@@ -3,12 +3,13 @@ package com.depromeet.bank.service.impl;
 import com.depromeet.bank.config.RestTemplateConfig;
 import com.depromeet.bank.domain.Air;
 import com.google.gson.Gson;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.json.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -17,13 +18,13 @@ import java.net.URI;
 import java.net.URLEncoder;
 
 @Service
+@Slf4j
 public class AirServiceImpl {
-    public static final Logger logger =  LoggerFactory.getLogger(AirServiceImpl.class);
 
     @Autowired
     private RestTemplateConfig restTemplateConfig;
 
-    private String serviceKey = "wcHq6FOmjnHYiJ0N5t1DEiEjYfE9njsCuqWfxGkGTpNPlMNaAh3K%2FFQ9lHjrECOSGVrTvnaI5kakoMjjdmD3Ug%3D%3D";
+    private static final String serviceKey = "wcHq6FOmjnHYiJ0N5t1DEiEjYfE9njsCuqWfxGkGTpNPlMNaAh3K%2FFQ9lHjrECOSGVrTvnaI5kakoMjjdmD3Ug%3D%3D";
 
     public String updateByStationName(String stationName) throws UnsupportedEncodingException {
         URI url = UriComponentsBuilder.newInstance()
@@ -39,7 +40,7 @@ public class AirServiceImpl {
                 .build(true)
                 .toUri();
         String response = restTemplateConfig.restTemplate().getForObject(url ,String.class);
-        logger.info("{}", response);
+        log.info("{}", response);
         return response;
     }
 

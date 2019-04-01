@@ -17,10 +17,6 @@ public class AirController {
     @Autowired
     private AirServiceImpl airService;
 
-//    @GetMapping("/{stationName}")
-//    public ResponseEntity<String> getByStationnation(@PathVariable String stationName) throws UnsupportedEncodingException {
-//        return airService.updateByStationName(stationName);
-//    }
     @GetMapping("/{stationName}")
     public String getByStationnation(@PathVariable String stationName) throws UnsupportedEncodingException {
         return airService.updateByStationName(stationName);
