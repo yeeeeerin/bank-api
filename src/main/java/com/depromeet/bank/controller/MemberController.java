@@ -5,31 +5,33 @@ import com.depromeet.bank.dto.MemberResponse;
 import com.depromeet.bank.dto.ResponseDto;
 import com.depromeet.bank.dto.TokenDto;
 import com.depromeet.bank.exception.NotFoundException;
-import com.depromeet.bank.exception.UnauthorizedException;
 import com.depromeet.bank.service.MemberService;
 import com.depromeet.bank.utils.JwtFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
+@Slf4j
+@RequestMapping("/api")
 public class MemberController {
 
     private final MemberService memberService;
-    private final JwtFactory jwtFactory;
 
+<<<<<<< HEAD
     public MemberController(MemberService memberService, JwtFactory jwtFactory) {
+=======
+    public MemberController(MemberService memberService) {
+>>>>>>> eb26b46c8a27929220f4b40b4c670c6a4a3e6b71
         this.memberService = memberService;
-        this.jwtFactory = jwtFactory;
     }
 
-    @PostMapping("/members")
+    @PostMapping("/members/login")
     public ResponseDto<TokenDto> join(@RequestBody TokenDto tokenDto) {
 
         TokenDto responseTokenDto = new TokenDto();
@@ -43,13 +45,11 @@ public class MemberController {
     }
 
     @GetMapping("/members")
-    public ResponseDto<List<MemberResponse>> getMembers(@RequestHeader(defaultValue = "") String authentication,
-                                                        @RequestParam(defaultValue = "0") Integer page,
-                                                        @RequestParam(defaultValue = "20") Integer size) {
+    public ResponseDto<List<MemberResponse>> getMembers(@RequestParam(defaultValue = "0") Integer page,
+                                                        @RequestParam(defaultValue = "20") Integer size,
+                                                        @RequestAttribute Long id) {
 
-        Long memberIdFromToken = getMemberId(authentication)
-                .orElseThrow(() -> new UnauthorizedException("토큰이 유효하지 않습니다."));
-
+        log.info(String.valueOf(id));
         Pageable pageable = PageRequest.of(page, size);
         List<MemberResponse> memberResponses = memberService.getMembers(pageable).stream()
                 .map(MemberResponse::from)
@@ -58,34 +58,21 @@ public class MemberController {
     }
 
     @GetMapping("/members/{memberId:\\d+}")
-    public ResponseDto<MemberResponse> getMember(@RequestHeader(required = false, defaultValue = "") String authentication,
-                                                 @PathVariable Long memberId) {
-        Long memberIdFromToken = getMemberId(authentication)
-                .orElseThrow(() -> new UnauthorizedException("토큰이 유효하지 않습니다."));
+    public ResponseDto<MemberResponse> getMember(@PathVariable Long memberId) {
 
         Member member = memberService.getMember(memberId).orElseThrow(() -> new NotFoundException("회원이 없습니다."));
         MemberResponse memberResponse = MemberResponse.from(member);
         return ResponseDto.of(HttpStatus.OK, "회원 조회에 성공했습니다. ", memberResponse);
     }
 
-    @GetMapping("/members/me")
-    public ResponseDto<MemberResponse> getMe(@RequestHeader(required = false, defaultValue = "") String authentication) {
-        Long memberId = getMemberId(authentication)
-                .orElseThrow(() -> new UnauthorizedException("토큰이 유효하지 않습니다."));
 
-        Member member = memberService.getMember(memberId).orElseThrow(() -> new NotFoundException("회원이 없습니다."));
+    @GetMapping("/members/me")
+    public ResponseDto<MemberResponse> getMe(@RequestAttribute Long id) {
+
+        Member member = memberService.getMember(id).orElseThrow(() -> new NotFoundException("회원이 없습니다."));
         MemberResponse memberResponse = MemberResponse.from(member);
         return ResponseDto.of(HttpStatus.OK, "회원 조회에 성공했습니다.", memberResponse);
     }
 
-    private Optional<Long> getMemberId(String token) {
-        if (StringUtils.isEmpty(token)) {
-            return Optional.empty();
-        }
-        try {
-            return jwtFactory.decodeToken(token);
-        } catch (NumberFormatException ex) {
-            return Optional.empty();
-        }
-    }
+
 }

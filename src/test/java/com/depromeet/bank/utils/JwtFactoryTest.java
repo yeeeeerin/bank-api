@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -45,7 +45,7 @@ public class JwtFactoryTest {
         String exceptionToken = "gg";
 
         //when
-        Optional<Long> result = jwtFactory.decodeToken(exceptionToken);
+        Optional<Long> result = jwtFactory.getMemberId(exceptionToken);
 
         //then
         assertThat(result.isPresent(), is(false));
@@ -66,7 +66,7 @@ public class JwtFactoryTest {
         when(mockClaim.asLong()).thenReturn(1L);
 
         //when
-        Optional<Long> result = jwtFactory.decodeToken(token);
+        Optional<Long> result = jwtFactory.getMemberId(token);
 
         //then
         assertThat(result.orElse(0L), is(1L));
