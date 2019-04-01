@@ -1,6 +1,10 @@
 package com.depromeet.bank.service.impl;
 
 import com.depromeet.bank.config.RestTemplateConfig;
+import com.depromeet.bank.domain.Air;
+import com.google.gson.Gson;
+import org.json.JSONObject;
+import org.json.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +25,7 @@ public class AirServiceImpl {
 
     private String serviceKey = "wcHq6FOmjnHYiJ0N5t1DEiEjYfE9njsCuqWfxGkGTpNPlMNaAh3K%2FFQ9lHjrECOSGVrTvnaI5kakoMjjdmD3Ug%3D%3D";
 
-    public ResponseEntity<String> updateByStationName(String stationName) throws UnsupportedEncodingException {
+    public String updateByStationName(String stationName) throws UnsupportedEncodingException {
         URI url = UriComponentsBuilder.newInstance()
                 .scheme("http")
                 .host("openapi.airkorea.or.kr")
@@ -34,8 +38,19 @@ public class AirServiceImpl {
                 .queryParam("ver", 1.3)
                 .build(true)
                 .toUri();
-        logger.info("{}", url);
-        ResponseEntity<String> response = restTemplateConfig.restTemplate().getForEntity(url ,String.class);
+        String response = restTemplateConfig.restTemplate().getForObject(url ,String.class);
+        logger.info("{}", response);
         return response;
+    }
+
+    public JSONObject parseXMLToJson(String response) {
+        JSONObject json = XML.toJSONObject(response);
+        return json;
+    }
+
+    public Air jsonToAir(JSONObject response) {
+        Gson gson = new Gson();
+        String res = String.valueOf(response.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONObject("item"));
+        return gson.fromJson(res, Air.class);
     }
 }

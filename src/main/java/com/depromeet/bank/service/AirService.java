@@ -7,4 +7,5 @@ import java.io.UnsupportedEncodingException;
 
 public interface AirService {
     ResponseEntity<String> updateByStationName(String stationName) throws UnsupportedEncodingException;
+
 }
