@@ -50,9 +50,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `bank-dev`.`transcation`
+-- Table `bank-dev`.`transaction`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bank-dev`.`transcation` (
+CREATE TABLE IF NOT EXISTS `bank-dev`.`transaction` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `account_id` BIGINT NOT NULL,
   `amount` BIGINT NULL,
@@ -81,9 +81,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `bank-dev`.`Attendance`
+-- Table `bank-dev`.`attendance`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bank-dev`.`Attendance` (
+CREATE TABLE IF NOT EXISTS `bank-dev`.`attendance` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `number_of_attendee` INT NULL,
   `number_of_absentee` INT NULL,
