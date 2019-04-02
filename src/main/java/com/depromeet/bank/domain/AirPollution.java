@@ -12,19 +12,19 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @ToString
-public class Air {
+public class AirPollution {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @JsonProperty
-    private String pm10Value;
+    private Long pm10Value;
 
     @JsonProperty
-    private String pm25Value;
+    private Long pm25Value;
 
     @JsonProperty
-    private String o3Value;
+    private Long o3Value;
 
 }

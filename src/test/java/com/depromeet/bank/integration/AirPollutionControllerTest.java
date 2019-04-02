@@ -1,19 +1,15 @@
-package com.depromeet.bank.controller;
+package com.depromeet.bank.integration;
 
-import com.depromeet.bank.domain.Air;
-import com.depromeet.bank.service.impl.AirServiceImpl;
+import com.depromeet.bank.domain.AirPollution;
+import com.depromeet.bank.service.impl.AirPollutionServiceImpl;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.UnsupportedEncodingException;
@@ -21,12 +17,12 @@ import java.io.UnsupportedEncodingException;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
-public class AirControllerTest {
+public class AirPollutionControllerTest {
     private String response;
-    private Air air;
+    private AirPollution airPollution;
 
     @Autowired
-    private AirServiceImpl airService;
+    private AirPollutionServiceImpl airService;
 
     @Before
     public void setUp() throws Exception {
@@ -51,13 +47,13 @@ public class AirControllerTest {
         JSONObject res = object.getJSONObject("response").getJSONObject("body").getJSONObject("items").getJSONObject("item");
         log.info("item : {}", res);
         Gson gson = new Gson();
-        Air air = gson.fromJson(String.valueOf(res), Air.class);
-        log.info("air객체 : {}", air.toString());
+        AirPollution airPollution = gson.fromJson(String.valueOf(res), AirPollution.class);
+        log.info("air객체 : {}", airPollution.toString());
     }
 
     @Test
     public void jsonToAir객체테스트() throws Exception {
-        air = airService.jsonToAir(airService.parseXMLToJson(response));
-        log.info("{}", air);
+        airPollution = airService.jsonToAir(airService.parseXMLToJson(response));
+        log.info("{}", airPollution);
     }
 }
