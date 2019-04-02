@@ -34,7 +34,7 @@ public enum NounName {
     MOLE("두더지");
 
 
-    String name;
+    private String name;
 
     NounName(String name) {
         this.name = name;

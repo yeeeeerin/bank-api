@@ -31,7 +31,7 @@ public enum AdjectiveName {
     SHY("수줍어하는");
 
 
-    String name;
+    private String name;
 
     AdjectiveName(String name) {
         this.name = name;

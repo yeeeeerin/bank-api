@@ -37,7 +37,6 @@ public class Instrument {
         return new Instrument(name, description, expiredAt);
     }
 
-    //todo 뭔가 전 방법이 더 괜찮은거같아여ㅠㅠ 
     public Instrument update(InstrumentValue instrumentValue) {
         if (instrumentValue == null) {
             return this;
