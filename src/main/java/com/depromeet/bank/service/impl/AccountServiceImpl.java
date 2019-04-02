@@ -7,6 +7,7 @@ import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.MemberRepository;
 import com.depromeet.bank.service.AccountService;
+import com.depromeet.bank.utils.AccountFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +27,7 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
     private final MemberRepository memberRepository;
+    private final AccountFactory accountFactory;
 
     @Override
     @Transactional
@@ -37,12 +39,7 @@ public class AccountServiceImpl implements AccountService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException("회원이 존재하지 않습니다"));
 
-        Account account = Account.builder()
-                .member(member)
-                .name(accountDto.getName())
-                .balance(0L)
-                .rate(accountDto.getRate())
-                .build();
+        Account account = accountFactory.setAccount(member, accountDto);
 
         accountRepository.save(account);
 
@@ -70,5 +67,6 @@ public class AccountServiceImpl implements AccountService {
         Assert.notNull(accountId, "'accountId' must not be null");
         accountRepository.deleteById(accountId);
     }
+
 
 }

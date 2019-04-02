@@ -28,7 +28,7 @@ public class Account {
     //형용사 + 명사로 랜덤하게
     private String name;
 
-    //todo 계좌번호
+    private String accountNumber;
 
     private Long balance;    //잔고
 
