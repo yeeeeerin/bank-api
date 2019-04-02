@@ -25,6 +25,7 @@ public class Account {
     @GeneratedValue
     private Long id;
 
+    //형용사 + 명사로 랜덤하게
     private String name;
 
     private String accountNumber;

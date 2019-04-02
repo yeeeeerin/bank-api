@@ -2,6 +2,7 @@ package com.depromeet.bank.controller;
 
 import com.depromeet.bank.dto.ResponseDto;
 import com.depromeet.bank.exception.NotFoundException;
+import com.depromeet.bank.exception.ServiceUnavailableException;
 import com.depromeet.bank.exception.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,12 @@ public class ApiControllerAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseDto handleNotFoundException(NotFoundException ex) {
         return ResponseDto.of(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(ServiceUnavailableException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    public ResponseDto handleServiceUnavailableException(ServiceUnavailableException ex) {
+        return ResponseDto.of(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

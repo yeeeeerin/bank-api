@@ -70,7 +70,7 @@ public class InstrumentTest {
                 ZonedDateTime.now().plusDays(10)
         );
         // when
-        mockMvc.perform(post("/instruments")
+        mockMvc.perform(post("/api/instruments")
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(request)))
@@ -95,10 +95,9 @@ public class InstrumentTest {
         MvcResult anotherResult = createInstrument(request);
         MvcResult theOtherResult = createInstrument(request);
         // when
-        mockMvc.perform(get("/instruments")
+        mockMvc.perform(get("/api/instruments")
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader))
                 // then
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.response").isArray())
                 .andExpect(jsonPath("$.response.[0]").exists())
@@ -111,7 +110,7 @@ public class InstrumentTest {
     public void 상품_목록_조회__조건에_맞는_상품이_없으면_빈리스트_응답() throws Exception {
         // given
         // when
-        MvcResult mvcResult = mockMvc.perform(get("/instruments")
+        MvcResult mvcResult = mockMvc.perform(get("/api/instruments")
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader))
                 // then 1
                 .andExpect(status().isOk())
@@ -126,7 +125,7 @@ public class InstrumentTest {
     public void 상품_조회__해당_상품이_존재하지_않으면_404_응답() throws Exception {
         // given
         // when
-        MvcResult mvcResult = mockMvc.perform(get("/instruments/{instrumentId}", 1)
+        MvcResult mvcResult = mockMvc.perform(get("/api/instruments/{instrumentId}", 1)
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader))
                 // then 1
                 .andExpect(status().isNotFound())
@@ -150,7 +149,7 @@ public class InstrumentTest {
         ResponseDto<InstrumentResponse> instrumentResponseDto = objectMapper.readValue(createResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
         Long instrumentId = instrumentResponseDto.getResponse().getId();
         // when
-        MvcResult mvcResult = mockMvc.perform(get("/instruments/{instrumentId}", instrumentId)
+        MvcResult mvcResult = mockMvc.perform(get("/api/instruments/{instrumentId}", instrumentId)
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader))
                 // then 1
                 .andExpect(status().isOk())
@@ -175,7 +174,7 @@ public class InstrumentTest {
         Long instrumentId = instrumentResponseDto.getResponse().getId();
         // when
         String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest("afterName", null, null));
-        MvcResult mvcResult = mockMvc.perform(put("/instruments/{instrumentId}", instrumentId)
+        MvcResult mvcResult = mockMvc.perform(put("/api/instruments/{instrumentId}", instrumentId)
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(requestBody))
@@ -204,7 +203,7 @@ public class InstrumentTest {
         Long instrumentId = instrumentResponseDto.getResponse().getId();
         // when
         String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest(null, "afterDescription", null));
-        MvcResult mvcResult = mockMvc.perform(put("/instruments/{instrumentId}", instrumentId)
+        MvcResult mvcResult = mockMvc.perform(put("/api/instruments/{instrumentId}", instrumentId)
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(requestBody))
@@ -233,7 +232,7 @@ public class InstrumentTest {
         Long instrumentId = instrumentResponseDto.getResponse().getId();
         // when
         String requestBody = objectMapper.writeValueAsString(request);
-        MvcResult mvcResult = mockMvc.perform(put("/instruments/{instrumentId}", instrumentId)
+        MvcResult mvcResult = mockMvc.perform(put("/api/instruments/{instrumentId}", instrumentId)
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(requestBody))
@@ -262,7 +261,7 @@ public class InstrumentTest {
         Long instrumentId = instrumentResponseDto.getResponse().getId();
         // when
         String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest(null, null, null));
-        MvcResult mvcResult = mockMvc.perform(put("/instruments/{instrumentId}", instrumentId)
+        MvcResult mvcResult = mockMvc.perform(put("/api/instruments/{instrumentId}", instrumentId)
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(requestBody))
@@ -283,7 +282,7 @@ public class InstrumentTest {
         // given
         // when
         String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest("afterName", "afterDescription", null));
-        mockMvc.perform(put("/instruments/{instrumentId}", 1000L)
+        mockMvc.perform(put("/api/instruments/{instrumentId}", 1000L)
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(requestBody))
@@ -297,7 +296,7 @@ public class InstrumentTest {
         // given
         Long notExistInstrumentId = 1000L;
         // when
-        mockMvc.perform(delete("/instruments/{instrumentId}", notExistInstrumentId)
+        mockMvc.perform(delete("/api/instruments/{instrumentId}", notExistInstrumentId)
         .header(AUTHORIZATION_HEADER_NAME, authorizationHeader))
                 // then
                 .andExpect(status().isNoContent())
@@ -316,7 +315,7 @@ public class InstrumentTest {
         ResponseDto<InstrumentResponse> instrumentResponseDto = objectMapper.readValue(createResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
         Long instrumentId = instrumentResponseDto.getResponse().getId();
         // when
-        mockMvc.perform(delete("/instruments/{instrumentId}", instrumentId)
+        mockMvc.perform(delete("/api/instruments/{instrumentId}", instrumentId)
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader))
                 // then
                 .andExpect(status().isNoContent())
@@ -324,7 +323,7 @@ public class InstrumentTest {
     }
 
     private MvcResult createInstrument(InstrumentRequest request) throws Exception {
-        return mockMvc.perform(post("/instruments")
+        return mockMvc.perform(post("/api/instruments")
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(request)))
