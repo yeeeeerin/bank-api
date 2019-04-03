@@ -7,7 +7,7 @@ import org.springframework.util.Assert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -17,12 +17,12 @@ public class Instrument {
     private Long id;
     private String name;
     private String description;
-    private ZonedDateTime expiredAt;
+    private LocalDateTime expiredAt;
 
     protected Instrument() {
     }
 
-    private Instrument(String name, String description, ZonedDateTime expiredAt) {
+    private Instrument(String name, String description, LocalDateTime expiredAt) {
         this.id = null;
         this.name = name;
         this.description = description;
@@ -33,7 +33,7 @@ public class Instrument {
         Assert.notNull(instrumentValue, "'instrumentValue' must not be null");
         String name = instrumentValue.getName();
         String description = instrumentValue.getDescription();
-        ZonedDateTime expiredAt = instrumentValue.getExpiredAt();
+        LocalDateTime expiredAt = instrumentValue.getExpiredAt();
         return new Instrument(name, description, expiredAt);
     }
 
@@ -49,7 +49,7 @@ public class Instrument {
         if (requestedDescription != null) {
             this.description = requestedDescription;
         }
-        ZonedDateTime requestedExpiredAt = instrumentValue.getExpiredAt();
+        LocalDateTime requestedExpiredAt = instrumentValue.getExpiredAt();
         if (requestedExpiredAt != null) {
             this.expiredAt = requestedExpiredAt;
         }

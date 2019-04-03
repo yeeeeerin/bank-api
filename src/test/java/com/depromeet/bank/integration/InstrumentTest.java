@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -67,7 +68,7 @@ public class InstrumentTest {
         InstrumentRequest request = TestHelper.createInstrumentRequest(
                 "상품 이름",
                 "상품 설명",
-                ZonedDateTime.now().plusDays(10)
+                LocalDateTime.now().plusDays(10)
         );
         // when
         mockMvc.perform(post("/api/instruments")
@@ -80,7 +81,7 @@ public class InstrumentTest {
                 .andExpect(jsonPath("$.response.name").value(request.getName()))
                 .andExpect(jsonPath("$.response.description").value(request.getDescription()))
                 .andExpect(jsonPath("$.response.expiredAt")
-                        .value(request.getExpiredAt().toLocalDateTime().toString()));
+                        .value(request.getExpiredAt().toString()));
     }
 
     @Test
@@ -89,7 +90,7 @@ public class InstrumentTest {
         InstrumentRequest request = TestHelper.createInstrumentRequest(
                 "상품 이름",
                 "상품 설명",
-                ZonedDateTime.now().plusDays(10)
+                LocalDateTime.now().plusDays(10)
         );
         MvcResult oneResult = createInstrument(request);
         MvcResult anotherResult = createInstrument(request);
@@ -143,7 +144,7 @@ public class InstrumentTest {
         InstrumentRequest request = TestHelper.createInstrumentRequest(
                 "상품 하나",
                 "상품 설명 하나",
-                ZonedDateTime.now().plusDays(10)
+                LocalDateTime.now().plusDays(10)
         );
         MvcResult createResult = createInstrument(request);
         ResponseDto<InstrumentResponse> instrumentResponseDto = objectMapper.readValue(createResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
@@ -167,7 +168,7 @@ public class InstrumentTest {
         InstrumentRequest request = TestHelper.createInstrumentRequest(
                 "beforeName",
                 "beforeDescription",
-                ZonedDateTime.now().plusDays(10)
+                LocalDateTime.now().plusDays(10)
         );
         MvcResult createResult = createInstrument(request);
         ResponseDto<InstrumentResponse> instrumentResponseDto = objectMapper.readValue(createResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
@@ -187,7 +188,7 @@ public class InstrumentTest {
         assertThat(instrumentResponse.getId()).isEqualTo(instrumentId);
         assertThat(instrumentResponse.getName()).isEqualTo("afterName");
         assertThat(instrumentResponse.getDescription()).isEqualTo(request.getDescription());
-        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt().toLocalDateTime());
+        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt());
     }
 
     @Test
@@ -196,7 +197,7 @@ public class InstrumentTest {
         InstrumentRequest request = TestHelper.createInstrumentRequest(
                 "beforeName",
                 "beforeDescription",
-                ZonedDateTime.now().plusDays(10)
+                LocalDateTime.now().plusDays(10)
         );
         MvcResult createResult = createInstrument(request);
         ResponseDto<InstrumentResponse> instrumentResponseDto = objectMapper.readValue(createResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
@@ -216,7 +217,7 @@ public class InstrumentTest {
         assertThat(instrumentResponse.getId()).isEqualTo(instrumentId);
         assertThat(instrumentResponse.getName()).isEqualTo(request.getName());
         assertThat(instrumentResponse.getDescription()).isEqualTo("afterDescription");
-        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt().toLocalDateTime());
+        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt());
     }
 
     @Test
@@ -225,7 +226,7 @@ public class InstrumentTest {
         InstrumentRequest request = TestHelper.createInstrumentRequest(
                 "beforeName",
                 "beforeDescription",
-                ZonedDateTime.now().plusDays(10)
+                LocalDateTime.now().plusDays(10)
         );
         MvcResult createResult = createInstrument(request);
         ResponseDto<InstrumentResponse> instrumentResponseDto = objectMapper.readValue(createResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
@@ -245,7 +246,7 @@ public class InstrumentTest {
         assertThat(instrumentResponse.getId()).isEqualTo(instrumentId);
         assertThat(instrumentResponse.getName()).isEqualTo(request.getName());
         assertThat(instrumentResponse.getDescription()).isEqualTo(request.getDescription());
-        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt().toLocalDateTime());
+        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt());
     }
 
     @Test
@@ -254,7 +255,7 @@ public class InstrumentTest {
         InstrumentRequest request = TestHelper.createInstrumentRequest(
                 "beforeName",
                 "beforeDescription",
-                ZonedDateTime.now().plusDays(10)
+                LocalDateTime.now().plusDays(10)
         );
         MvcResult createResult = createInstrument(request);
         ResponseDto<InstrumentResponse> instrumentResponseDto = objectMapper.readValue(createResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
@@ -274,7 +275,7 @@ public class InstrumentTest {
         assertThat(instrumentResponse.getId()).isEqualTo(instrumentId);
         assertThat(instrumentResponse.getName()).isEqualTo(request.getName());
         assertThat(instrumentResponse.getDescription()).isEqualTo(request.getDescription());
-        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt().toLocalDateTime());
+        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt());
     }
 
     @Test
@@ -309,7 +310,7 @@ public class InstrumentTest {
         InstrumentRequest request = TestHelper.createInstrumentRequest(
                 "beforeName",
                 "beforeDescription",
-                ZonedDateTime.now().plusDays(10)
+                LocalDateTime.now().plusDays(10)
         );
         MvcResult createResult = createInstrument(request);
         ResponseDto<InstrumentResponse> instrumentResponseDto = objectMapper.readValue(createResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
