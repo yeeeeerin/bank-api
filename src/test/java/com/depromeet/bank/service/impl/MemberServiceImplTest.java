@@ -4,9 +4,11 @@ package com.depromeet.bank.service.impl;
 import com.depromeet.bank.domain.Member;
 import com.depromeet.bank.dto.TokenDto;
 import com.depromeet.bank.helper.TestHelper;
+import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.MemberRepository;
 import com.depromeet.bank.service.MemberService;
 import com.depromeet.bank.service.SocialFetchService;
+import com.depromeet.bank.utils.AccountFactory;
 import com.depromeet.bank.utils.JwtFactory;
 import com.depromeet.bank.vo.SocialMemberVo;
 import org.junit.Before;
@@ -24,8 +26,8 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@SuppressWarnings("NonAsciiCharacters")
 @RunWith(MockitoJUnitRunner.class)
+@SuppressWarnings("NonAsciiCharacters")
 public class MemberServiceImplTest {
 
     private static final String MEMBER_NAME = "이예린";
@@ -41,6 +43,10 @@ public class MemberServiceImplTest {
     private MemberRepository memberRepository;
     @Mock
     private JwtFactory jwtFactory;
+    @Mock
+    private AccountRepository accountRepository;
+    @Mock
+    private AccountFactory accountFactory;
 
     private MemberService memberService;
     private TokenDto tokenDto;
@@ -48,10 +54,14 @@ public class MemberServiceImplTest {
 
     @Before
     public void setup() {
+
         memberService = new MemberServiceImpl(
                 socialFetchService,
                 memberRepository,
+                accountRepository,
+                accountFactory,
                 jwtFactory);
+        
         this.tokenDto = new TokenDto("x6n6QvcJhH-nJPHgaasGzgDjUbLofvh-pZjBywopyNkAAAFpskMpHg");
         member = TestHelper.createMember(MEMBER_KAKAO_ID, MEMBER_NAME, MEMBER_PROFILE_HREF);
     }
@@ -95,7 +105,6 @@ public class MemberServiceImplTest {
         // then
         assertThat(result, is(TOKEN_OF_YERIN));
     }
-
 
 
 }
