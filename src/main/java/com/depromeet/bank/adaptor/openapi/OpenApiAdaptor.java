@@ -7,5 +7,7 @@ import java.net.URI;
 import java.util.Optional;
 
 public interface OpenApiAdaptor {
-    Optional<AirPollution> getAirPollutionByStationName(URI requestURI) throws IOException;
+//    Optional<AirPollution> getAirPollutionByStationName(URI requestURI) throws IOException;
+    Optional<AirPollution> getAirPollutionByStationName(String stationName) throws IOException;
+
 }

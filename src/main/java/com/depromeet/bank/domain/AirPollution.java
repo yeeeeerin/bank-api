@@ -12,15 +12,10 @@ import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-@Entity
 @Getter
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AirPollution {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
     private Long pm10Value;
 

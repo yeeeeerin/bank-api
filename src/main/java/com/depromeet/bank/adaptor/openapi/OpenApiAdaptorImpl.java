@@ -22,10 +22,23 @@ public class OpenApiAdaptorImpl implements OpenApiAdaptor {
         this.restTemplate = restTemplate;
     }
 
+//    @Override
+//    public Optional<AirPollution> getAirPollutionByStationName(URI uri) throws IOException {
+//            try {
+//                String response = restTemplate.getForObject(uri, String.class);
+//                return Optional.of(jsonUriXml.jsonToAirPollution(jsonUriXml.xmlToJson(response)));
+//            } catch (RestClientException ex) {
+//                log.error("Failed to get open-api request");
+//                throw new RestClientException("유효하지 않은 요청입니다.");
+//            } catch (IOException ex) {
+//                throw new IOException("IO예외가 발생했습니다.");
+//            }
+//    }
+
     @Override
-    public Optional<AirPollution> getAirPollutionByStationName(URI uri) throws IOException {
+    public Optional<AirPollution> getAirPollutionByStationName(String stationName) throws IOException {
             try {
-                String response = restTemplate.getForObject(uri, String.class);
+                String response = restTemplate.getForObject(jsonUriXml.makeURIfromStationName(stationName), String.class);
                 return Optional.of(jsonUriXml.jsonToAirPollution(jsonUriXml.xmlToJson(response)));
             } catch (RestClientException ex) {
                 log.error("Failed to get open-api request");
@@ -34,4 +47,6 @@ public class OpenApiAdaptorImpl implements OpenApiAdaptor {
                 throw new IOException("IO예외가 발생했습니다.");
             }
     }
+
+
 }

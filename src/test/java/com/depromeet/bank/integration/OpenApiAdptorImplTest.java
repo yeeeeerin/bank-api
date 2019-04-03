@@ -38,10 +38,9 @@ public class OpenApiAdptorImplTest {
     }
 
 
-
     @Test
     public void jsonToAirPollution() throws IOException {
-        JSONObject object = jsonUriXml.xmlToJson(openApiAdaptor.getAirPollutionByStationName(uri).toString());
+        JSONObject object = jsonUriXml.xmlToJson(openApiAdaptor.getAirPollutionByStationName("광교동").toString());
         AirPollution pollution = jsonUriXml.jsonToAirPollution(object);
         log.info("{}", pollution);
     }
