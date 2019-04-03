@@ -1,55 +1,37 @@
 package com.depromeet.bank.adaptor.openapi;
 
+import com.depromeet.bank.domain.AirPollution;
+import com.depromeet.bank.utils.JsonUriXml;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.util.Optional;
 
 @Slf4j
 @Component
-@PropertySource("classpath:open-api.properties")
 public class OpenApiAdaptorImpl implements OpenApiAdaptor {
+    private final JsonUriXml jsonUriXml;
     private final RestTemplate restTemplate;
-    private final String serviceKey;
 
-    public OpenApiAdaptorImpl(RestTemplate restTemplate, @Value("${open-api.serviceKey}") String serviceKey) {
-        this.serviceKey = serviceKey;
+    public OpenApiAdaptorImpl(JsonUriXml jsonUriXml, RestTemplate restTemplate) {
+        this.jsonUriXml = jsonUriXml;
         this.restTemplate = restTemplate;
     }
 
     @Override
-    public Optional<String> getAirPollutionByStationName(String stationName) {
-        try {
-            URI url = UriComponentsBuilder.newInstance()
-                    .scheme("http")
-                    .host("openapi.airkorea.or.kr")
-                    .path("/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty")
-                    .queryParam("stationName", URLEncoder.encode(stationName, "UTF-8"))
-                    .queryParam("dataTerm", "daily")
-                    .queryParam("pageNo", 1)
-                    .queryParam("numOfRows", 1)
-                    .queryParam("serviceKey", serviceKey)
-                    .queryParam("ver", 1.3)
-                    .build(true)
-                    .toUri();
+    public Optional<AirPollution> getAirPollutionByStationName(URI uri) throws IOException {
             try {
-                String response = restTemplate.getForObject(url, String.class);
-                return Optional.of(response);
+                String response = restTemplate.getForObject(uri, String.class);
+                return Optional.of(jsonUriXml.jsonToAirPollution(jsonUriXml.xmlToJson(response)));
             } catch (RestClientException ex) {
                 log.error("Failed to get open-api request");
-                return Optional.empty();
+                throw new RestClientException("유효하지 않은 요청입니다.");
+            } catch (IOException ex) {
+                throw new IOException("IO예외가 발생했습니다.");
             }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return Optional.empty();
-        }
     }
 }
