@@ -43,13 +43,13 @@ public class MemberServiceImpl implements MemberService {
                     member1.setName(memberVo.getUserName());
                     member1.setProfileHref(memberVo.getProfileHref());
                     member1.setSocialId(memberVo.getId());
+
+                    memberRepository.save(member1);
+
+                    Account account = accountFactory.setAccount(member1, AccountDto.initAccount());
+                    accountRepository.save(account);
                     return member1;
                 });
-
-        memberRepository.save(member);
-
-        Account account = accountFactory.setAccount(member, AccountDto.initAccount());
-        accountRepository.save(account);
 
         return jwtFactory.generateToken(member);
 
