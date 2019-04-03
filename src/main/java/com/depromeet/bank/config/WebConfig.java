@@ -19,7 +19,11 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new ExceptionInterceptor(objectMapper()))
                 .addPathPatterns("/**")
-                .excludePathPatterns("/api/**");
+                .excludePathPatterns("/api/**")
+                .excludePathPatterns("/swagger-ui.html")
+                .excludePathPatterns("/webjars/springfox-swagger-ui/**")
+                .excludePathPatterns("/swagger-resources/**")
+                .excludePathPatterns("/v2/api-docs");
 
     }
 
