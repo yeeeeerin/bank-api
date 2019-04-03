@@ -45,10 +45,10 @@ public class MemberServiceImpl implements MemberService {
                     member1.setSocialId(memberVo.getId());
                     return member1;
                 });
-        
+
         memberRepository.save(member);
 
-        Account account = accountFactory.setAccount(member, new AccountDto());
+        Account account = accountFactory.setAccount(member, AccountDto.initAccount());
         accountRepository.save(account);
 
         return jwtFactory.generateToken(member);

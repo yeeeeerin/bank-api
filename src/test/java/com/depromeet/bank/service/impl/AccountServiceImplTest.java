@@ -47,7 +47,7 @@ public class AccountServiceImplTest {
             account = TestHelper.createAccount("하나계좌", 0L, 0.0, member);
             accountRepository.save(account);
         }
-        log.info("date : " + String.valueOf(account.getCreatedAt()));
+        log.info("date : " + account.getCreatedAt());
 
     }
 

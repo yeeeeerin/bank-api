@@ -4,10 +4,11 @@ package com.depromeet.bank.service.impl;
 import com.depromeet.bank.domain.Member;
 import com.depromeet.bank.dto.TokenDto;
 import com.depromeet.bank.helper.TestHelper;
+import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.MemberRepository;
-import com.depromeet.bank.service.AccountService;
 import com.depromeet.bank.service.MemberService;
 import com.depromeet.bank.service.SocialFetchService;
+import com.depromeet.bank.utils.AccountFactory;
 import com.depromeet.bank.utils.JwtFactory;
 import com.depromeet.bank.vo.SocialMemberVo;
 import org.junit.Before;
@@ -25,7 +26,6 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@SuppressWarnings("NonAsciiCharacters")
 @RunWith(MockitoJUnitRunner.class)
 public class MemberServiceImplTest {
 
@@ -43,7 +43,9 @@ public class MemberServiceImplTest {
     @Mock
     private JwtFactory jwtFactory;
     @Mock
-    private AccountService accountService;
+    private AccountRepository accountRepository;
+    @Mock
+    private AccountFactory accountFactory;
 
     private MemberService memberService;
     private TokenDto tokenDto;
@@ -51,11 +53,15 @@ public class MemberServiceImplTest {
 
     @Before
     public void setup() {
+
         memberService = new MemberServiceImpl(
                 socialFetchService,
                 memberRepository,
-                accountService,
+                accountRepository,
+                accountFactory,
                 jwtFactory);
+
+        //memberService = mock(MemberServiceImpl.class);
         this.tokenDto = new TokenDto("x6n6QvcJhH-nJPHgaasGzgDjUbLofvh-pZjBywopyNkAAAFpskMpHg");
         member = TestHelper.createMember(MEMBER_KAKAO_ID, MEMBER_NAME, MEMBER_PROFILE_HREF);
     }
@@ -98,17 +104,6 @@ public class MemberServiceImplTest {
 
         // then
         assertThat(result, is(TOKEN_OF_YERIN));
-    }
-
-
-    //todo test코드 작성하기
-    @Test
-    public void 계정이_생성되면_계좌도_익명으로_같이_생성된다() {
-        //given
-
-        //when
-
-        //then
     }
 
 

@@ -18,12 +18,15 @@ public class AccountFactory {
     private static final String charSet = "9876543210";
 
     public Account setAccount(Member member, AccountDto accountDto) {
+
+        Double rate = Optional.ofNullable(accountDto.getRate()).orElse(0.0);
+
         return Account.builder()
                 .member(member)
                 .name(naming(accountDto.getName()))
                 .accountNumber(createAccountNumber())
                 .balance(0L)
-                .rate(accountDto.getRate())
+                .rate(rate)
                 .build();
     }
 
