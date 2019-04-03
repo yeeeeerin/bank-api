@@ -47,6 +47,7 @@ public class JwtConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/**")
                 .excludePathPatterns("/api/monitor/l7check")
                 .excludePathPatterns("/api/members/login");
+
     }
 
 
