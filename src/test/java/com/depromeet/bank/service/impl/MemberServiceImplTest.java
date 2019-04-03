@@ -27,6 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
+@SuppressWarnings("NonAsciiCharacters")
 public class MemberServiceImplTest {
 
     private static final String MEMBER_NAME = "이예린";
@@ -60,8 +61,7 @@ public class MemberServiceImplTest {
                 accountRepository,
                 accountFactory,
                 jwtFactory);
-
-        //memberService = mock(MemberServiceImpl.class);
+        
         this.tokenDto = new TokenDto("x6n6QvcJhH-nJPHgaasGzgDjUbLofvh-pZjBywopyNkAAAFpskMpHg");
         member = TestHelper.createMember(MEMBER_KAKAO_ID, MEMBER_NAME, MEMBER_PROFILE_HREF);
     }
