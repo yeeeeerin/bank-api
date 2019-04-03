@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 @ToString
@@ -40,5 +42,15 @@ public enum DepromeetSessionType {
 
     public LocalDateTime getStartedAt() {
         return LocalDateTime.of(2019, month, dayOfMonth, 14, 0);
+    }
+
+    public static DepromeetSessionType latest(final LocalDateTime localDateTime) {
+        return Stream.of(values())
+                .filter(value -> value.getStartedAt().isBefore(localDateTime))
+                .reduce(MARCH_SIXTEENTH, (a, b) -> a.isAfter(b) ? a : b);
+    }
+
+    private boolean isAfter(DepromeetSessionType anotherSessionType) {
+        return this.getStartedAt().isAfter(anotherSessionType.getStartedAt());
     }
 }
