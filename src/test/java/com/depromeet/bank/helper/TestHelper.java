@@ -7,6 +7,7 @@ import com.depromeet.bank.dto.InstrumentRequest;
 import com.depromeet.bank.vo.SocialMemberVo;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +44,7 @@ public final class TestHelper {
                 .build();
     }
 
-    public static InstrumentRequest createInstrumentRequest(String name, String description, ZonedDateTime expiredAt) {
+    public static InstrumentRequest createInstrumentRequest(String name, String description, LocalDateTime expiredAt) {
         InstrumentRequest instrumentRequest = new InstrumentRequest();
         ReflectionTestUtils.setField(instrumentRequest, "name", name);
         ReflectionTestUtils.setField(instrumentRequest, "description", description);

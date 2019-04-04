@@ -4,17 +4,17 @@ import com.depromeet.bank.dto.InstrumentRequest;
 import lombok.Value;
 import org.springframework.util.Assert;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 @Value
 public class InstrumentValue {
     private final String name;
     private final String description;
-    private final ZonedDateTime expiredAt;
+    private final LocalDateTime expiredAt;
 
     private InstrumentValue(String name,
                             String description,
-                            ZonedDateTime expiredAt) {
+                            LocalDateTime expiredAt) {
         this.name = name;
         this.description = description;
         this.expiredAt = expiredAt;
@@ -24,7 +24,7 @@ public class InstrumentValue {
         Assert.notNull(instrumentRequest, "'instrumentRequest' must not be null");
         String name = instrumentRequest.getName();
         String description = instrumentRequest.getDescription();
-        ZonedDateTime zonedDateTime = instrumentRequest.getExpiredAt();
-        return new InstrumentValue(name, description, zonedDateTime);
+        LocalDateTime localDateTime = instrumentRequest.getExpiredAt();
+        return new InstrumentValue(name, description, localDateTime);
     }
 }

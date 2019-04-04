@@ -30,7 +30,7 @@ public class InstrumentResponse {
         Long id = instrument.getId();
         String name = instrument.getName();
         String description = instrument.getDescription();
-        LocalDateTime expiredAt = instrument.getExpiredAt().toLocalDateTime().plusHours(9);
+        LocalDateTime expiredAt = instrument.getExpiredAt();
         return new InstrumentResponse(id, name, description, expiredAt);
     }
 }
