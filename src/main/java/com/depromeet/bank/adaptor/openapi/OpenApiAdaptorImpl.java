@@ -1,6 +1,6 @@
 package com.depromeet.bank.adaptor.openapi;
 
-import com.depromeet.bank.exception.AirPollutionNotFoundException;
+import com.depromeet.bank.exception.AirPollutionResponseNotFound;
 import com.depromeet.bank.exception.OpenApiFailedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,27 +20,20 @@ import java.util.Optional;
 @PropertySource("classpath:open-api.properties")
 public class OpenApiAdaptorImpl implements OpenApiAdaptor {
     private final RestTemplate restTemplate;
-    private final ResponseParser responseParser;
     private final String serviceKey;
 
-    public OpenApiAdaptorImpl(RestTemplate restTemplate, ResponseParser responseParser, @Value("${open-api.serviceKey}") String serviceKey) {
+    public OpenApiAdaptorImpl(RestTemplate restTemplate, @Value("${open-api.serviceKey}") String serviceKey) {
         this.restTemplate = restTemplate;
-        this.responseParser = responseParser;
         this.serviceKey = serviceKey;
     }
 
     @Override
-    public Optional<AirPollution> getAirPollutionByStationName(String stationName) {
+    public Optional<AirPollutionResponse> getAirPollutionResponseByStationName(String stationName) {
         try {
-            String response = restTemplate.getForObject(makeURIfromStationName(stationName), String.class);
-            return Optional.of(responseParser
-                    .jsonToAirPollution(responseParser.xmlToJson(response)))
-                    .orElseThrow(() -> new AirPollutionNotFoundException("AirPollution을 만들 수 없습니다."));
+            AirPollutionResponse response = restTemplate.getForObject(makeURIfromStationName(stationName), AirPollutionResponse.class);
+            return Optional.of(response);
         } catch (OpenApiFailedException ex) {
             log.error("Failed to get open-api request", ex);
-            return Optional.empty();
-        } catch (IOException ex) {
-            log.error("Failed to make json into AirPollution", ex);
             return Optional.empty();
         }
     }

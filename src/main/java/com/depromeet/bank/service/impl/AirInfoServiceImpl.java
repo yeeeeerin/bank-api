@@ -2,7 +2,7 @@ package com.depromeet.bank.service.impl;
 
 import com.depromeet.bank.adaptor.openapi.OpenApiAdaptor;
 import com.depromeet.bank.domain.AirInfo;
-import com.depromeet.bank.exception.AirPollutionNotFoundException;
+import com.depromeet.bank.exception.AirPollutionResponseNotFound;
 import com.depromeet.bank.repository.AirInfoRepository;
 import com.depromeet.bank.service.AirInfoService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +25,8 @@ public class AirInfoServiceImpl implements AirInfoService {
     @Transactional
     public AirInfo createAirInfoByStationName(String stationName) {
         AirInfo airInfo = new AirInfo(openApiAdaptor
-                .getAirPollutionByStationName(stationName)
-                .get(), stationName);
+                .getAirPollutionResponseByStationName(stationName)
+                .orElseThrow(() -> new AirPollutionResponseNotFound("AirPollutionReponse객체를 만들 수 없습니다.")), stationName);
         log.info("airinfo : {}", airInfo.toString());
         return airInfoRepository.save(airInfo);
     }

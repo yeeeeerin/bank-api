@@ -1,6 +1,6 @@
 package com.depromeet.bank.domain;
 
-import com.depromeet.bank.adaptor.openapi.AirPollution;
+import com.depromeet.bank.adaptor.openapi.AirPollutionResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
@@ -30,13 +31,24 @@ public class AirInfo {
 
     private Long o3Value;
 
+    private Integer pm10Grade;
+
+    private Integer pm25Grade;
+
     private LocalDateTime dataTime;
 
-    public AirInfo(AirPollution airPollution, String stationName) {
-        this.pm10Value = airPollution.getPm10Value();
-        this.pm25Value = airPollution.getPm25Value();
-        this.o3Value = airPollution.getO3Value();
-        this.dataTime = airPollution.getDataTime();
+    public AirInfo(AirPollutionResponse response, String stationName) {
+        this.pm10Value = response.getItem().getPm10Value();
+        this.pm25Value = response.getItem().getPm25Value();
+        this.o3Value = response.getItem().getO3Value();
+        this.pm10Grade = response.getItem().getPm10Grade();
+        this.pm25Grade = response.getItem().getPm25Grade();
+        this.dataTime =  setDataTime(response.getItem().getDataTime());
         this.stationName = stationName;
     }
+
+    public LocalDateTime setDataTime(String dataTime) {
+        return LocalDateTime.parse(dataTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+
 }
