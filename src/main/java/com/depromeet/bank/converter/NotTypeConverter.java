@@ -6,15 +6,14 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 @Converter
-public class NotTypeConverter implements AttributeConverter<NotType, String> {
-
+public class NotTypeConverter implements AttributeConverter<NotType, Integer> {
     @Override
-    public String convertToDatabaseColumn(NotType attribute) {
-        return attribute.name();
+    public Integer convertToDatabaseColumn(NotType attribute) {
+        return attribute.getValue();
     }
 
     @Override
-    public NotType convertToEntityAttribute(String dbData) {
-        return NotType.valueOf(dbData);
+    public NotType convertToEntityAttribute(Integer dbData) {
+        return NotType.from(dbData);
     }
 }

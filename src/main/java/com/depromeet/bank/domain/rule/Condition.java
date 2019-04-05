@@ -1,6 +1,7 @@
 package com.depromeet.bank.domain.rule;
 
 import com.depromeet.bank.converter.ComparisonTypeConverter;
+import com.depromeet.bank.converter.DataTypeConverter;
 import com.depromeet.bank.converter.NotTypeConverter;
 import lombok.*;
 
@@ -19,6 +20,7 @@ public class Condition {
      * 어떤 데이터를 어떻게 가공해야 할지 (일별 미세먼지, 주별 출석률 등)
      */
     @Column
+    @Convert(converter = DataTypeConverter.class)
     private DataType dataType;
 
     /**
@@ -47,7 +49,7 @@ public class Condition {
     @Convert(converter = NotTypeConverter.class)
     private NotType notType;
 
-    public Condition(DataType dataType,
+    private Condition(DataType dataType,
                      Long goal,
                      Period period,
                      ComparisonType comparisonType,
@@ -63,7 +65,7 @@ public class Condition {
                                Long goal,
                                Period period,
                                ComparisonType comparisonType) {
-        return new Condition(dataType, goal, period, comparisonType, NotType.POSTIVE);
+        return new Condition(dataType, goal, period, comparisonType, NotType.POSITIVE);
     }
 
     public boolean satisfied() {

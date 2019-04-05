@@ -1,11 +1,12 @@
 package com.depromeet.bank.domain.rule;
 
-import com.depromeet.bank.converter.TimeUnitConverter;
 import com.depromeet.bank.domain.attendance.DepromeetSessionType;
 import lombok.*;
 
-import javax.persistence.Convert;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
@@ -15,13 +16,17 @@ import java.util.concurrent.TimeUnit;
 @ToString
 @EqualsAndHashCode
 public class Period {
-    @Convert(converter = TimeUnitConverter.class)
+    @Column
+    @Enumerated(value = EnumType.STRING)
     private TimeUnit timeUnit;
 
+    @Column
     private Integer cycleTime;
 
+    @Column
     private LocalDateTime fromAt;
 
+    @Column
     private LocalDateTime toAt;
 
     private Period(TimeUnit timeUnit,

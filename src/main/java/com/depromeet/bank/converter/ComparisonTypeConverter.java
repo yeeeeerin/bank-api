@@ -6,14 +6,14 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 @Converter
-public class ComparisonTypeConverter implements AttributeConverter<ComparisonType, String> {
+public class ComparisonTypeConverter implements AttributeConverter<ComparisonType, Integer> {
     @Override
-    public String convertToDatabaseColumn(ComparisonType attribute) {
-        return attribute.name();
+    public Integer convertToDatabaseColumn(ComparisonType attribute) {
+        return attribute.getValue();
     }
 
     @Override
-    public ComparisonType convertToEntityAttribute(String dbData) {
-        return ComparisonType.valueOf(dbData);
+    public ComparisonType convertToEntityAttribute(Integer dbData) {
+        return ComparisonType.from(dbData);
     }
 }

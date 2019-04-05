@@ -6,14 +6,14 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 @Converter
-public class DataTypeConverter implements AttributeConverter<DataType, String> {
+public class DataTypeConverter implements AttributeConverter<DataType, Integer> {
     @Override
-    public String convertToDatabaseColumn(DataType attribute) {
-        return attribute.name();
+    public Integer convertToDatabaseColumn(DataType attribute) {
+        return attribute.getValue();
     }
 
     @Override
-    public DataType convertToEntityAttribute(String dbData) {
-        return DataType.valueOf(dbData);
+    public DataType convertToEntityAttribute(Integer dbData) {
+        return DataType.from(dbData);
     }
 }
