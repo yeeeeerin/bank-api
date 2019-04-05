@@ -1,6 +1,6 @@
 package com.depromeet.bank.vo;
 
-import com.depromeet.bank.domain.attendance.AttendanceSign;
+import com.depromeet.bank.domain.data.attendance.AttendanceSign;
 import lombok.Value;
 
 import java.util.List;

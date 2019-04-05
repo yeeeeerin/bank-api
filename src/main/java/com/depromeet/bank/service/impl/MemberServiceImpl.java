@@ -1,6 +1,6 @@
 package com.depromeet.bank.service.impl;
 
-import com.depromeet.bank.domain.Account;
+import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.Member;
 import com.depromeet.bank.dto.AccountDto;
 import com.depromeet.bank.dto.TokenDto;
@@ -8,7 +8,7 @@ import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.MemberRepository;
 import com.depromeet.bank.service.MemberService;
 import com.depromeet.bank.service.SocialFetchService;
-import com.depromeet.bank.utils.AccountFactory;
+import com.depromeet.bank.domain.account.AccountFactory;
 import com.depromeet.bank.utils.JwtFactory;
 import com.depromeet.bank.vo.SocialMemberVo;
 import lombok.RequiredArgsConstructor;

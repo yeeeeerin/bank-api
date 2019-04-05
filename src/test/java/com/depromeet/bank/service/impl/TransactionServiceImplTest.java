@@ -1,6 +1,6 @@
 package com.depromeet.bank.service.impl;
 
-import com.depromeet.bank.domain.Account;
+import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.Member;
 import com.depromeet.bank.dto.TransactionRequest;
 import com.depromeet.bank.exception.NotFoundException;

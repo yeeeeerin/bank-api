@@ -24,14 +24,21 @@ public class Condition {
     private DataType dataType;
 
     /**
-     * 목표값
+     * data가 비교해야 할 값
      */
     @Column
     private Long goal;
 
     /**
+     * 기준 (조건을 만족하는 사건의 개수가 criterion 보다 크거나 같아야 성공)
+     */
+    @Column
+    private Long criterion;
+
+    /**
      * 데이터를 조회할 기간
      */
+    @Column
     @Embedded
     private Period period;
 
@@ -50,12 +57,14 @@ public class Condition {
     private NotType notType;
 
     private Condition(DataType dataType,
-                     Long goal,
-                     Period period,
-                     ComparisonType comparisonType,
-                     NotType notType) {
+                      Long goal,
+                      Long criterion,
+                      Period period,
+                      ComparisonType comparisonType,
+                      NotType notType) {
         this.dataType = dataType;
         this.goal = goal;
+        this.criterion = criterion;
         this.period = period;
         this.comparisonType = comparisonType;
         this.notType = notType;
@@ -63,12 +72,18 @@ public class Condition {
 
     public static Condition of(DataType dataType,
                                Long goal,
+                               Long criterion,
                                Period period,
                                ComparisonType comparisonType) {
-        return new Condition(dataType, goal, period, comparisonType, NotType.POSITIVE);
+        return new Condition(dataType, goal, criterion, period, comparisonType, NotType.POSITIVE);
     }
 
-    public boolean satisfied() {
-        return false;
+    public static Condition of(DataType dataType,
+                               Long goal,
+                               Long criterion,
+                               Period period,
+                               ComparisonType comparisonType,
+                               NotType notType) {
+        return new Condition(dataType, goal, criterion, period, comparisonType, notType);
     }
 }

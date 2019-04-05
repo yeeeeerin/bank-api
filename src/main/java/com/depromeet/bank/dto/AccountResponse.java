@@ -1,6 +1,6 @@
 package com.depromeet.bank.dto;
 
-import com.depromeet.bank.domain.Account;
+import com.depromeet.bank.domain.account.Account;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.Assert;

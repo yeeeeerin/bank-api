@@ -1,6 +1,6 @@
 package com.depromeet.bank.controller;
 
-import com.depromeet.bank.domain.Account;
+import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.dto.AccountDto;
 import com.depromeet.bank.dto.AccountResponse;
 import com.depromeet.bank.dto.ResponseDto;

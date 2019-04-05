@@ -1,10 +1,9 @@
-package com.depromeet.bank.domain.attendance;
+package com.depromeet.bank.domain.data.attendance;
 
 import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Getter

@@ -1,6 +1,6 @@
 package com.depromeet.bank.service;
 
-import com.depromeet.bank.domain.Account;
+import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.dto.AccountDto;
 
 import java.util.List;

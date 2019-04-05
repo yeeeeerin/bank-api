@@ -1,5 +1,7 @@
-package com.depromeet.bank.domain;
+package com.depromeet.bank.domain.account;
 
+import com.depromeet.bank.domain.Member;
+import com.depromeet.bank.domain.Transaction;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

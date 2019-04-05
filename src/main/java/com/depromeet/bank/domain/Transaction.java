@@ -3,6 +3,7 @@ package com.depromeet.bank.domain;
 import com.depromeet.bank.vo.TransactionValue;
 import lombok.Getter;
 import lombok.Setter;
+import com.depromeet.bank.domain.account.Account;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.util.Assert;

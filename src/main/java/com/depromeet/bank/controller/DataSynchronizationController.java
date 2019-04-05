@@ -1,6 +1,6 @@
 package com.depromeet.bank.controller;
 
-import com.depromeet.bank.domain.attendance.Attendance;
+import com.depromeet.bank.domain.data.attendance.Attendance;
 import com.depromeet.bank.dto.AttendanceResponse;
 import com.depromeet.bank.dto.ResponseDto;
 import com.depromeet.bank.service.AttendanceService;
