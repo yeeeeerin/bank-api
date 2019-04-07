@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TransactionService {
-    void createTransaction(TransactionRequest transactionRequest, Long memberId);
+    void createTransaction(Long memberId, TransactionRequest transactionRequest);
 
-    List<TransactionResponse> getTransaction(Long accountId, int page);
+    List<TransactionResponse> getTransaction(Long memberId, Long accountId, int page);
 
-    void deleteTransaction(UUID guid);
+    void deleteTransaction(Long memberId, UUID guid);
 }

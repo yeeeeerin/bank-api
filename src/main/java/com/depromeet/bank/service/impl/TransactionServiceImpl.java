@@ -37,7 +37,7 @@ public class TransactionServiceImpl implements TransactionService {
      * */
     @Override
     @Transactional
-    public void createTransaction(TransactionRequest transactionRequest, Long memberId) {
+    public void createTransaction(Long memberId, TransactionRequest transactionRequest) {
 
         Account fromAccount = accountRepository.findById(transactionRequest.getFromAccountId())
                 .orElseThrow(() -> new NotFoundException("계좌가 존재하지 않습니다."));
@@ -68,9 +68,15 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<TransactionResponse> getTransaction(Long accountId, int page) {
-        accountRepository.findById(accountId)
-                .orElseThrow(() -> new NotFoundException("계좌가 존재하지 않습니다."));
+    public List<TransactionResponse> getTransaction(Long memberId, Long accountId, int page) {
+        Long accountMemberId = accountRepository.findById(accountId)
+                .orElseThrow(() -> new NotFoundException("계좌가 존재하지 않습니다."))
+                .getMember()
+                .getId();
+
+        if (accountMemberId != memberId) {
+            throw new ServiceUnavailableException("접근 권한이 없습니다.");
+        }
 
         Pageable pageable = PageRequest.of(page, 10);
         return transactionRepository.findAllByAccount_Id(accountId, pageable)
@@ -84,11 +90,11 @@ public class TransactionServiceImpl implements TransactionService {
     /*
      * 해당하는 guid를 가지고 있는 거래 내역들을 찾아
      * 그 거래내역을 가지고 있는 계좌로 부터 돈을 돌려주고
-     * 취소한 거래 내역을 추가한다
+     * 취소한 거래 내역을 추가한다.
      * */
     @Override
     @Transactional
-    public void deleteTransaction(UUID guid) {
+    public void deleteTransaction(Long memberId, UUID guid) {
         transactionRepository.findByGuid(guid).ifPresent(
                 s -> s.forEach(t -> {
                     String cancelGuid = UUID.randomUUID().toString();
