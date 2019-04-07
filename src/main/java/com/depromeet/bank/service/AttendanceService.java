@@ -7,9 +7,11 @@ import com.depromeet.bank.vo.AttendanceValue;
 import java.util.Optional;
 
 public interface AttendanceService {
-    void fetch(DepromeetSessionType depromeetSessionType);
+    Attendance fetch(DepromeetSessionType depromeetSessionType);
 
     Optional<Attendance> findBySessionType(DepromeetSessionType depromeetSessionType);
 
     Attendance createOrUpdate(AttendanceValue attendanceValue, DepromeetSessionType depromeetSessionType);
+
+    Attendance synchronize(Long attendanceId);
 }

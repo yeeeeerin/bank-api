@@ -1,6 +1,7 @@
 package com.depromeet.bank.controller;
 
 import com.depromeet.bank.dto.ResponseDto;
+import com.depromeet.bank.exception.InternalServerErrorException;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.exception.ServiceUnavailableException;
 import com.depromeet.bank.exception.UnauthorizedException;
@@ -43,6 +44,12 @@ public class ApiControllerAdvice {
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public ResponseDto handleServiceUnavailableException(ServiceUnavailableException ex) {
         return ResponseDto.of(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+    }
+
+    @ExceptionHandler(InternalServerErrorException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseDto handleBadRequestException(InternalServerErrorException ex) {
+        return ResponseDto.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
