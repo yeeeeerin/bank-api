@@ -4,13 +4,12 @@ import com.depromeet.bank.domain.Transaction;
 import com.depromeet.bank.dto.TransactionRequest;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface TransactionService {
     void createTransaction(TransactionRequest transactionRequest);
 
-    Optional<List<Transaction>> getTransaction(Long accountId);
+    List<Transaction> getTransaction(Long accountId, int page);
 
     void deleteTransaction(UUID guid);
 }

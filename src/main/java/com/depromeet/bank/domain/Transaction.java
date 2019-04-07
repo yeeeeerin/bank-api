@@ -1,6 +1,7 @@
 package com.depromeet.bank.domain;
 
 import com.depromeet.bank.vo.TransactionValue;
+import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,6 +13,7 @@ import java.util.UUID;
 
 @Entity
 @Setter
+@Getter
 @EntityListeners(AuditingEntityListener.class)
 public class Transaction {
 

@@ -44,7 +44,7 @@ public class Account {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     @JsonIgnore
     @Builder.Default
     private Set<Transaction> transactions = new HashSet<>();

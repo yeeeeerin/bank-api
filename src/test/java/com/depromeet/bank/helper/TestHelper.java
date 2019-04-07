@@ -3,14 +3,18 @@ package com.depromeet.bank.helper;
 
 import com.depromeet.bank.domain.Account;
 import com.depromeet.bank.domain.Member;
+import com.depromeet.bank.domain.Transaction;
+import com.depromeet.bank.domain.TransactionClassify;
 import com.depromeet.bank.dto.InstrumentRequest;
+import com.depromeet.bank.dto.TransactionRequest;
 import com.depromeet.bank.vo.SocialMemberVo;
+import com.depromeet.bank.vo.TransactionValue;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public final class TestHelper {
     // nontinstantiable utility class
@@ -36,12 +40,15 @@ public final class TestHelper {
     }
 
     public static Account createAccount(String name, Long balance, Double rate, Member member) {
-        return Account.builder()
-                .name(name)
-                .balance(balance)
-                .rate(rate)
-                .member(member)
-                .build();
+
+        Account account = new Account();
+        account.setName(name);
+        account.setBalance(balance);
+        account.setRate(rate);
+        account.setMember(member);
+
+        return account;
+
     }
 
     public static InstrumentRequest createInstrumentRequest(String name, String description, LocalDateTime expiredAt) {
@@ -51,4 +58,23 @@ public final class TestHelper {
         ReflectionTestUtils.setField(instrumentRequest, "expiredAt", expiredAt);
         return instrumentRequest;
     }
+
+    public static TransactionRequest createTransactionRequest(Long fromAccountId, Long toAccountId, Long amount) {
+        TransactionRequest transactionRequest = new TransactionRequest();
+        ReflectionTestUtils.setField(transactionRequest, "fromAccountId", fromAccountId);
+        ReflectionTestUtils.setField(transactionRequest, "toAccountId", toAccountId);
+        ReflectionTestUtils.setField(transactionRequest, "amount", amount);
+        return transactionRequest;
+    }
+
+    private static TransactionValue transactionValue(Long amount, TransactionClassify transactionClassify, Account account) {
+        return TransactionValue.of(amount, transactionClassify, account, UUID.randomUUID());
+    }
+
+    public static Transaction createTransaction(Long amount, TransactionClassify transactionClassify, Account account) {
+        TransactionValue transactionValue = transactionValue(amount, transactionClassify, account);
+        return Transaction.from(transactionValue);
+    }
+
+
 }
