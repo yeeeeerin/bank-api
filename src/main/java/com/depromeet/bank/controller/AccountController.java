@@ -6,12 +6,9 @@ import com.depromeet.bank.dto.AccountResponse;
 import com.depromeet.bank.dto.ResponseDto;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.service.AccountService;
-import com.depromeet.bank.utils.JwtFactory;
-import io.swagger.annotations.ApiImplicitParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +19,6 @@ import java.util.stream.Collectors;
 public class AccountController {
 
     private final AccountService accountService;
-    private final JwtFactory jwtFactory;
 
 
     //계좌 생성
@@ -49,6 +45,4 @@ public class AccountController {
         return ResponseDto.of(HttpStatus.OK, "계좌 정보 조회에 성공했습니다", accountList);
     }
 
-    //거래내역 조회
-    //@GetMapping("/accounts/{accountId:\\d+}")
 }
