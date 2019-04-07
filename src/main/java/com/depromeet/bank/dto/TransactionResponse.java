@@ -4,7 +4,6 @@ import com.depromeet.bank.domain.Transaction;
 import com.depromeet.bank.domain.TransactionClassify;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 
 public class TransactionResponse {
@@ -15,12 +14,13 @@ public class TransactionResponse {
 
     private TransactionClassify transactionClassify;
 
-    private UUID guid;
+    private String guid;
 
-    private TransactionResponse(Long amount, LocalDateTime dateTime, TransactionClassify transactionClassify, UUID guid) {
+    private TransactionResponse(Long amount, LocalDateTime dateTime, TransactionClassify transactionClassify, String guid) {
         this.amount = amount;
         this.dateTime = dateTime;
         this.transactionClassify = transactionClassify;
+        this.guid = guid;
     }
 
     public static TransactionResponse from(Transaction transaction) {

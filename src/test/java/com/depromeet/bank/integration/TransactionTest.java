@@ -9,22 +9,20 @@ import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.MemberRepository;
 import com.depromeet.bank.repository.TransactionRepository;
 import com.depromeet.bank.service.TransactionService;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.UUID;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Slf4j
+@Transactional
 public class TransactionTest {
 
     @Autowired
@@ -74,16 +72,5 @@ public class TransactionTest {
         assertThat(받는계좌.getBalance(), is(1200l));
     }
 
-    @Test(expected = NotFoundException.class)
-    public void 이체를하고_해당_이체를_삭제한후_성공하면_해당_이체_내역이_없음으로_NotFoundException() {
-        //given
-        UUID guid = transactionService.createTransaction(transactionRequest);
-
-        //when
-        transactionService.deleteTransaction(guid);
-
-        //then
-        transactionRepository.findByGuid(guid).orElseThrow(NotFoundException::new);
-    }
 
 }

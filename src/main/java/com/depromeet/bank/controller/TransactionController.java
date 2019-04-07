@@ -17,16 +17,20 @@ import java.util.UUID;
 public class TransactionController {
     private final TransactionService transactionService;
 
-    @PostMapping("/transactions")
-    public ResponseDto<String> addTransaction(@RequestBody TransactionRequest transactionRequest) {
+    @PostMapping("/accounts/{accountId:\\d+}/transfer")
+    public ResponseDto<String> addTransaction(@PathVariable Long accountId,
+                                              @RequestAttribute Long id,
+                                              @RequestBody TransactionRequest transactionRequest) {
+
         transactionService.createTransaction(transactionRequest);
 
         return ResponseDto.of(HttpStatus.OK, "transaction done");
     }
 
-    @GetMapping("/transactions")
+    @GetMapping("/accounts/{accountId:\\d+}/transactions")
     public ResponseDto<List<TransactionResponse>> getTransaction(@RequestParam(value = "page", defaultValue = "0") int page,
-                                                                 @RequestAttribute Long accountId) {
+                                                                 @PathVariable Long accountId,
+                                                                 @RequestAttribute Long id) {
 
         List<TransactionResponse> transactionList = transactionService.getTransaction(accountId, page);
 
@@ -34,8 +38,9 @@ public class TransactionController {
     }
 
 
-    @PostMapping("/transactions/cancel")
-    public void deleteTransaction(UUID guid) {
+    @PostMapping("/accounts/{accountId:\\d+}/transactions/cancel")
+    public void deleteTransaction(@RequestAttribute Long id,
+                                  @RequestBody UUID guid) {
         transactionService.deleteTransaction(guid);
     }
 
