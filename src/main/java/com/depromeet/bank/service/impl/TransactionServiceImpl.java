@@ -7,6 +7,7 @@ import com.depromeet.bank.dto.TransactionRequest;
 import com.depromeet.bank.dto.TransactionResponse;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.exception.ServiceUnavailableException;
+import com.depromeet.bank.exception.UnAuthenticationException;
 import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.TransactionRepository;
 import com.depromeet.bank.service.TransactionService;
@@ -43,7 +44,10 @@ public class TransactionServiceImpl implements TransactionService {
                 .orElseThrow(() -> new NotFoundException("계좌가 존재하지 않습니다."));
 
         if (fromAccount.getMember().getId() != memberId) {
-            throw new ServiceUnavailableException("접근 권한이 없습니다.");
+            throw new UnAuthenticationException("접근 권한이 없습니다.");
+        }
+        if (fromAccount.getBalance() <= transactionRequest.getAmount()) {
+            throw new ServiceUnavailableException("잔고가 부족합니다.");
         }
 
         Account toAccount = accountRepository.findById(transactionRequest.getToAccountId())
@@ -53,13 +57,13 @@ public class TransactionServiceImpl implements TransactionService {
         Long amount = transactionRequest.getAmount();
 
         TransactionValue fromTransactionValue =
-                TransactionValue.of(amount, TransactionClassify.DEPOSIT, fromAccount, guid);
+                TransactionValue.of(amount, TransactionClassify.WITHDRAWAL, fromAccount, guid);
         fromAccount.setBalance(fromAccount.getBalance() - amount);
         transactionRepository.save(Transaction.from(fromTransactionValue));
 
 
         TransactionValue toTransactionValue =
-                TransactionValue.of(amount, TransactionClassify.WITHDRAWAL, toAccount, guid);
+                TransactionValue.of(amount, TransactionClassify.DEPOSIT, toAccount, guid);
         toAccount.setBalance(toAccount.getBalance() + amount);
         transactionRepository.save(Transaction.from(toTransactionValue));
 
@@ -75,7 +79,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .getId();
 
         if (accountMemberId != memberId) {
-            throw new ServiceUnavailableException("접근 권한이 없습니다.");
+            throw new UnAuthenticationException("접근 권한이 없습니다.");
         }
 
         Pageable pageable = PageRequest.of(page, 10);
@@ -102,7 +106,9 @@ public class TransactionServiceImpl implements TransactionService {
                             .getId())
                             .ifPresent(account -> {
                                 if (t.getTransactionClassify() == TransactionClassify.DEPOSIT) {
-
+                                    if (account.getBalance() <= t.getAmount()) {
+                                        throw new ServiceUnavailableException("잔고가 부족합니다.");
+                                    }
                                     TransactionValue fromTransactionValue =
                                             TransactionValue.of(t.getAmount(), TransactionClassify.WITHDRAWAL, account, cancelGuid);
                                     account.setBalance(account.getBalance() - t.getAmount());
