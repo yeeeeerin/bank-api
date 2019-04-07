@@ -4,6 +4,7 @@ import com.depromeet.bank.domain.Account;
 import com.depromeet.bank.domain.Transaction;
 import com.depromeet.bank.domain.TransactionClassify;
 import com.depromeet.bank.dto.TransactionRequest;
+import com.depromeet.bank.dto.TransactionResponse;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.TransactionRepository;
@@ -63,13 +64,15 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Transaction> getTransaction(Long accountId, int page) {
+    public List<TransactionResponse> getTransaction(Long accountId, int page) {
         accountRepository.findById(accountId)
                 .orElseThrow(() -> new NotFoundException("계좌가 존재하지 않습니다."));
 
         Pageable pageable = PageRequest.of(page, 10);
         return transactionRepository.findAllByAccount_Id(accountId, pageable)
                 .stream()
+                .collect(Collectors.toList()).stream()
+                .map(TransactionResponse::from)
                 .collect(Collectors.toList());
     }
 
