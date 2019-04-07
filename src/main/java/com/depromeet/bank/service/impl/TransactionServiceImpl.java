@@ -35,7 +35,7 @@ public class TransactionServiceImpl implements TransactionService {
      * */
     @Override
     @Transactional
-    public void createTransaction(TransactionRequest transactionRequest) {
+    public UUID createTransaction(TransactionRequest transactionRequest) {
 
         Account fromAccount = accountRepository.findById(transactionRequest.getFromAccountId())
                 .orElseThrow(() -> new NotFoundException("계좌가 존재하지 않습니다."));
@@ -56,6 +56,8 @@ public class TransactionServiceImpl implements TransactionService {
                 TransactionValue.of(amount, TransactionClassify.WITHDRAWAL, toAccount, guid);
         toAccount.setBalance(toAccount.getBalance() + amount);
         transactionRepository.save(Transaction.from(toTransactionValue));
+
+        return guid;
 
     }
 
