@@ -68,7 +68,7 @@ public final class TestHelper {
     }
 
     private static TransactionValue transactionValue(Long amount, TransactionClassify transactionClassify, Account account) {
-        return TransactionValue.of(amount, transactionClassify, account, UUID.randomUUID());
+        return TransactionValue.of(amount, transactionClassify, account, UUID.randomUUID().toString());
     }
 
     public static Transaction createTransaction(Long amount, TransactionClassify transactionClassify, Account account) {

@@ -62,7 +62,7 @@ public class TransactionTest {
 
         //given
         //when
-        transactionService.createTransaction(transactionRequest);
+        transactionService.createTransaction(member.getId(), transactionRequest);
 
         Account 요청계좌 = accountRepository.findById(fromAccount.getId()).orElseThrow(NotFoundException::new);
         Account 받는계좌 = accountRepository.findById(toAccount.getId()).orElseThrow(NotFoundException::new);

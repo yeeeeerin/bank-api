@@ -22,7 +22,7 @@ public class TransactionController {
                                               @RequestAttribute Long id,
                                               @RequestBody TransactionRequest transactionRequest) {
 
-        transactionService.createTransaction(transactionRequest);
+        transactionService.createTransaction(id, transactionRequest);
 
         return ResponseDto.of(HttpStatus.OK, "transaction done");
     }
@@ -32,7 +32,7 @@ public class TransactionController {
                                                                  @PathVariable Long accountId,
                                                                  @RequestAttribute Long id) {
 
-        List<TransactionResponse> transactionList = transactionService.getTransaction(accountId, page);
+        List<TransactionResponse> transactionList = transactionService.getTransaction(id, accountId, page);
 
         return ResponseDto.of(HttpStatus.OK, "이체 정보 조회에 성공했습니다", transactionList);
     }
@@ -41,7 +41,7 @@ public class TransactionController {
     @PostMapping("/accounts/{accountId:\\d+}/transactions/cancel")
     public void deleteTransaction(@RequestAttribute Long id,
                                   @RequestBody UUID guid) {
-        transactionService.deleteTransaction(guid);
+        transactionService.deleteTransaction(id, guid);
     }
 
 
