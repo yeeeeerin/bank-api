@@ -5,19 +5,22 @@ import com.depromeet.bank.domain.Account;
 import com.depromeet.bank.domain.Member;
 import com.depromeet.bank.domain.Transaction;
 import com.depromeet.bank.domain.TransactionClassify;
+import com.depromeet.bank.domain.attendance.Attendance;
 import com.depromeet.bank.dto.InstrumentRequest;
 import com.depromeet.bank.dto.TransactionRequest;
 import com.depromeet.bank.vo.SocialMemberVo;
 import com.depromeet.bank.vo.TransactionValue;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public final class TestHelper {
-    // nontinstantiable utility class
+    // noninstantiable utility class
     private TestHelper() {
     }
 
@@ -76,5 +79,16 @@ public final class TestHelper {
         return Transaction.from(transactionValue);
     }
 
-
+    public static Attendance createAttendance(Long id,
+                                              Integer numberOfAttendee,
+                                              Integer numberOfAbsentee,
+                                              String sessionName,
+                                              LocalDateTime createdAt)
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Constructor<Attendance> constructor = Attendance.class.getDeclaredConstructor(
+                Long.class, Integer.class, Integer.class, String.class, LocalDateTime.class
+        );
+        constructor.setAccessible(true);
+        return constructor.newInstance(id, numberOfAttendee, numberOfAbsentee, sessionName, createdAt);
+    }
 }
