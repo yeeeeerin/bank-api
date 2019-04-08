@@ -1,6 +1,6 @@
 package com.depromeet.bank.repository;
 
-import com.depromeet.bank.domain.attendance.DepromeetSessionType;
+import com.depromeet.bank.domain.data.attendance.DepromeetSessionType;
 import com.depromeet.bank.domain.rule.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,9 +33,11 @@ public class AdjustmentRuleRepositoryTest {
     private Condition createCondition() {
         DataType dateType = DataType.NUMBER_OF_ATTENDEE;
         Long goal = 50L;
+        Long criterion = 1L;
         Period period = Period.from(DepromeetSessionType.MARCH_TWENTY_THIRD);
         ComparisonType comparisonType = ComparisonType.GREATER_THAN_OR_EQUAL_TO;
-        return Condition.of(dateType, goal, period, comparisonType);
+        NotType notType = NotType.POSITIVE;
+        return Condition.of(dateType, goal, criterion, period, comparisonType, notType);
     }
 
     private Reward createReward() {

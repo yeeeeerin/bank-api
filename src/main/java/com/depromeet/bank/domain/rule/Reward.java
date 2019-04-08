@@ -12,19 +12,20 @@ import java.util.Optional;
 @ToString
 @EqualsAndHashCode
 public class Reward {
-    private static Reward DEFAULT = new Reward(0L);
+    private static final double RATE_DEFAULT = 0.0;
+    private static final Reward DEFAULT = new Reward(RATE_DEFAULT);
 
     /**
-     * 퍼센트로 나타낸 값 x 100, 소수점 절사
+     * 투자금을 기준으로 보상해주어야 하는 비율. (단위 미정)
      */
     @Column
-    private Long rate;
+    private Double rate;
 
-    private Reward(Long rate) {
-        this.rate = Optional.ofNullable(rate).orElse(0L);
+    private Reward(Double rate) {
+        this.rate = Optional.ofNullable(rate).orElse(RATE_DEFAULT);
     }
 
-    public static Reward from(Long rate) {
+    public static Reward from(Double rate) {
         return new Reward(rate);
     }
 

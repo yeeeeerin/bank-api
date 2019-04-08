@@ -1,6 +1,6 @@
 package com.depromeet.bank.scheduler;
 
-import com.depromeet.bank.domain.attendance.DepromeetSessionType;
+import com.depromeet.bank.domain.data.attendance.DepromeetSessionType;
 import com.depromeet.bank.service.AttendanceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;

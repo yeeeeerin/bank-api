@@ -1,4 +1,4 @@
-package com.depromeet.bank.domain.attendance;
+package com.depromeet.bank.domain.data.attendance;
 
 import lombok.Getter;
 

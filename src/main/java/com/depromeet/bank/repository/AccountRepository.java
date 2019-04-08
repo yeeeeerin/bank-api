@@ -1,6 +1,6 @@
 package com.depromeet.bank.repository;
 
-import com.depromeet.bank.domain.Account;
+import com.depromeet.bank.domain.account.Account;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

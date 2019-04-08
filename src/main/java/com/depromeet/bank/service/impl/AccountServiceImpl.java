@@ -1,13 +1,13 @@
 package com.depromeet.bank.service.impl;
 
-import com.depromeet.bank.domain.Account;
+import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.Member;
 import com.depromeet.bank.dto.AccountDto;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.MemberRepository;
 import com.depromeet.bank.service.AccountService;
-import com.depromeet.bank.utils.AccountFactory;
+import com.depromeet.bank.domain.account.AccountFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;

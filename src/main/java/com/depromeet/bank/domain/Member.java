@@ -1,6 +1,7 @@
 package com.depromeet.bank.domain;
 
 
+import com.depromeet.bank.domain.account.Account;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;

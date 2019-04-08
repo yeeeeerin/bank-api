@@ -1,4 +1,4 @@
-package com.depromeet.bank.domain.naming;
+package com.depromeet.bank.domain.account.naming;
 
 public enum NounName {
     DONKEY("당나귀"),

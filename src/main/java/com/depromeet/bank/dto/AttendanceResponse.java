@@ -1,6 +1,6 @@
 package com.depromeet.bank.dto;
 
-import com.depromeet.bank.domain.attendance.Attendance;
+import com.depromeet.bank.domain.data.attendance.Attendance;
 import lombok.*;
 import org.springframework.util.Assert;
 
