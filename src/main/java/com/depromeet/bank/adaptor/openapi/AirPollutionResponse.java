@@ -53,6 +53,15 @@ public class AirPollutionResponse {
             private Integer pm25Grade;
 
         }
+
+        @XmlElement
+        private Integer totalCount;
+
+        @XmlElement
+        private Integer pageNo;
+
+        @XmlElement
+        private Integer numOfRows;
     }
 
     public Body.Item getItem() {

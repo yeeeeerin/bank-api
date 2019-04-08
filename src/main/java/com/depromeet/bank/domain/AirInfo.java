@@ -1,6 +1,7 @@
 package com.depromeet.bank.domain;
 
 import com.depromeet.bank.adaptor.openapi.AirPollutionResponse;
+import com.depromeet.bank.adaptor.openapi.OpenApiStationName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,6 +9,7 @@ import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -37,14 +39,14 @@ public class AirInfo {
 
     private LocalDateTime dataTime;
 
-    public AirInfo(AirPollutionResponse response, String stationName) {
+    public AirInfo(AirPollutionResponse response, OpenApiStationName stationName) {
         this.pm10Value = response.getItem().getPm10Value();
         this.pm25Value = response.getItem().getPm25Value();
         this.o3Value = response.getItem().getO3Value();
         this.pm10Grade = response.getItem().getPm10Grade();
         this.pm25Grade = response.getItem().getPm25Grade();
         this.dataTime =  setDataTime(response.getItem().getDataTime());
-        this.stationName = stationName;
+        this.stationName = stationName.getValue();
     }
 
     public LocalDateTime setDataTime(String dataTime) {

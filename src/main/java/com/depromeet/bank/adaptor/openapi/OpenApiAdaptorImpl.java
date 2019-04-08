@@ -28,7 +28,7 @@ public class OpenApiAdaptorImpl implements OpenApiAdaptor {
     }
 
     @Override
-    public Optional<AirPollutionResponse> getAirPollutionResponseByStationName(String stationName) {
+    public Optional<AirPollutionResponse> getAirPollutionResponseByStationName(OpenApiStationName stationName) {
         try {
             AirPollutionResponse response = restTemplate.getForObject(makeURIfromStationName(stationName), AirPollutionResponse.class);
             return Optional.of(response);
@@ -38,13 +38,13 @@ public class OpenApiAdaptorImpl implements OpenApiAdaptor {
         }
     }
 
-    public URI makeURIfromStationName(String stationName) {
+    public URI makeURIfromStationName(OpenApiStationName stationName) {
         try {
             URI uri = UriComponentsBuilder.newInstance()
                     .scheme("http")
                     .host("openapi.airkorea.or.kr")
                     .path("/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty")
-                    .queryParam("stationName", URLEncoder.encode(stationName, "UTF-8"))
+                    .queryParam("stationName", URLEncoder.encode(stationName.getValue(), "UTF-8"))
                     .queryParam("dataTerm", "daily")
                     .queryParam("pageNo", 1)
                     .queryParam("numOfRows", 1)
@@ -56,6 +56,6 @@ public class OpenApiAdaptorImpl implements OpenApiAdaptor {
         } catch (UnsupportedEncodingException ex) {
             log.error("{}", ex);
             throw new RuntimeException("Encoding에 실패했습니다.");
+            }
         }
     }
-}
