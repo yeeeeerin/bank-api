@@ -3,7 +3,6 @@ package com.depromeet.bank.controller;
 import com.depromeet.bank.dto.ResponseDto;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.exception.ServiceUnavailableException;
-import com.depromeet.bank.exception.UnAuthenticationException;
 import com.depromeet.bank.exception.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,7 +26,11 @@ public class ApiControllerAdvice {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
     public ResponseDto handleUnauthorizedException(UnauthorizedException ex) {
-        return ResponseDto.of(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        if (!ex.getMessage().isEmpty()) {
+            return ResponseDto.of(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        } else {
+            return ResponseDto.of(HttpStatus.UNAUTHORIZED, "Unauthorized user");
+        }
     }
 
     @ExceptionHandler(NotFoundException.class)
@@ -47,16 +50,6 @@ public class ApiControllerAdvice {
     public ResponseDto handleException(Exception ex) {
         log.error("internal server error", ex);
         return ResponseDto.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
-    }
-
-    @ExceptionHandler(UnAuthenticationException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ResponseDto handleUnAuthenticationException(UnAuthenticationException ex) {
-        if (!ex.getMessage().isEmpty()) {
-            return ResponseDto.of(HttpStatus.FORBIDDEN, ex.getMessage());
-        } else {
-            return ResponseDto.of(HttpStatus.FORBIDDEN, "Unauthorized user");
-        }
     }
 
 
