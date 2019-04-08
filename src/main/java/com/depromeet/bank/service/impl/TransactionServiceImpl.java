@@ -7,6 +7,7 @@ import com.depromeet.bank.dto.TransactionRequest;
 import com.depromeet.bank.dto.TransactionResponse;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.exception.ServiceUnavailableException;
+import com.depromeet.bank.exception.UnauthorizedException;
 import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.TransactionRepository;
 import com.depromeet.bank.service.TransactionService;
@@ -40,26 +41,29 @@ public class TransactionServiceImpl implements TransactionService {
     public void createTransaction(Long memberId, TransactionRequest transactionRequest) {
 
         Account fromAccount = accountRepository.findById(transactionRequest.getFromAccountId())
-                .orElseThrow(() -> new NotFoundException("계좌가 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException(""));
 
         if (fromAccount.getMember().getId() != memberId) {
-            throw new ServiceUnavailableException("접근 권한이 없습니다.");
+            throw new UnauthorizedException();
+        }
+        if (fromAccount.getBalance() <= transactionRequest.getAmount()) {
+            throw new ServiceUnavailableException("There is not enough balance.");
         }
 
         Account toAccount = accountRepository.findById(transactionRequest.getToAccountId())
-                .orElseThrow(() -> new NotFoundException("계좌가 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("Not found account"));
 
         String guid = UUID.randomUUID().toString();
         Long amount = transactionRequest.getAmount();
 
         TransactionValue fromTransactionValue =
-                TransactionValue.of(amount, TransactionClassify.DEPOSIT, fromAccount, guid);
+                TransactionValue.of(amount, TransactionClassify.WITHDRAWAL, fromAccount, guid);
         fromAccount.setBalance(fromAccount.getBalance() - amount);
         transactionRepository.save(Transaction.from(fromTransactionValue));
 
 
         TransactionValue toTransactionValue =
-                TransactionValue.of(amount, TransactionClassify.WITHDRAWAL, toAccount, guid);
+                TransactionValue.of(amount, TransactionClassify.DEPOSIT, toAccount, guid);
         toAccount.setBalance(toAccount.getBalance() + amount);
         transactionRepository.save(Transaction.from(toTransactionValue));
 
@@ -70,12 +74,12 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional(readOnly = true)
     public List<TransactionResponse> getTransaction(Long memberId, Long accountId, int page) {
         Long accountMemberId = accountRepository.findById(accountId)
-                .orElseThrow(() -> new NotFoundException("계좌가 존재하지 않습니다."))
+                .orElseThrow(() -> new NotFoundException("Not found account"))
                 .getMember()
                 .getId();
 
         if (accountMemberId != memberId) {
-            throw new ServiceUnavailableException("접근 권한이 없습니다.");
+            throw new UnauthorizedException();
         }
 
         Pageable pageable = PageRequest.of(page, 10);
@@ -102,7 +106,9 @@ public class TransactionServiceImpl implements TransactionService {
                             .getId())
                             .ifPresent(account -> {
                                 if (t.getTransactionClassify() == TransactionClassify.DEPOSIT) {
-
+                                    if (account.getBalance() <= t.getAmount()) {
+                                        throw new ServiceUnavailableException("There is not enough balance");
+                                    }
                                     TransactionValue fromTransactionValue =
                                             TransactionValue.of(t.getAmount(), TransactionClassify.WITHDRAWAL, account, cancelGuid);
                                     account.setBalance(account.getBalance() - t.getAmount());

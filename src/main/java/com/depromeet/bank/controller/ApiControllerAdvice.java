@@ -26,7 +26,11 @@ public class ApiControllerAdvice {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
     public ResponseDto handleUnauthorizedException(UnauthorizedException ex) {
-        return ResponseDto.of(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        if (!ex.getMessage().isEmpty()) {
+            return ResponseDto.of(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        } else {
+            return ResponseDto.of(HttpStatus.UNAUTHORIZED, "Unauthorized user");
+        }
     }
 
     @ExceptionHandler(NotFoundException.class)
@@ -47,4 +51,6 @@ public class ApiControllerAdvice {
         log.error("internal server error", ex);
         return ResponseDto.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
     }
+
+
 }
