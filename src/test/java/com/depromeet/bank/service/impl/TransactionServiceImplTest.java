@@ -4,7 +4,7 @@ import com.depromeet.bank.domain.Account;
 import com.depromeet.bank.domain.Member;
 import com.depromeet.bank.dto.TransactionRequest;
 import com.depromeet.bank.exception.NotFoundException;
-import com.depromeet.bank.exception.ServiceUnavailableException;
+import com.depromeet.bank.exception.UnauthorizedException;
 import com.depromeet.bank.helper.TestHelper;
 import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.TransactionRepository;
@@ -52,7 +52,7 @@ public class TransactionServiceImplTest {
     @Test(expected = NotFoundException.class)
     public void 이체시_계좌가_없으면_NotFoundException() {
         //given
-        
+
         //when
         transactionService.createTransaction(member.getId(), transactionRequest);
 
@@ -73,7 +73,7 @@ public class TransactionServiceImplTest {
 
     }
 
-    @Test(expected = ServiceUnavailableException.class)
+    @Test(expected = UnauthorizedException.class)
     public void 이체시_권한이_없다면_ServiceUnavailableException() {
 
         //given
