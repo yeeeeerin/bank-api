@@ -1,5 +1,7 @@
 package com.depromeet.bank.domain.instrument;
 
+import com.depromeet.bank.converter.SettlementStatusConverter;
+import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.rule.AdjustmentRule;
 import com.depromeet.bank.vo.InstrumentValue;
 import lombok.AccessLevel;
@@ -11,10 +13,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -35,6 +34,10 @@ public class Instrument {
     private LocalDateTime expiredAt;
 
     @Column
+    @Convert(converter = SettlementStatusConverter.class)
+    private SettlementStatus settlementStatus;
+
+    @Column
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -42,14 +45,21 @@ public class Instrument {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    @OneToMany
+    private List<Account> accounts;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<AdjustmentRule> adjustmentRules;
 
-    private Instrument(String name, String description, LocalDateTime expiredAt, List<AdjustmentRule> adjustmentRules) {
+    private Instrument(String name,
+                       String description,
+                       LocalDateTime expiredAt,
+                       List<AdjustmentRule> adjustmentRules) {
         this.instrumentId = null;
         this.name = Objects.requireNonNull(name);
         this.description = Objects.requireNonNull(description);
         this.expiredAt = Objects.requireNonNull(expiredAt);
+        this.settlementStatus = Optional.ofNullable(settlementStatus).orElse(SettlementStatus.INCOMPLETE);
         this.adjustmentRules = new ArrayList<>(adjustmentRules);
     }
 
@@ -77,6 +87,11 @@ public class Instrument {
         if (requestedExpiredAt != null) {
             this.expiredAt = requestedExpiredAt;
         }
+        return this;
+    }
+
+    public Instrument setAsCompleted() {
+        this.settlementStatus = SettlementStatus.COMPLETE;
         return this;
     }
 

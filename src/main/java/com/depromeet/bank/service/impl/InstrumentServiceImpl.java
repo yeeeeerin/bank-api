@@ -2,6 +2,7 @@ package com.depromeet.bank.service.impl;
 
 import com.depromeet.bank.domain.instrument.Instrument;
 import com.depromeet.bank.domain.instrument.InstrumentFactory;
+import com.depromeet.bank.domain.instrument.SettlementStatus;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.AdjustmentRuleRepository;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,6 +35,12 @@ public class InstrumentServiceImpl implements InstrumentService {
     public List<Instrument> getInstruments(Pageable pageable) {
         return instrumentRepository.findAll(pageable).stream()
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Instrument> getInstrumentsExpiredAndIncomplete(LocalDateTime localDateTime) {
+        return instrumentRepository.findByExpiredAtLessThanAndSettlementStatus(localDateTime, SettlementStatus.INCOMPLETE);
     }
 
     @Override

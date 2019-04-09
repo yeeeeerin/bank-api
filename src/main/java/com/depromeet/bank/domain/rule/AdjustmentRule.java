@@ -26,6 +26,9 @@ public class AdjustmentRule {
     private Reward reward;
 
     @Column
+    private boolean satisfied;
+
+    @Column
     @CreatedDate
     private LocalDateTime createdAt;
 

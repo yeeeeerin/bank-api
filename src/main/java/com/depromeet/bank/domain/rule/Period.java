@@ -35,4 +35,12 @@ public class Period {
         LocalDateTime startedAt = sessionType.getStartedAt();
         return new Period(startedAt, startedAt);
     }
+
+    public boolean contains(LocalDateTime localDateTime) {
+        if (localDateTime == null) {
+            return false;
+        }
+        return (localDateTime.isAfter(fromAt) || localDateTime.isEqual(fromAt))
+                && (localDateTime.isBefore(toAt) || localDateTime.isEqual(toAt));
+    }
 }
