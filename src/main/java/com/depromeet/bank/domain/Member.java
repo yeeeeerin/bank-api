@@ -14,6 +14,7 @@ import java.util.Set;
 @Setter
 @Getter
 public class Member {
+    public static final Long SYSTEM_MEMBER_ID = 0L;
 
     @Id
     @GeneratedValue
