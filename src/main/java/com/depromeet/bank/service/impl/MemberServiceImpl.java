@@ -1,15 +1,15 @@
 package com.depromeet.bank.service.impl;
 
-import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.Member;
+import com.depromeet.bank.domain.account.Account;
+import com.depromeet.bank.domain.account.AccountFactory;
+import com.depromeet.bank.domain.account.JwtFactory;
 import com.depromeet.bank.dto.AccountDto;
 import com.depromeet.bank.dto.TokenDto;
 import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.MemberRepository;
 import com.depromeet.bank.service.MemberService;
 import com.depromeet.bank.service.SocialFetchService;
-import com.depromeet.bank.domain.account.AccountFactory;
-import com.depromeet.bank.utils.JwtFactory;
 import com.depromeet.bank.vo.SocialMemberVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +46,7 @@ public class MemberServiceImpl implements MemberService {
 
                     memberRepository.save(member1);
 
-                    Account account = accountFactory.setAccount(member1, AccountDto.initAccount());
+                    Account account = accountFactory.createForMember(member1, AccountDto.initAccount());
                     accountRepository.save(account);
                     return member1;
                 });

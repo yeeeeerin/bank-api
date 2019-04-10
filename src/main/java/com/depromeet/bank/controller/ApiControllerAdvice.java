@@ -25,7 +25,6 @@ public class ApiControllerAdvice {
 
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ResponseBody
     public ResponseDto handleUnauthorizedException(UnauthorizedException ex) {
         if (!ex.getMessage().isEmpty()) {
             return ResponseDto.of(HttpStatus.UNAUTHORIZED, ex.getMessage());

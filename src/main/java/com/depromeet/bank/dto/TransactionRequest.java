@@ -32,4 +32,12 @@ public class TransactionRequest {
                 Double.valueOf(amount * rate).longValue()
         );
     }
+
+    public static TransactionRequest forInstrument(Long fromAccountId, Long toAccountId, Long investment) {
+        return new TransactionRequest(
+                fromAccountId,
+                toAccountId,
+                investment
+        );
+    }
 }

@@ -4,6 +4,8 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.depromeet.bank.config.JwtConfig;
+import com.depromeet.bank.domain.Member;
+import com.depromeet.bank.domain.account.JwtFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

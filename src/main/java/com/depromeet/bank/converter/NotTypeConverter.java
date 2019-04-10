@@ -9,6 +9,9 @@ import javax.persistence.Converter;
 public class NotTypeConverter implements AttributeConverter<NotType, Integer> {
     @Override
     public Integer convertToDatabaseColumn(NotType attribute) {
+        if (attribute == null) {
+            return null;
+        }
         return attribute.getValue();
     }
 

@@ -2,7 +2,6 @@ package com.depromeet.bank.domain;
 
 
 import com.depromeet.bank.domain.account.Account;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +17,7 @@ public class Member {
 
     @Id
     @GeneratedValue
+    @Column(name = "member_id")
     private Long id;
 
     private Long socialId;
@@ -27,7 +27,6 @@ public class Member {
     private String profileHref;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    @JsonIgnore
     private Set<Account> accounts = new HashSet<>();
 
 

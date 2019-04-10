@@ -1,7 +1,9 @@
 package com.depromeet.bank.domain;
 
 import com.depromeet.bank.vo.TransactionValue;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import com.depromeet.bank.domain.account.Account;
 import org.springframework.data.annotation.CreatedDate;
@@ -14,11 +16,13 @@ import java.time.LocalDateTime;
 @Entity
 @Setter
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class Transaction {
 
     @Id
     @GeneratedValue
+    @Column(name = "transaction_id")
     private Long id;
 
     private String guid;
@@ -32,6 +36,7 @@ public class Transaction {
     private TransactionClassify transactionClassify;
 
     @ManyToOne
+    @JoinColumn(name = "account_id")
     private Account account;
 
     private Transaction(Long amount, TransactionClassify transactionClassify, Account account, String guid) {

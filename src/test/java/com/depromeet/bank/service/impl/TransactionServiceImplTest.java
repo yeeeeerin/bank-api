@@ -36,7 +36,7 @@ public class TransactionServiceImplTest {
     private Member member;
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         transactionService = new TransactionServiceImpl(accountRepository, transactionRepository);
 
         member = TestHelper.createMember(1L, "yerin", "http://test.png");

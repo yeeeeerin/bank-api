@@ -44,7 +44,7 @@ public class TransactionTest {
     private TransactionRequest transactionRequest;
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         member = TestHelper.createMember(1l, "yerin", "http://test.png");
         memberRepository.save(member);
 

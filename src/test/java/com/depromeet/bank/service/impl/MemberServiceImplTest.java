@@ -2,14 +2,14 @@ package com.depromeet.bank.service.impl;
 
 
 import com.depromeet.bank.domain.Member;
+import com.depromeet.bank.domain.account.AccountFactory;
+import com.depromeet.bank.domain.account.JwtFactory;
 import com.depromeet.bank.dto.TokenDto;
 import com.depromeet.bank.helper.TestHelper;
 import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.MemberRepository;
 import com.depromeet.bank.service.MemberService;
 import com.depromeet.bank.service.SocialFetchService;
-import com.depromeet.bank.domain.account.AccountFactory;
-import com.depromeet.bank.utils.JwtFactory;
 import com.depromeet.bank.vo.SocialMemberVo;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,7 +61,7 @@ public class MemberServiceImplTest {
                 accountRepository,
                 accountFactory,
                 jwtFactory);
-        
+
         this.tokenDto = new TokenDto("x6n6QvcJhH-nJPHgaasGzgDjUbLofvh-pZjBywopyNkAAAFpskMpHg");
         member = TestHelper.createMember(MEMBER_KAKAO_ID, MEMBER_NAME, MEMBER_PROFILE_HREF);
     }
