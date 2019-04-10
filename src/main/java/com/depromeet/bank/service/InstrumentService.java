@@ -5,11 +5,14 @@ import com.depromeet.bank.vo.AdjustmentRuleValue;
 import com.depromeet.bank.vo.InstrumentValue;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 public interface InstrumentService {
     List<Instrument> getInstruments(Pageable pageable);
+
+    List<Instrument> getInstrumentsExpiredAndIncomplete(LocalDateTime localDateTime);
 
     Optional<Instrument> getInstrument(Long instrumentId);
 

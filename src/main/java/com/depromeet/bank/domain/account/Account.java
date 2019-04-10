@@ -23,6 +23,8 @@ import java.util.Set;
 @EntityListeners(AuditingEntityListener.class)
 public class Account {
 
+    public static final Long SYSTEM_ACCOUNT_ID = 0L;
+
     @Id
     @GeneratedValue
     private Long id;

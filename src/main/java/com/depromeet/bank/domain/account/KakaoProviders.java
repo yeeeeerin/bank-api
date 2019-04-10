@@ -1,4 +1,4 @@
-package com.depromeet.bank.utils;
+package com.depromeet.bank.domain.account;
 
 import lombok.Getter;
 
