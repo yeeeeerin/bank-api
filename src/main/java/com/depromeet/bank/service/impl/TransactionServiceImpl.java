@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,9 +26,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
-
-    //super user
-    private static final Long SUPER_ACCOUNT_ID = 0l;
 
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
@@ -39,14 +37,16 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional
     public void createTransaction(Long memberId, TransactionRequest transactionRequest) {
+        Assert.notNull(memberId, "'memberId' must not be null");
+        Assert.notNull(transactionRequest, "'transactionRequest' must not be null");
 
         Account fromAccount = accountRepository.findById(transactionRequest.getFromAccountId())
                 .orElseThrow(() -> new NotFoundException(""));
 
-        if (fromAccount.getMember().getId() != memberId) {
+        if (!memberId.equals(fromAccount.getMember().getId())) {
             throw new UnauthorizedException();
         }
-        if (fromAccount.getBalance() <= transactionRequest.getAmount()) {
+        if (fromAccount.getBalance() < transactionRequest.getAmount()) {
             throw new ServiceUnavailableException("There is not enough balance.");
         }
 
@@ -73,19 +73,21 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional(readOnly = true)
     public List<TransactionResponse> getTransaction(Long memberId, Long accountId, int page) {
+        Assert.notNull(memberId, "'memberId' must not be null");
+        Assert.notNull(accountId, "'accountId' must not be null");
+
         Long accountMemberId = accountRepository.findById(accountId)
                 .orElseThrow(() -> new NotFoundException("Not found account"))
                 .getMember()
                 .getId();
 
-        if (accountMemberId != memberId) {
+        if (!memberId.equals(accountMemberId)) {
             throw new UnauthorizedException();
         }
 
         Pageable pageable = PageRequest.of(page, 10);
         return transactionRepository.findAllByAccount_Id(accountId, pageable)
                 .stream()
-                .collect(Collectors.toList()).stream()
                 .map(TransactionResponse::from)
                 .collect(Collectors.toList());
     }

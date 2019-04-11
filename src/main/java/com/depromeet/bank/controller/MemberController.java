@@ -6,7 +6,6 @@ import com.depromeet.bank.dto.ResponseDto;
 import com.depromeet.bank.dto.TokenDto;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.service.MemberService;
-import com.depromeet.bank.utils.JwtFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

@@ -1,6 +1,7 @@
 package com.depromeet.bank.integration;
 
 import com.depromeet.bank.domain.Member;
+import com.depromeet.bank.domain.account.JwtFactory;
 import com.depromeet.bank.domain.rule.ComparisonType;
 import com.depromeet.bank.domain.rule.DataType;
 import com.depromeet.bank.domain.rule.NotType;
@@ -10,7 +11,6 @@ import com.depromeet.bank.dto.InstrumentResponse;
 import com.depromeet.bank.dto.ResponseDto;
 import com.depromeet.bank.helper.TestHelper;
 import com.depromeet.bank.repository.MemberRepository;
-import com.depromeet.bank.utils.JwtFactory;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;

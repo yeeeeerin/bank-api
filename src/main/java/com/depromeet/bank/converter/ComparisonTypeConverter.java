@@ -9,6 +9,9 @@ import javax.persistence.Converter;
 public class ComparisonTypeConverter implements AttributeConverter<ComparisonType, Integer> {
     @Override
     public Integer convertToDatabaseColumn(ComparisonType attribute) {
+        if (attribute == null) {
+            return null;
+        }
         return attribute.getValue();
     }
 

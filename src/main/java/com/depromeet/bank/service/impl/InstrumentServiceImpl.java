@@ -1,13 +1,18 @@
 package com.depromeet.bank.service.impl;
 
+import com.depromeet.bank.domain.Member;
+import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.instrument.Instrument;
 import com.depromeet.bank.domain.instrument.InstrumentFactory;
 import com.depromeet.bank.domain.instrument.SettlementStatus;
+import com.depromeet.bank.dto.AccountDto;
+import com.depromeet.bank.dto.TransactionRequest;
+import com.depromeet.bank.exception.InternalServerErrorException;
 import com.depromeet.bank.exception.NotFoundException;
-import com.depromeet.bank.repository.AccountRepository;
-import com.depromeet.bank.repository.AdjustmentRuleRepository;
 import com.depromeet.bank.repository.InstrumentRepository;
+import com.depromeet.bank.service.AccountService;
 import com.depromeet.bank.service.InstrumentService;
+import com.depromeet.bank.service.TransactionService;
 import com.depromeet.bank.vo.AdjustmentRuleValue;
 import com.depromeet.bank.vo.InstrumentValue;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +31,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class InstrumentServiceImpl implements InstrumentService {
 
-    private final AccountRepository accountRepository;
     private final InstrumentRepository instrumentRepository;
     private final InstrumentFactory instrumentFactory;
+    private final AccountService accountService;
+    private final TransactionService transactionService;
 
     @Override
     @Transactional(readOnly = true)
@@ -68,9 +74,23 @@ public class InstrumentServiceImpl implements InstrumentService {
         Assert.notNull(memberId, "'memberId' must not be null");
         Assert.notNull(instrumentId, "'instrumentId' must not be null");
         Assert.notNull(investment, "'investment' must not be null");
-        // FIXME: 계좌 생성
-        // FIXME: 계좌와 상품 매핑
-        return null;
+
+        Instrument instrument = instrumentRepository.findById(instrumentId)
+                .orElseThrow(() -> new NotFoundException("상품이 존재하지 않습니다."));
+
+        Account account = accountService.createAccountForInstrument(memberId, instrument);
+        List<Account> accounts = instrument.getAccounts();
+        accounts.add(account);
+
+        Account defaultAccount = accountService.getDefaultAccount(memberId);
+
+        TransactionRequest transactionRequest = TransactionRequest.forInstrument(
+                defaultAccount.getId(),
+                account.getId(),
+                investment
+        );
+        transactionService.createTransaction(memberId, transactionRequest);
+        return instrumentRepository.save(instrument);
     }
 
     @Override

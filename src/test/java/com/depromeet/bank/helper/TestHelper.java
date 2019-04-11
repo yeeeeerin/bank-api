@@ -71,8 +71,14 @@ public final class TestHelper {
         return instrumentRequest;
     }
 
-    public static TransactionRequest createTransactionRequest(Long fromAccountId, Long toAccountId, Long amount) {
-        TransactionRequest transactionRequest = new TransactionRequest();
+    public static TransactionRequest createTransactionRequest(Long fromAccountId,
+                                                              Long toAccountId,
+                                                              Long amount) throws Exception {
+
+        Constructor<TransactionRequest> constructor = TransactionRequest.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+        TransactionRequest transactionRequest = constructor.newInstance();
+
         ReflectionTestUtils.setField(transactionRequest, "fromAccountId", fromAccountId);
         ReflectionTestUtils.setField(transactionRequest, "toAccountId", toAccountId);
         ReflectionTestUtils.setField(transactionRequest, "amount", amount);

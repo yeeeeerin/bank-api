@@ -17,8 +17,9 @@ public class AccountFactory {
 
     private static final String CHARSET = "9876543210";
     private static final double RATE_DEFAULT = 0.0;
+    private static final Long BALANCE_DEFAULT = 0L;
 
-    public Account setAccount(Member member, AccountDto accountDto) {
+    public Account createForMember(Member member, AccountDto accountDto) {
 
         Double rate = Optional.ofNullable(accountDto.getRate()).orElse(RATE_DEFAULT);
 
@@ -26,19 +27,20 @@ public class AccountFactory {
                 .member(member)
                 .name(naming(accountDto.getName()))
                 .accountNumber(createAccountNumber())
-                .balance(0L)
+                .balance(BALANCE_DEFAULT)
                 .rate(rate)
+                .accountType(AccountType.MEMBER)
                 .build();
     }
 
-    public Account createInstrumentAccount(Member member, Instrument instrument, Long investment) {
-        Double rate = RATE_DEFAULT;
+    public Account createForInstrument(Member member, Instrument instrument) {
         return Account.builder()
                 .member(member)
                 .name(instrument.getName())
                 .accountNumber(createAccountNumber())
-                .balance(investment)
-                .rate(rate)
+                .balance(BALANCE_DEFAULT)
+                .rate(RATE_DEFAULT)
+                .accountType(AccountType.INSTRUMENT)
                 .build();
     }
 

@@ -6,6 +6,7 @@ import com.depromeet.bank.dto.InstrumentResponse;
 import com.depromeet.bank.dto.JoinInstrumentRequest;
 import com.depromeet.bank.dto.ResponseDto;
 import com.depromeet.bank.exception.NotFoundException;
+import com.depromeet.bank.repository.InstrumentRepository;
 import com.depromeet.bank.service.InstrumentService;
 import com.depromeet.bank.vo.AdjustmentRuleValue;
 import com.depromeet.bank.vo.InstrumentValue;
@@ -60,8 +61,9 @@ public class InstrumentController {
     public ResponseDto<Object> joinInstrument(@RequestAttribute(name = "id") Long memberId,
                                               @PathVariable Long instrumentId,
                                               @RequestBody JoinInstrumentRequest joinInstrumentRequest) {
-        instrumentService.joinInstrument(memberId, instrumentId, joinInstrumentRequest.getInvestment());
-        return ResponseDto.of(HttpStatus.OK, "상품 가입에 성공했습니다.", null);
+        Instrument instrument = instrumentService.joinInstrument(memberId, instrumentId, joinInstrumentRequest.getInvestment());
+        InstrumentResponse instrumentResponse = InstrumentResponse.from(instrument);
+        return ResponseDto.of(HttpStatus.OK, "상품 가입에 성공했습니다.", instrumentResponse);
     }
 
     @PutMapping("/instruments/{instrumentId:\\d+}")

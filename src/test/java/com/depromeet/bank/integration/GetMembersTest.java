@@ -1,9 +1,9 @@
 package com.depromeet.bank.integration;
 
 import com.depromeet.bank.domain.Member;
+import com.depromeet.bank.domain.account.JwtFactory;
 import com.depromeet.bank.helper.TestHelper;
 import com.depromeet.bank.repository.MemberRepository;
-import com.depromeet.bank.utils.JwtFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

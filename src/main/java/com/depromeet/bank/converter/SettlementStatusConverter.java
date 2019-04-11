@@ -9,6 +9,9 @@ import javax.persistence.Converter;
 public class SettlementStatusConverter implements AttributeConverter<SettlementStatus, Integer> {
     @Override
     public Integer convertToDatabaseColumn(SettlementStatus attribute) {
+        if (attribute == null) {
+            return null;
+        }
         return attribute.getValue();
     }
 

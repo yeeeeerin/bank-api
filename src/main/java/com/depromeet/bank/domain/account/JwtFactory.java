@@ -1,4 +1,4 @@
-package com.depromeet.bank.utils;
+package com.depromeet.bank.domain.account;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;

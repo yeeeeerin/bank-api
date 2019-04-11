@@ -18,9 +18,9 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @PostMapping("/accounts/{accountId:\\d+}/transfer")
-    public ResponseDto<String> addTransaction(@PathVariable Long accountId,
-                                              @RequestAttribute Long id,
-                                              @RequestBody TransactionRequest transactionRequest) {
+    public ResponseDto addTransaction(@PathVariable Long accountId,
+                                      @RequestAttribute Long id,
+                                      @RequestBody TransactionRequest transactionRequest) {
 
         transactionService.createTransaction(id, transactionRequest);
 
