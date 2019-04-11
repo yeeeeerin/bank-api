@@ -60,6 +60,7 @@ public class MemberServiceImpl implements MemberService {
     public List<Member> getMembers(Pageable pageable) {
         Assert.notNull(pageable, "'pageable' must not be null");
         return memberRepository.findAll(pageable).stream()
+                .filter(member -> !member.getId().equals(Member.SYSTEM_MEMBER_ID))
                 .collect(Collectors.toList());
     }
 
