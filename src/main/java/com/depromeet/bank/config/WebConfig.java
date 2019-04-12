@@ -1,5 +1,6 @@
 package com.depromeet.bank.config;
 
+import com.depromeet.bank.converter.RankTypeConverter;
 import com.depromeet.bank.intercepter.ExceptionInterceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -44,6 +46,11 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/swagger-resources/**")
                 .excludePathPatterns("/v2/api-docs");
 
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new RankTypeConverter());
     }
 
 }

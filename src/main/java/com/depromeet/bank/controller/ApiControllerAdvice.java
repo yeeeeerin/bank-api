@@ -1,21 +1,23 @@
 package com.depromeet.bank.controller;
 
 import com.depromeet.bank.dto.ResponseDto;
-import com.depromeet.bank.exception.InternalServerErrorException;
-import com.depromeet.bank.exception.NotFoundException;
-import com.depromeet.bank.exception.ServiceUnavailableException;
-import com.depromeet.bank.exception.UnauthorizedException;
+import com.depromeet.bank.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
 @RestControllerAdvice
 public class ApiControllerAdvice {
+
+    @ExceptionHandler(BadRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseDto handleBadRequestException(BadRequestException ex) {
+        return ResponseDto.of(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
