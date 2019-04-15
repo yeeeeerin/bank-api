@@ -1,9 +1,9 @@
-POST http://localhost:8080/accounts/create
+POST http://localhost:8080/api/accounts
 Content-Type: application/json
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5ZXJpbiIsIlVTRVJOQU1FIjoi7J207JiI66awIiwiSUQiOjF9.7sl8zOjlnZ2Lup9Am8ihPgfGzyvcBQ_OU3C437lawt8
 
 {
-  "name": "계좌계좌",
+  "name": "",
   "rate": 0.03
 }
 

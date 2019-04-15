@@ -1,9 +1,6 @@
-package com.depromeet.bank.utils;
+package com.depromeet.bank.domain.account;
 
-import com.depromeet.bank.vo.SocialMemberVo;
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
-import org.springframework.stereotype.Component;
 
 
 @Getter
@@ -20,3 +17,4 @@ public enum KakaoProviders {
     }
 
 }
+

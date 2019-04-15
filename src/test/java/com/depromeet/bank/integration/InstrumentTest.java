@@ -1,12 +1,16 @@
 package com.depromeet.bank.integration;
 
 import com.depromeet.bank.domain.Member;
+import com.depromeet.bank.domain.account.JwtFactory;
+import com.depromeet.bank.domain.rule.ComparisonType;
+import com.depromeet.bank.domain.rule.DataType;
+import com.depromeet.bank.domain.rule.NotType;
+import com.depromeet.bank.dto.AdjustmentRuleRequest;
 import com.depromeet.bank.dto.InstrumentRequest;
 import com.depromeet.bank.dto.InstrumentResponse;
 import com.depromeet.bank.dto.ResponseDto;
 import com.depromeet.bank.helper.TestHelper;
 import com.depromeet.bank.repository.MemberRepository;
-import com.depromeet.bank.utils.JwtFactory;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -21,12 +25,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -43,6 +48,10 @@ public class InstrumentTest {
             new TypeReference<ResponseDto<InstrumentResponse>>() {
             };
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
+
+    private static final String INSTRUMENT_NAME_BEFORE = "beforeInstrumentName";
+    private static final String INSTRUMENT_DESCRIPTION_BEFORE = "beforeInstrumentDescription";
+    private static final LocalDateTime INSTRUMENT_EXPIRED_AT_BEFORE = LocalDateTime.of(2019, 4, 7, 23, 59, 0);
 
     @Autowired
     private MockMvc mockMvc;
@@ -64,11 +73,7 @@ public class InstrumentTest {
     @Test
     public void 상품_생성__성공() throws Exception {
         // given
-        InstrumentRequest request = TestHelper.createInstrumentRequest(
-                "상품 이름",
-                "상품 설명",
-                ZonedDateTime.now().plusDays(10)
-        );
+        InstrumentRequest request = this.createInstrumentRequest();
         // when
         mockMvc.perform(post("/api/instruments")
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader)
@@ -80,17 +85,13 @@ public class InstrumentTest {
                 .andExpect(jsonPath("$.response.name").value(request.getName()))
                 .andExpect(jsonPath("$.response.description").value(request.getDescription()))
                 .andExpect(jsonPath("$.response.expiredAt")
-                        .value(request.getExpiredAt().toLocalDateTime().toString()));
+                        .value(request.getExpiredAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)));
     }
 
     @Test
     public void 상품_목록_조회__성공() throws Exception {
         // given
-        InstrumentRequest request = TestHelper.createInstrumentRequest(
-                "상품 이름",
-                "상품 설명",
-                ZonedDateTime.now().plusDays(10)
-        );
+        InstrumentRequest request = this.createInstrumentRequest();
         MvcResult oneResult = createInstrument(request);
         MvcResult anotherResult = createInstrument(request);
         MvcResult theOtherResult = createInstrument(request);
@@ -140,11 +141,7 @@ public class InstrumentTest {
     @Test
     public void 상품_조회__성공() throws Exception {
         // given
-        InstrumentRequest request = TestHelper.createInstrumentRequest(
-                "상품 하나",
-                "상품 설명 하나",
-                ZonedDateTime.now().plusDays(10)
-        );
+        InstrumentRequest request = this.createInstrumentRequest();
         MvcResult createResult = createInstrument(request);
         ResponseDto<InstrumentResponse> instrumentResponseDto = objectMapper.readValue(createResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
         Long instrumentId = instrumentResponseDto.getResponse().getId();
@@ -164,16 +161,12 @@ public class InstrumentTest {
     @Test
     public void 상품_수정__name_변경_성공() throws Exception {
         // given
-        InstrumentRequest request = TestHelper.createInstrumentRequest(
-                "beforeName",
-                "beforeDescription",
-                ZonedDateTime.now().plusDays(10)
-        );
+        InstrumentRequest request = this.createInstrumentRequest();
         MvcResult createResult = createInstrument(request);
         ResponseDto<InstrumentResponse> instrumentResponseDto = objectMapper.readValue(createResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
         Long instrumentId = instrumentResponseDto.getResponse().getId();
         // when
-        String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest("afterName", null, null));
+        String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest("afterName", null, null, null));
         MvcResult mvcResult = mockMvc.perform(put("/api/instruments/{instrumentId}", instrumentId)
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -187,22 +180,18 @@ public class InstrumentTest {
         assertThat(instrumentResponse.getId()).isEqualTo(instrumentId);
         assertThat(instrumentResponse.getName()).isEqualTo("afterName");
         assertThat(instrumentResponse.getDescription()).isEqualTo(request.getDescription());
-        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt().toLocalDateTime());
+        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt());
     }
 
     @Test
     public void 상품_수정__description_변경_성공() throws Exception {
         // given
-        InstrumentRequest request = TestHelper.createInstrumentRequest(
-                "beforeName",
-                "beforeDescription",
-                ZonedDateTime.now().plusDays(10)
-        );
+        InstrumentRequest request = this.createInstrumentRequest();
         MvcResult createResult = createInstrument(request);
         ResponseDto<InstrumentResponse> instrumentResponseDto = objectMapper.readValue(createResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
         Long instrumentId = instrumentResponseDto.getResponse().getId();
         // when
-        String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest(null, "afterDescription", null));
+        String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest(null, "afterDescription", null, null));
         MvcResult mvcResult = mockMvc.perform(put("/api/instruments/{instrumentId}", instrumentId)
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -216,17 +205,13 @@ public class InstrumentTest {
         assertThat(instrumentResponse.getId()).isEqualTo(instrumentId);
         assertThat(instrumentResponse.getName()).isEqualTo(request.getName());
         assertThat(instrumentResponse.getDescription()).isEqualTo("afterDescription");
-        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt().toLocalDateTime());
+        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt());
     }
 
     @Test
     public void 상품_수정__이전과_동일한_값으로_수정요청하면_기존값_그대로_응답() throws Exception {
         // given
-        InstrumentRequest request = TestHelper.createInstrumentRequest(
-                "beforeName",
-                "beforeDescription",
-                ZonedDateTime.now().plusDays(10)
-        );
+        InstrumentRequest request = this.createInstrumentRequest();
         MvcResult createResult = createInstrument(request);
         ResponseDto<InstrumentResponse> instrumentResponseDto = objectMapper.readValue(createResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
         Long instrumentId = instrumentResponseDto.getResponse().getId();
@@ -245,22 +230,18 @@ public class InstrumentTest {
         assertThat(instrumentResponse.getId()).isEqualTo(instrumentId);
         assertThat(instrumentResponse.getName()).isEqualTo(request.getName());
         assertThat(instrumentResponse.getDescription()).isEqualTo(request.getDescription());
-        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt().toLocalDateTime());
+        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt());
     }
 
     @Test
     public void 상품_수정__빈_값으로_수정요청하면_기존값으로_응답() throws Exception {
         // given
-        InstrumentRequest request = TestHelper.createInstrumentRequest(
-                "beforeName",
-                "beforeDescription",
-                ZonedDateTime.now().plusDays(10)
-        );
+        InstrumentRequest request = this.createInstrumentRequest();
         MvcResult createResult = createInstrument(request);
         ResponseDto<InstrumentResponse> instrumentResponseDto = objectMapper.readValue(createResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
         Long instrumentId = instrumentResponseDto.getResponse().getId();
         // when
-        String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest(null, null, null));
+        String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest(null, null, null, null));
         MvcResult mvcResult = mockMvc.perform(put("/api/instruments/{instrumentId}", instrumentId)
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -274,14 +255,14 @@ public class InstrumentTest {
         assertThat(instrumentResponse.getId()).isEqualTo(instrumentId);
         assertThat(instrumentResponse.getName()).isEqualTo(request.getName());
         assertThat(instrumentResponse.getDescription()).isEqualTo(request.getDescription());
-        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt().toLocalDateTime());
+        assertThat(instrumentResponse.getExpiredAt()).isEqualTo(request.getExpiredAt());
     }
 
     @Test
     public void 상품_수정__상품이_존재하지_않으면_404_응답() throws Exception {
         // given
         // when
-        String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest("afterName", "afterDescription", null));
+        String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest("afterName", "afterDescription", null, null));
         mockMvc.perform(put("/api/instruments/{instrumentId}", 1000L)
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -297,7 +278,7 @@ public class InstrumentTest {
         Long notExistInstrumentId = 1000L;
         // when
         mockMvc.perform(delete("/api/instruments/{instrumentId}", notExistInstrumentId)
-        .header(AUTHORIZATION_HEADER_NAME, authorizationHeader))
+                .header(AUTHORIZATION_HEADER_NAME, authorizationHeader))
                 // then
                 .andExpect(status().isNoContent())
                 .andExpect(jsonPath("$").doesNotExist());
@@ -306,11 +287,7 @@ public class InstrumentTest {
     @Test
     public void 상품_삭제__상품이_존재하면_삭제하고_204_응답() throws Exception {
         // given
-        InstrumentRequest request = TestHelper.createInstrumentRequest(
-                "beforeName",
-                "beforeDescription",
-                ZonedDateTime.now().plusDays(10)
-        );
+        InstrumentRequest request = this.createInstrumentRequest();
         MvcResult createResult = createInstrument(request);
         ResponseDto<InstrumentResponse> instrumentResponseDto = objectMapper.readValue(createResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
         Long instrumentId = instrumentResponseDto.getResponse().getId();
@@ -329,5 +306,27 @@ public class InstrumentTest {
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andReturn();
+    }
+
+    private InstrumentRequest createInstrumentRequest() {
+        return TestHelper.createInstrumentRequest(
+                INSTRUMENT_NAME_BEFORE,
+                INSTRUMENT_DESCRIPTION_BEFORE,
+                INSTRUMENT_EXPIRED_AT_BEFORE,
+                Collections.singletonList(createAdjustmentRuleRequest())
+        );
+    }
+
+    private AdjustmentRuleRequest createAdjustmentRuleRequest() {
+        return TestHelper.createAdjustmentRuleRequest(
+                DataType.NUMBER_OF_ATTENDEE,
+                ComparisonType.GREATER_THAN_OR_EQUAL_TO,
+                NotType.POSITIVE,
+                50L,
+                1L,
+                LocalDateTime.of(2019, 4, 6, 0, 0, 0),
+                LocalDateTime.of(2019, 4, 6, 23, 59, 0),
+                0.0
+        );
     }
 }

@@ -1,7 +1,7 @@
 package com.depromeet.bank.intercepter;
 
+import com.depromeet.bank.domain.account.JwtFactory;
 import com.depromeet.bank.exception.UnauthorizedException;
-import com.depromeet.bank.utils.JwtFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;

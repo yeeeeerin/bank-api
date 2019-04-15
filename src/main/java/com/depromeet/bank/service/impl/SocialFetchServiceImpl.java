@@ -1,8 +1,8 @@
 package com.depromeet.bank.service.impl;
 
+import com.depromeet.bank.domain.account.KakaoProviders;
 import com.depromeet.bank.dto.TokenDto;
 import com.depromeet.bank.service.SocialFetchService;
-import com.depromeet.bank.utils.KakaoProviders;
 import com.depromeet.bank.vo.SocialMemberVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;

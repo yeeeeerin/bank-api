@@ -1,6 +1,6 @@
 package com.depromeet.bank.integration;
 
-import com.depromeet.bank.domain.attendance.DepromeetSessionType;
+import com.depromeet.bank.domain.data.attendance.DepromeetSessionType;
 import com.depromeet.bank.repository.AttendanceRepository;
 import com.depromeet.bank.service.AttendanceService;
 import org.junit.Test;

@@ -1,6 +1,6 @@
 package com.depromeet.bank.dto;
 
-import com.depromeet.bank.domain.Instrument;
+import com.depromeet.bank.domain.instrument.Instrument;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,10 +27,10 @@ public class InstrumentResponse {
 
     public static InstrumentResponse from(Instrument instrument) {
         Assert.notNull(instrument, "'instrument' must not be null");
-        Long id = instrument.getId();
+        Long id = instrument.getInstrumentId();
         String name = instrument.getName();
         String description = instrument.getDescription();
-        LocalDateTime expiredAt = instrument.getExpiredAt().toLocalDateTime().plusHours(9);
+        LocalDateTime expiredAt = instrument.getExpiredAt();
         return new InstrumentResponse(id, name, description, expiredAt);
     }
 }

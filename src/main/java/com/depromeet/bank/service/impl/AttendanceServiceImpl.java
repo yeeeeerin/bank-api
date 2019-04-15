@@ -4,12 +4,15 @@ import com.depromeet.bank.adaptor.google.CellAddress;
 import com.depromeet.bank.adaptor.google.GoogleApiAdapter;
 import com.depromeet.bank.adaptor.google.GoogleApiResponse;
 import com.depromeet.bank.adaptor.google.Range;
-import com.depromeet.bank.domain.attendance.Attendance;
-import com.depromeet.bank.domain.attendance.DepromeetSessionType;
+import com.depromeet.bank.domain.data.attendance.Attendance;
+import com.depromeet.bank.domain.data.attendance.DepromeetSessionType;
 import com.depromeet.bank.exception.GoogleApiFailedException;
+import com.depromeet.bank.exception.InternalServerErrorException;
+import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.repository.AttendanceRepository;
 import com.depromeet.bank.service.AttendanceService;
 import com.depromeet.bank.vo.AttendanceValue;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
@@ -18,8 +21,8 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @PropertySource("classpath:depromeet.properties")
 public class AttendanceServiceImpl implements AttendanceService {
@@ -41,25 +44,17 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     @Transactional
-    public void fetch(DepromeetSessionType depromeetSessionType) {
+    public Attendance fetch(DepromeetSessionType depromeetSessionType) {
         Range range = Range.of(
                 CellAddress.of(depromeetSessionType.getColumnName(), ROW_NUMBER_FROM),
                 CellAddress.of(depromeetSessionType.getColumnName(), ROW_NUMBER_TO)
         );
-        List<String> signs = googleApiAdapter.findBySheetIdAndRange(sheetId, range)
-                .map(GoogleApiResponse::getSheets)
-                .map(sheets -> sheets.get(0))
-                .map(GoogleApiResponse.Sheet::getData)
-                .map(dataList -> dataList.get(0))
-                .map(GoogleApiResponse.SheetData::getRowData)
-                .map(rowValuesList -> rowValuesList.stream()
-                            .map(GoogleApiResponse.RowValues::getValues)
-                            .map(rowValueList -> rowValueList.get(0))
-                            .map(GoogleApiResponse.RowValue::getFormattedValue)
-                            .collect(Collectors.toList()))
+
+        GoogleApiResponse googleApiResponse = googleApiAdapter.findBySheetIdAndRange(sheetId, range)
                 .orElseThrow(() -> new GoogleApiFailedException("구글 API 요청에 실패했습니다."));
+        List<String> signs = googleApiAdapter.parseAttendanceSigns(googleApiResponse);
         AttendanceValue attendanceValue = AttendanceValue.from(signs);
-        createOrUpdate(attendanceValue, depromeetSessionType);
+        return createOrUpdate(attendanceValue, depromeetSessionType);
     }
 
     @Override
@@ -80,5 +75,18 @@ public class AttendanceServiceImpl implements AttendanceService {
                     Attendance attendance = Attendance.of(attendanceValue, depromeetSessionType);
                     return attendanceRepository.save(attendance);
                 });
+    }
+
+    @Override
+    @Transactional
+    public Attendance synchronize(Long attendanceId) {
+        Attendance attendance = attendanceRepository.findById(attendanceId)
+                .orElseThrow(() -> new NotFoundException("출석 정보가 존재하지 않습니다."));
+        DepromeetSessionType depromeetSessionType = DepromeetSessionType.valueOf(attendance.getSessionName());
+        if (depromeetSessionType == null) {
+            log.error("depromeetSessionType must not be null. attendanceId:{}", attendanceId);
+            throw new InternalServerErrorException("데이터가 올바르지 않습니다.");
+        }
+        return fetch(depromeetSessionType);
     }
 }

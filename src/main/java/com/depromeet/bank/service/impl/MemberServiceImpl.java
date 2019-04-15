@@ -1,11 +1,15 @@
 package com.depromeet.bank.service.impl;
 
 import com.depromeet.bank.domain.Member;
+import com.depromeet.bank.domain.account.Account;
+import com.depromeet.bank.domain.account.AccountFactory;
+import com.depromeet.bank.domain.account.JwtFactory;
+import com.depromeet.bank.dto.AccountDto;
 import com.depromeet.bank.dto.TokenDto;
+import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.MemberRepository;
 import com.depromeet.bank.service.MemberService;
 import com.depromeet.bank.service.SocialFetchService;
-import com.depromeet.bank.utils.JwtFactory;
 import com.depromeet.bank.vo.SocialMemberVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +27,8 @@ public class MemberServiceImpl implements MemberService {
 
     private final SocialFetchService socialFetchService;
     private final MemberRepository memberRepository;
+    private final AccountRepository accountRepository;
+    private final AccountFactory accountFactory;
     private final JwtFactory jwtFactory;
 
     @Override
@@ -37,10 +43,13 @@ public class MemberServiceImpl implements MemberService {
                     member1.setName(memberVo.getUserName());
                     member1.setProfileHref(memberVo.getProfileHref());
                     member1.setSocialId(memberVo.getId());
+
+                    memberRepository.save(member1);
+
+                    Account account = accountFactory.createForMember(member1, AccountDto.initAccount());
+                    accountRepository.save(account);
                     return member1;
                 });
-
-        memberRepository.save(member);
 
         return jwtFactory.generateToken(member);
 
@@ -51,6 +60,7 @@ public class MemberServiceImpl implements MemberService {
     public List<Member> getMembers(Pageable pageable) {
         Assert.notNull(pageable, "'pageable' must not be null");
         return memberRepository.findAll(pageable).stream()
+                .filter(member -> !member.getId().equals(Member.SYSTEM_MEMBER_ID))
                 .collect(Collectors.toList());
     }
 

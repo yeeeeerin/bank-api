@@ -1,7 +1,8 @@
 package com.depromeet.bank.service.impl;
 
-import com.depromeet.bank.domain.Account;
+import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.Member;
+import com.depromeet.bank.dto.AccountDto;
 import com.depromeet.bank.helper.TestHelper;
 import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.MemberRepository;
@@ -46,8 +47,19 @@ public class AccountServiceImplTest {
             account = TestHelper.createAccount("하나계좌", 0L, 0.0, member);
             accountRepository.save(account);
         }
-        log.info("date : " + String.valueOf(account.getCreatedAt()));
+        log.info("date : " + account.getCreatedAt());
 
+    }
+
+    @Test
+    public void 계좌_생성_테스트() {
+        AccountDto dto = new AccountDto();
+        dto.setName("");
+        dto.setRate(0.0);
+
+        Account account = accountService.createAccount(dto, member.getId()).get();
+        assertThat(account.getMember().getName(), is("yerin"));
+        log.info(account.getName());
     }
 
 
