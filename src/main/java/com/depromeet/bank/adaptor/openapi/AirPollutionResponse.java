@@ -67,4 +67,12 @@ public class AirPollutionResponse {
     public Body.Item getItem() {
         return getBody().getItems().get(0);
     }
+
+    public Long getPm10Value() {
+        return getItem().pm10Value;
+    }
+
+    public Long getPm25Value() {
+        return getItem().pm25Value;
+    }
 }
