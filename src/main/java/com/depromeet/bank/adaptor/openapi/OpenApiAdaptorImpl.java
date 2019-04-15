@@ -38,54 +38,6 @@ public class OpenApiAdaptorImpl implements OpenApiAdaptor {
         }
     }
 
-    @Override
-    public AirGrade checkAirGrade(AirPollutionResponse response) {
-        AirGrade pm10Grade = checkGradeByPm10Value(response.getPm10Value());
-        AirGrade pm25Grade = checkGradeByPm25Value(response.getPm25Value());
-        if (pm10Grade.getGrade() > pm25Grade.getGrade())
-            return pm10Grade;
-        return pm25Grade;
-    }
-
-    @Override
-    public AirGrade checkGradeByPm10Value(Long pm10Value) {
-        if (pm10Value >= 0 && pm10Value <= 15)
-            return AirGrade.FIRST;
-        else if (pm10Value >= 16 && pm10Value <= 30)
-            return AirGrade.SECOND;
-        else if (pm10Value >= 31 && pm10Value <= 40)
-            return AirGrade.THIRD;
-        else if (pm10Value >= 41 && pm10Value <= 50)
-            return AirGrade.FOUTH;
-        else if (pm10Value >= 51 && pm10Value <= 75)
-            return AirGrade.FIFTH;
-        else if (pm10Value >= 76 && pm10Value <= 100)
-            return AirGrade.SIXTH;
-        else if (pm10Value >= 101 && pm10Value <= 150)
-            return AirGrade.SEVENTH;
-        return AirGrade.EIGHTH;
-    }
-
-    @Override
-    public AirGrade checkGradeByPm25Value(Long pm25Value) {
-        if (pm25Value >= 0 && pm25Value <= 8)
-            return AirGrade.FIRST;
-        else if (pm25Value >= 9 && pm25Value <= 15)
-            return AirGrade.SECOND;
-        else if (pm25Value >= 16 && pm25Value <= 20)
-            return AirGrade.THIRD;
-        else if (pm25Value >= 21 && pm25Value <= 25)
-            return AirGrade.FOUTH;
-        else if (pm25Value >= 26 && pm25Value <= 37)
-            return AirGrade.FIFTH;
-        else if (pm25Value >= 38 && pm25Value <= 50)
-            return AirGrade.SIXTH;
-        else if (pm25Value >= 51 && pm25Value <= 75)
-            return AirGrade.SEVENTH;
-        return AirGrade.EIGHTH;
-    }
-
-
     public URI makeURIfromStationName(OpenApiStationName stationName) {
         try {
             URI uri = UriComponentsBuilder.newInstance()
