@@ -3,10 +3,14 @@ package com.depromeet.bank.domain;
 import com.depromeet.bank.adaptor.openapi.AirGrade;
 import com.depromeet.bank.adaptor.openapi.AirPollutionResponse;
 import com.depromeet.bank.adaptor.openapi.OpenApiStationName;
+import com.depromeet.bank.converter.AirGradeConverter;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 @Setter
 @ToString
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class AirInfo {
 
     @Id
@@ -37,21 +42,39 @@ public class AirInfo {
 
     private LocalDateTime dataTime;
 
+    @Convert(converter = AirGradeConverter.class)
     private AirGrade airGrade;
 
-    public AirInfo(AirPollutionResponse response, OpenApiStationName stationName, AirGrade airGrade) {
-        this.pm10Value = response.getItem().getPm10Value();
-        this.pm25Value = response.getItem().getPm25Value();
-        this.o3Value = response.getItem().getO3Value();
-        this.pm10Grade = response.getItem().getPm10Grade();
-        this.pm25Grade = response.getItem().getPm25Grade();
-        this.dataTime =  setDataTime(response.getItem().getDataTime());
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+    public AirInfo(AirPollutionResponse.Body.Item item, OpenApiStationName stationName) {
+        this.pm10Value = item.getPm10Value();
+        this.pm25Value = item.getPm25Value();
+        this.o3Value = item.getO3Value();
+        this.pm10Grade = item.getPm10Grade();
+        this.pm25Grade = item.getPm25Grade();
+        this.dataTime = setDataTime(item.getDataTime());
         this.stationName = stationName.getValue();
-        this.airGrade = airGrade;
+        this.airGrade = AirGrade.from(item);
     }
 
-    public LocalDateTime setDataTime(String dataTime) {
+    private LocalDateTime setDataTime(String dataTime) {
         return LocalDateTime.parse(dataTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+
+    public AirInfo update(AirPollutionResponse.Body.Item item) {
+        this.pm10Value = item.getPm10Value();
+        this.pm25Value = item.getPm25Value();
+        this.o3Value = item.getO3Value();
+        this.pm10Grade = item.getPm10Grade();
+        this.pm25Grade = item.getPm25Grade();
+        this.dataTime = setDataTime(item.getDataTime());
+        this.airGrade = AirGrade.from(item);
+        return this;
     }
 
 }
