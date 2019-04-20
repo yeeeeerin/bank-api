@@ -3,7 +3,7 @@ package com.depromeet.bank.service.impl;
 import com.depromeet.bank.adaptor.openapi.AirPollutionResponse;
 import com.depromeet.bank.adaptor.openapi.OpenApiAdaptor;
 import com.depromeet.bank.adaptor.openapi.OpenApiStationName;
-import com.depromeet.bank.domain.AirInfo;
+import com.depromeet.bank.domain.data.airinfo.AirInfo;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.repository.AirInfoRepository;
 import com.depromeet.bank.service.AirInfoService;

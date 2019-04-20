@@ -1,7 +1,7 @@
 package com.depromeet.bank.dto;
 
 import com.depromeet.bank.adaptor.openapi.AirGrade;
-import com.depromeet.bank.domain.AirInfo;
+import com.depromeet.bank.domain.data.airinfo.AirInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

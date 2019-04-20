@@ -1,4 +1,4 @@
-package com.depromeet.bank.domain;
+package com.depromeet.bank.domain.data.airinfo;
 
 import com.depromeet.bank.adaptor.openapi.AirGrade;
 import com.depromeet.bank.adaptor.openapi.AirPollutionResponse;
@@ -26,6 +26,7 @@ public class AirInfo {
 
     @Id
     @GeneratedValue
+    @Column(name = "air_info_id")
     private Long id;
 
     private String stationName;

@@ -1,6 +1,6 @@
 package com.depromeet.bank.repository;
 
-import com.depromeet.bank.domain.AirInfo;
+import com.depromeet.bank.domain.data.airinfo.AirInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
