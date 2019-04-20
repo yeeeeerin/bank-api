@@ -13,6 +13,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ApiControllerAdvice {
 
+    @ExceptionHandler(NoContentException.class)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void handleNoContentException(NoContentException ex) {
+        // do nothing
+    }
+
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseDto handleBadRequestException(BadRequestException ex) {
