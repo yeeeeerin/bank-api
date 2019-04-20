@@ -1,6 +1,6 @@
 package com.depromeet.bank.scheduler;
 
-import com.depromeet.bank.adaptor.openapi.OpenApiStationName;
+import com.depromeet.bank.adapter.openapi.OpenApiStationName;
 import com.depromeet.bank.service.AirInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

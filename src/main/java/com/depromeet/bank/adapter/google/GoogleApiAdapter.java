@@ -1,4 +1,4 @@
-package com.depromeet.bank.adaptor.google;
+package com.depromeet.bank.adapter.google;
 
 import java.util.List;
 import java.util.Optional;

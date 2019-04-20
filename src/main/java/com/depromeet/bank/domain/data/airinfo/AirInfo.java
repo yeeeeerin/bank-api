@@ -1,8 +1,8 @@
 package com.depromeet.bank.domain.data.airinfo;
 
-import com.depromeet.bank.adaptor.openapi.AirGrade;
-import com.depromeet.bank.adaptor.openapi.AirPollutionResponse;
-import com.depromeet.bank.adaptor.openapi.OpenApiStationName;
+import com.depromeet.bank.adapter.openapi.AirGrade;
+import com.depromeet.bank.adapter.openapi.AirPollutionResponse;
+import com.depromeet.bank.adapter.openapi.OpenApiStationName;
 import com.depromeet.bank.converter.AirGradeConverter;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

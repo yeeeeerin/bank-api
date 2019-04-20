@@ -1,8 +1,8 @@
 package com.depromeet.bank.service.impl;
 
-import com.depromeet.bank.adaptor.openapi.AirPollutionResponse;
-import com.depromeet.bank.adaptor.openapi.OpenApiAdaptor;
-import com.depromeet.bank.adaptor.openapi.OpenApiStationName;
+import com.depromeet.bank.adapter.openapi.AirPollutionResponse;
+import com.depromeet.bank.adapter.openapi.OpenApiAdapter;
+import com.depromeet.bank.adapter.openapi.OpenApiStationName;
 import com.depromeet.bank.domain.data.airinfo.AirInfo;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.repository.AirInfoRepository;
@@ -20,13 +20,13 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class AirInfoServiceImpl implements AirInfoService {
 
-    private final OpenApiAdaptor openApiAdaptor;
+    private final OpenApiAdapter openApiAdapter;
     private final AirInfoRepository airInfoRepository;
 
     @Override
     @Transactional
     public AirInfo createAirInfoByStationName(OpenApiStationName stationName) {
-        AirPollutionResponse response = openApiAdaptor.getAirPollutionResponseByStationName(stationName);
+        AirPollutionResponse response = openApiAdapter.getAirPollutionResponseByStationName(stationName);
         // 중복 생성 방지
         AirPollutionResponse.Body.Item item = response.getItem();
         LocalDateTime dataTime = DateTimeUtils.parseFromDataTime(item.getDataTime());
@@ -45,7 +45,7 @@ public class AirInfoServiceImpl implements AirInfoService {
         if (dataTime == null) {
             return airInfo;
         }
-        AirPollutionResponse response = openApiAdaptor.getAirPollutionResponseByStationName(stationName);
+        AirPollutionResponse response = openApiAdapter.getAirPollutionResponseByStationName(stationName);
         AirPollutionResponse.Body.Item itemResult = response.getBody().getItems().stream()
                 .filter(item -> dataTime.isEqual(DateTimeUtils.parseFromDataTime(item.getDataTime())))
                 .findFirst()

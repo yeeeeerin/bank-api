@@ -1,6 +1,6 @@
 package com.depromeet.bank.converter;
 
-import com.depromeet.bank.adaptor.openapi.AirGrade;
+import com.depromeet.bank.adapter.openapi.AirGrade;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

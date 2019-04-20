@@ -1,8 +1,8 @@
 package com.depromeet.bank.integration;
 
-import com.depromeet.bank.adaptor.openapi.AirPollutionResponse;
-import com.depromeet.bank.adaptor.openapi.OpenApiAdaptor;
-import com.depromeet.bank.adaptor.openapi.OpenApiStationName;
+import com.depromeet.bank.adapter.openapi.AirPollutionResponse;
+import com.depromeet.bank.adapter.openapi.OpenApiAdapter;
+import com.depromeet.bank.adapter.openapi.OpenApiStationName;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +17,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @Slf4j
 public class OpenApiAdapterTest {
     @Autowired
-    private OpenApiAdaptor apiAdaptor;
+    private OpenApiAdapter apiAdaptor;
 
     @Test
     public void stationName을Enum으로했을때응답이되는지() {

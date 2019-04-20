@@ -1,4 +1,4 @@
-package com.depromeet.bank.adaptor.google;
+package com.depromeet.bank.adapter.google;
 
 import lombok.Value;
 
