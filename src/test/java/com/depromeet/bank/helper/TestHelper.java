@@ -11,6 +11,8 @@ import com.depromeet.bank.domain.rule.NotType;
 import com.depromeet.bank.dto.AdjustmentRuleRequest;
 import com.depromeet.bank.dto.InstrumentRequest;
 import com.depromeet.bank.dto.TransactionRequest;
+import com.depromeet.bank.repository.AccountRepository;
+import com.depromeet.bank.repository.MemberRepository;
 import com.depromeet.bank.vo.SocialMemberVo;
 import com.depromeet.bank.vo.TransactionValue;
 import org.springframework.test.util.ReflectionTestUtils;

@@ -1,11 +1,15 @@
 package com.depromeet.bank.controller;
 
 import com.depromeet.bank.domain.Member;
+import com.depromeet.bank.dto.MemberAttendResponse;
 import com.depromeet.bank.dto.MemberResponse;
 import com.depromeet.bank.dto.ResponseDto;
 import com.depromeet.bank.dto.TokenDto;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.service.MemberService;
+import com.depromeet.bank.service.VisitService;
+import com.depromeet.bank.vo.VisitValue;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,13 +22,11 @@ import java.util.stream.Collectors;
 @RestController
 @Slf4j
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
-
-    public MemberController(MemberService memberService) {
-        this.memberService = memberService;
-    }
+    private final VisitService visitService;
 
     @PostMapping("/members/login")
     public ResponseDto<TokenDto> join(@RequestBody TokenDto tokenDto) {
@@ -69,5 +71,20 @@ public class MemberController {
         return ResponseDto.of(HttpStatus.OK, "회원 조회에 성공했습니다.", memberResponse);
     }
 
+    /**
+     * 멤버가 출석 할 때 호출됩니다.
+     * 오늘 처음 출석하는 경우라면, 지급해야할 포인트를 계산하고 출석 포인트 정산 작업을 진행합니다.
+     * 오늘 이미 출석 정산 작업이 완료된 경우라면, 204 상태코드를 응답합니다.
+     */
+    @PostMapping("/members/me/attend")
+    public ResponseDto<MemberAttendResponse> attendMember(@RequestAttribute(name = "id") Long memberId) {
+        VisitValue visitValue = visitService.attend(memberId);
+        MemberAttendResponse memberAttendResponse = MemberAttendResponse.from(visitValue);
+        return ResponseDto.of(
+                HttpStatus.OK,
+                "출석 요청이 성공했습니다.",
+                memberAttendResponse
+        );
+    }
 
 }

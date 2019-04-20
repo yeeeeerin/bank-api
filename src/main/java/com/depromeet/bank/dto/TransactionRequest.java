@@ -40,4 +40,12 @@ public class TransactionRequest {
                 investment
         );
     }
+
+    public static TransactionRequest forAttendancePoint(Long toAccountId, Long amount) {
+        return new TransactionRequest(
+                SYSTEM_ACCOUNT_ID,
+                toAccountId,
+                amount
+        );
+    }
 }
