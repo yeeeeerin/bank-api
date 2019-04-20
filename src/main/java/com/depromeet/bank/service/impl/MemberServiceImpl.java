@@ -6,10 +6,12 @@ import com.depromeet.bank.domain.account.AccountFactory;
 import com.depromeet.bank.domain.account.JwtFactory;
 import com.depromeet.bank.dto.AccountDto;
 import com.depromeet.bank.dto.TokenDto;
+import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.MemberRepository;
 import com.depromeet.bank.service.MemberService;
 import com.depromeet.bank.service.SocialFetchService;
+import com.depromeet.bank.vo.MemberValue;
 import com.depromeet.bank.vo.SocialMemberVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -43,6 +45,7 @@ public class MemberServiceImpl implements MemberService {
                     member1.setName(memberVo.getUserName());
                     member1.setProfileHref(memberVo.getProfileHref());
                     member1.setSocialId(memberVo.getId());
+                    member1.setCardinalNumber(null);
 
                     memberRepository.save(member1);
 
@@ -69,6 +72,18 @@ public class MemberServiceImpl implements MemberService {
     public Optional<Member> getMember(Long memberId) {
         Assert.notNull(memberId, "'memberId' must not be null");
         return memberRepository.findById(memberId);
+    }
+
+    @Override
+    @Transactional
+    public Member updateMember(Long memberId, MemberValue memberValue) {
+        Assert.notNull(memberId, "'memberId' must not be null");
+        Assert.notNull(memberValue, "'memberValue' must not be null");
+
+        final Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException("회원이 존재하지 않습니다. "));
+        member.update(memberValue);
+        return memberRepository.save(member);
     }
 
 }

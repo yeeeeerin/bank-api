@@ -1,13 +1,11 @@
 package com.depromeet.bank.controller;
 
 import com.depromeet.bank.domain.Member;
-import com.depromeet.bank.dto.MemberAttendResponse;
-import com.depromeet.bank.dto.MemberResponse;
-import com.depromeet.bank.dto.ResponseDto;
-import com.depromeet.bank.dto.TokenDto;
+import com.depromeet.bank.dto.*;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.service.MemberService;
 import com.depromeet.bank.service.VisitService;
+import com.depromeet.bank.vo.MemberValue;
 import com.depromeet.bank.vo.VisitValue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,6 +67,15 @@ public class MemberController {
         Member member = memberService.getMember(id).orElseThrow(() -> new NotFoundException("회원이 없습니다."));
         MemberResponse memberResponse = MemberResponse.from(member);
         return ResponseDto.of(HttpStatus.OK, "회원 조회에 성공했습니다.", memberResponse);
+    }
+
+    @PutMapping("/members/{memberId}")
+    public ResponseDto<MemberResponse> updateMember(@RequestAttribute(name = "id") Long memberId,
+                                                    @RequestBody MemberUpdateRequest memberUpdateRequest) {
+        MemberValue memberValue = MemberValue.from(memberUpdateRequest);
+        Member member = memberService.updateMember(memberId, memberValue);
+        MemberResponse memberResponse = MemberResponse.from(member);
+        return ResponseDto.of(HttpStatus.OK, "회원 갱신에 성공했습니다.", memberResponse);
     }
 
     /**
