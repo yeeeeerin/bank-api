@@ -7,14 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-@Component
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class AIrInfoScheduler implements Fetchable {
     private final AirInfoService airInfoService;
 
     @Override
-    @Scheduled(cron = "0 0 */4 * * *")
+    @Scheduled(cron = "0 30 * * * *")
     public void fetch() {
         airInfoService.createAirInfoByStationName(OpenApiStationName.SEOUL);
     }
