@@ -24,6 +24,8 @@ public class Member {
 
     private String name;
 
+    private Integer cardinalNumber;
+
     private String profileHref;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)

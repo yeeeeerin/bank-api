@@ -11,15 +11,20 @@ import org.springframework.util.Assert;
 public class MemberResponse {
     private Long id;
     private String name;
+    private Integer cardinalNumber;
     @Nullable
     private String profileImageUrl;
 
-    private MemberResponse(Long id, String name, @Nullable String profileImageUrl) {
+    private MemberResponse(Long id,
+                           String name,
+                           @Nullable Integer cardinalNumber,
+                           @Nullable String profileImageUrl) {
         Assert.notNull(id, "'id' must not be null");
         Assert.notNull(name, "'name' must not be null");
 
         this.id = id;
         this.name = name;
+        this.cardinalNumber = cardinalNumber;
         this.profileImageUrl = profileImageUrl;
     }
 
@@ -28,8 +33,9 @@ public class MemberResponse {
 
         Long memberId = member.getId();
         String name = member.getName();
+        Integer cardinalNumber = member.getCardinalNumber();
         String profileImageUrl = member.getProfileHref();
 
-        return new MemberResponse(memberId, name, profileImageUrl);
+        return new MemberResponse(memberId, name, cardinalNumber, profileImageUrl);
     }
 }
