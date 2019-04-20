@@ -14,6 +14,8 @@ public class AccountResponse {
     private Long id;
     private String name;
     private Long balance;
+    private String accountNumber;
+    private String accountType;
     private Double rate;
     private LocalDateTime createdAt;
 
@@ -25,6 +27,8 @@ public class AccountResponse {
                 .name(account.getName())
                 .rate(account.getRate())
                 .balance(account.getBalance())
+                .accountNumber(account.getAccountNumber())
+                .accountType(account.getAccountType().name())
                 .createdAt(account.getCreatedAt())
                 .build();
     }

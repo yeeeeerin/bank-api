@@ -4,7 +4,6 @@ package com.depromeet.bank.service;
 import com.depromeet.bank.domain.data.attendance.Attendance;
 import com.depromeet.bank.domain.data.attendance.DepromeetSessionType;
 import com.depromeet.bank.domain.instrument.Instrument;
-import com.depromeet.bank.domain.instrument.SettlementStatus;
 import com.depromeet.bank.domain.rule.*;
 import com.depromeet.bank.dto.TransactionRequest;
 import com.depromeet.bank.exception.NotFoundException;
