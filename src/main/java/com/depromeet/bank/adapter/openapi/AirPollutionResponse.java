@@ -1,4 +1,4 @@
-package com.depromeet.bank.adaptor.openapi;
+package com.depromeet.bank.adapter.openapi;
 
 import lombok.Getter;
 import lombok.Setter;

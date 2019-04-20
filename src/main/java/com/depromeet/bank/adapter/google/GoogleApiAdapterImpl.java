@@ -1,4 +1,4 @@
-package com.depromeet.bank.adaptor.google;
+package com.depromeet.bank.adapter.google;
 
 import com.depromeet.bank.exception.GoogleApiFailedException;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.depromeet.bank.adaptor.openapi;
+package com.depromeet.bank.adapter.openapi;
 
 import com.depromeet.bank.exception.OpenApiFailedException;
 import lombok.extern.slf4j.Slf4j;
@@ -14,11 +14,11 @@ import java.net.URI;
 @Slf4j
 @Component
 @PropertySource("classpath:open-api.properties")
-public class OpenApiAdaptorImpl implements OpenApiAdaptor {
+public class OpenApiAdapterImpl implements OpenApiAdapter {
     private final RestTemplate restTemplate;
     private final String serviceKey;
 
-    public OpenApiAdaptorImpl(RestTemplate restTemplate, @Value("${open-api.serviceKey}") String serviceKey) {
+    public OpenApiAdapterImpl(RestTemplate restTemplate, @Value("${open-api.serviceKey}") String serviceKey) {
         this.restTemplate = restTemplate;
         this.serviceKey = serviceKey;
     }

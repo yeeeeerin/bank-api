@@ -1,9 +1,9 @@
 package com.depromeet.bank.integration;
 
-import com.depromeet.bank.adaptor.google.CellAddress;
-import com.depromeet.bank.adaptor.google.GoogleApiAdapter;
-import com.depromeet.bank.adaptor.google.GoogleApiResponse;
-import com.depromeet.bank.adaptor.google.Range;
+import com.depromeet.bank.adapter.google.CellAddress;
+import com.depromeet.bank.adapter.google.GoogleApiAdapter;
+import com.depromeet.bank.adapter.google.GoogleApiResponse;
+import com.depromeet.bank.adapter.google.Range;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

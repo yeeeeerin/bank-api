@@ -1,8 +1,8 @@
 package com.depromeet.bank.integration;
 
-import com.depromeet.bank.adaptor.google.GoogleApiAdapter;
-import com.depromeet.bank.adaptor.google.GoogleApiResponse;
-import com.depromeet.bank.adaptor.google.Range;
+import com.depromeet.bank.adapter.google.GoogleApiAdapter;
+import com.depromeet.bank.adapter.google.GoogleApiResponse;
+import com.depromeet.bank.adapter.google.Range;
 import com.depromeet.bank.domain.account.JwtFactory;
 import com.depromeet.bank.domain.data.attendance.Attendance;
 import com.depromeet.bank.domain.data.attendance.DepromeetSessionType;

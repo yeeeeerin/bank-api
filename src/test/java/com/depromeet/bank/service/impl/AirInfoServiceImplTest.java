@@ -1,8 +1,8 @@
 package com.depromeet.bank.service.impl;
 
-import com.depromeet.bank.adaptor.openapi.OpenApiAdaptor;
-import com.depromeet.bank.adaptor.openapi.OpenApiAdaptorImpl;
-import com.depromeet.bank.adaptor.openapi.OpenApiStationName;
+import com.depromeet.bank.adapter.openapi.OpenApiAdapter;
+import com.depromeet.bank.adapter.openapi.OpenApiAdapterImpl;
+import com.depromeet.bank.adapter.openapi.OpenApiStationName;
 import com.depromeet.bank.domain.data.airinfo.AirInfo;
 import com.depromeet.bank.repository.AirInfoRepository;
 import com.depromeet.bank.service.AirInfoService;
@@ -30,15 +30,15 @@ public class AirInfoServiceImplTest {
     @Autowired
     private AirInfoService airInfoService;
     @Autowired
-    private OpenApiAdaptor openApiAdaptor;
+    private OpenApiAdapter openApiAdapter;
     @Autowired
     private RestTemplate restTemplate;
     private AirInfo airInfo;
 
     @Before
     public void setUp() {
-        openApiAdaptor = new OpenApiAdaptorImpl(restTemplate, servicekey);
-        airInfoService = new AirInfoServiceImpl(openApiAdaptor, airInfoRepository);
+        openApiAdapter = new OpenApiAdapterImpl(restTemplate, servicekey);
+        airInfoService = new AirInfoServiceImpl(openApiAdapter, airInfoRepository);
     }
 
     @Ignore

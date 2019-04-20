@@ -1,5 +1,5 @@
-package com.depromeet.bank.adaptor.openapi;
+package com.depromeet.bank.adapter.openapi;
 
-public interface OpenApiAdaptor {
+public interface OpenApiAdapter {
     AirPollutionResponse getAirPollutionResponseByStationName(OpenApiStationName stationName);
 }
