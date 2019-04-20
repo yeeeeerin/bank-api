@@ -1,10 +1,12 @@
 package com.depromeet.bank.service.impl;
 
 
+import com.depromeet.bank.adapter.mail.MailAdapter;
 import com.depromeet.bank.domain.Member;
 import com.depromeet.bank.domain.account.AccountFactory;
 import com.depromeet.bank.domain.account.JwtFactory;
 import com.depromeet.bank.dto.TokenDto;
+import com.depromeet.bank.helper.DepromeetMembers;
 import com.depromeet.bank.helper.TestHelper;
 import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.MemberRepository;
@@ -14,8 +16,11 @@ import com.depromeet.bank.vo.SocialMemberVo;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -47,6 +52,10 @@ public class MemberServiceImplTest {
     private AccountRepository accountRepository;
     @Mock
     private AccountFactory accountFactory;
+    @Mock
+    private DepromeetMembers depromeetMembers;
+    @Mock
+    private MailAdapter mailAdapter;
 
     private MemberService memberService;
     private TokenDto tokenDto;
@@ -54,14 +63,15 @@ public class MemberServiceImplTest {
 
     @Before
     public void setup() {
-
         memberService = new MemberServiceImpl(
                 socialFetchService,
                 memberRepository,
                 accountRepository,
                 accountFactory,
-                jwtFactory);
-
+                jwtFactory,
+                depromeetMembers,
+                mailAdapter
+        );
         this.tokenDto = new TokenDto("x6n6QvcJhH-nJPHgaasGzgDjUbLofvh-pZjBywopyNkAAAFpskMpHg");
         member = TestHelper.createMember(MEMBER_KAKAO_ID, MEMBER_NAME, MEMBER_PROFILE_HREF);
     }

@@ -1,5 +1,7 @@
 package com.depromeet.bank.service.impl;
 
+import com.depromeet.bank.adapter.mail.MailAdapter;
+import com.depromeet.bank.adapter.mail.MailValue;
 import com.depromeet.bank.domain.Member;
 import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.account.AccountFactory;
@@ -7,6 +9,7 @@ import com.depromeet.bank.domain.account.JwtFactory;
 import com.depromeet.bank.dto.AccountDto;
 import com.depromeet.bank.dto.TokenDto;
 import com.depromeet.bank.exception.NotFoundException;
+import com.depromeet.bank.helper.DepromeetMembers;
 import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.MemberRepository;
 import com.depromeet.bank.service.MemberService;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,6 +36,8 @@ public class MemberServiceImpl implements MemberService {
     private final AccountRepository accountRepository;
     private final AccountFactory accountFactory;
     private final JwtFactory jwtFactory;
+    private final DepromeetMembers depromeetMembers;
+    private final MailAdapter mailAdapter;
 
     @Override
     @Transactional
@@ -41,17 +47,27 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = memberRepository.findBySocialId(memberVo.getUserId())
                 .orElseGet(() -> {
-                    Member member1 = new Member();
-                    member1.setName(memberVo.getUserName());
-                    member1.setProfileHref(memberVo.getProfileHref());
-                    member1.setSocialId(memberVo.getId());
-                    member1.setCardinalNumber(null);
+                    // 멤버 생성
+                    Member createdMember = new Member();
+                    String name = memberVo.getUserName();
+                    createdMember.setName(name);
+                    depromeetMembers.getNumberByName(name).ifPresent(createdMember::setCardinalNumber);
 
-                    memberRepository.save(member1);
+                    createdMember.setProfileHref(memberVo.getProfileHref());
+                    createdMember.setSocialId(memberVo.getId());
+                    memberRepository.save(createdMember);
 
-                    Account account = accountFactory.createForMember(member1, AccountDto.initAccount());
+                    // 계좌 생성
+                    Account account = accountFactory.createForMember(createdMember, AccountDto.initAccount());
                     accountRepository.save(account);
-                    return member1;
+
+                    // 메일 발송
+                    mailAdapter.send(MailValue.of(
+                            "[디즈가즈아] 신규 회원 가입 알림 - " + name,
+                            name + "님이 디프가즈아 서비스에 가입하셨습니다 :D",
+                            Arrays.asList("depromeet.billionaire@gmail.com", "seong0428@gmail.com")
+                    ));
+                    return createdMember;
                 });
 
         return jwtFactory.generateToken(member);
