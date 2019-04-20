@@ -1,5 +1,6 @@
 package com.depromeet.bank.integration;
 
+import com.depromeet.bank.adapter.mail.MailAdapter;
 import com.depromeet.bank.domain.account.JwtFactory;
 import com.depromeet.bank.dto.MemberUpdateRequest;
 import com.depromeet.bank.dto.TokenDto;
@@ -44,6 +45,8 @@ public class MemberCommandTest {
     private JwtFactory jwtFactory;
     @MockBean
     private SocialFetchService socialFetchService;
+    @MockBean
+    private MailAdapter mailAdapter;
 
     @Mock
     private SocialMemberVo socialMemberVo;
