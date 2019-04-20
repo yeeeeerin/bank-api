@@ -3,7 +3,7 @@ package com.depromeet.bank.service.impl;
 import com.depromeet.bank.adaptor.openapi.OpenApiAdaptor;
 import com.depromeet.bank.adaptor.openapi.OpenApiAdaptorImpl;
 import com.depromeet.bank.adaptor.openapi.OpenApiStationName;
-import com.depromeet.bank.domain.AirInfo;
+import com.depromeet.bank.domain.data.airinfo.AirInfo;
 import com.depromeet.bank.repository.AirInfoRepository;
 import com.depromeet.bank.service.AirInfoService;
 import lombok.extern.slf4j.Slf4j;

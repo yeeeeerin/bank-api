@@ -1,6 +1,6 @@
 package com.depromeet.bank.controller;
 
-import com.depromeet.bank.domain.AirInfo;
+import com.depromeet.bank.domain.data.airinfo.AirInfo;
 import com.depromeet.bank.domain.data.attendance.Attendance;
 import com.depromeet.bank.dto.AirInfoSynchronizationResponse;
 import com.depromeet.bank.dto.AttendanceResponse;
