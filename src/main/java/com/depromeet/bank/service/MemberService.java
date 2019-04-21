@@ -20,5 +20,5 @@ public interface MemberService {
 
     Member updateMember(Long memberId, MemberValue memberValue);
 
-    Set<Member> getMembersToBeCorrected();
+    List<Member> getMembersToBeCorrected();
 }

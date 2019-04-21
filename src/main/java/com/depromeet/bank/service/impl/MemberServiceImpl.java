@@ -101,14 +101,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    @Transactional
-    public Set<Member> getMembersToBeCorrected() {
+    @Transactional(readOnly = true)
+    public List<Member> getMembersToBeCorrected() {
         final List<Member> membersNumberIsNull = memberRepository.findByCardinalNumberIsNull();
         final List<Member> membersUnknownName = memberRepository.findAll()
                 .stream()
                 .filter(member -> !depromeetMembers.getNumberByName(member.getName()).isPresent())
                 .collect(Collectors.toList());
-        final Set<Member> membersToBeCorrected = new HashSet<>(membersNumberIsNull);
+        final List<Member> membersToBeCorrected = new ArrayList<>(membersNumberIsNull);
         membersToBeCorrected.addAll(membersUnknownName);
         return membersToBeCorrected;
     }
