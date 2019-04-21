@@ -2,10 +2,13 @@ package com.depromeet.bank.dto;
 
 import com.depromeet.bank.domain.Transaction;
 import com.depromeet.bank.domain.TransactionClassify;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-
+@Getter
+@ToString
 public class TransactionResponse {
 
     private Long amount;
