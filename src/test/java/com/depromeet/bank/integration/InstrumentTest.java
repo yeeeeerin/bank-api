@@ -84,7 +84,7 @@ public class InstrumentTest {
                 .andExpect(jsonPath("$.status").value(201))
                 .andExpect(jsonPath("$.response.name").value(request.getName()))
                 .andExpect(jsonPath("$.response.description").value(request.getDescription()))
-                .andExpect(jsonPath("$.response.expiredAt")
+                .andExpect(jsonPath("$.response.toBeSettledAt")
                         .value(request.getExpiredAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)));
     }
 

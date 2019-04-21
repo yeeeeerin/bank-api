@@ -1,6 +1,7 @@
 package com.depromeet.bank.service;
 
 import com.depromeet.bank.domain.instrument.Instrument;
+import com.depromeet.bank.dto.InstrumentExpirationType;
 import com.depromeet.bank.vo.AdjustmentRuleValue;
 import com.depromeet.bank.vo.InstrumentValue;
 import org.springframework.data.domain.Pageable;
@@ -10,9 +11,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface InstrumentService {
-    List<Instrument> getInstruments(Pageable pageable);
+    List<Instrument> getInstruments(Pageable pageable, InstrumentExpirationType expirationType);
 
-    List<Instrument> getInstrumentsExpiredAndIncomplete(LocalDateTime localDateTime);
+    List<Instrument> getInstrumentsNeedToBeSettled(LocalDateTime localDateTime);
 
     Optional<Instrument> getInstrument(Long instrumentId);
 

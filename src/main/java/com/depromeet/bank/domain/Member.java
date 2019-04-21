@@ -4,8 +4,6 @@ package com.depromeet.bank.domain;
 import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.vo.MemberValue;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;

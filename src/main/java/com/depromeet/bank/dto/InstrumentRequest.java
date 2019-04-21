@@ -20,11 +20,13 @@ public class InstrumentRequest {
     private String description;
     @NotNull
     private LocalDateTime expiredAt;
+    @NotNull
+    private LocalDateTime toBeSettledAt;
     @NotEmpty
     private List<AdjustmentRuleRequest> rules;
 
     public InstrumentValue toInstrumentValue() {
-        return InstrumentValue.of(name, description, expiredAt);
+        return InstrumentValue.of(name, description, expiredAt, toBeSettledAt);
     }
 
     public List<AdjustmentRuleValue> toAdjustmentRuleValues() {

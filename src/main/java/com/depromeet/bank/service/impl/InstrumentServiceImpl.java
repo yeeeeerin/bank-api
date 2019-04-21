@@ -1,13 +1,12 @@
 package com.depromeet.bank.service.impl;
 
-import com.depromeet.bank.domain.Member;
 import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.instrument.Instrument;
 import com.depromeet.bank.domain.instrument.InstrumentFactory;
 import com.depromeet.bank.domain.instrument.SettlementStatus;
-import com.depromeet.bank.dto.AccountDto;
+import com.depromeet.bank.dto.InstrumentExpirationType;
 import com.depromeet.bank.dto.TransactionRequest;
-import com.depromeet.bank.exception.InternalServerErrorException;
+import com.depromeet.bank.exception.BadRequestException;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.repository.InstrumentRepository;
 import com.depromeet.bank.service.AccountService;
@@ -38,15 +37,29 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Instrument> getInstruments(Pageable pageable) {
-        return instrumentRepository.findAll(pageable).stream()
-                .collect(Collectors.toList());
+    public List<Instrument> getInstruments(Pageable pageable, InstrumentExpirationType expirationType) {
+        switch(expirationType) {
+            case ALL:
+                return instrumentRepository.findAll(pageable)
+                        .stream()
+                        .collect(Collectors.toList());
+            case TRUE:
+                return instrumentRepository.findByExpiredAtLessThan(LocalDateTime.now(), pageable)
+                        .stream()
+                        .collect(Collectors.toList());
+            case FALSE:
+                return instrumentRepository.findByExpiredAtGreaterThan(LocalDateTime.now(), pageable)
+                        .stream()
+                        .collect(Collectors.toList());
+            default:
+                throw new IllegalArgumentException("'expirationType' is not supported. type:" + expirationType);
+        }
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Instrument> getInstrumentsExpiredAndIncomplete(LocalDateTime localDateTime) {
-        return instrumentRepository.findByExpiredAtLessThanAndSettlementStatus(localDateTime, SettlementStatus.INCOMPLETE);
+    public List<Instrument> getInstrumentsNeedToBeSettled(LocalDateTime localDateTime) {
+        return instrumentRepository.findByToBeSettledAtLessThanAndSettlementStatus(localDateTime, SettlementStatus.INCOMPLETE);
     }
 
     @Override
@@ -77,6 +90,10 @@ public class InstrumentServiceImpl implements InstrumentService {
 
         Instrument instrument = instrumentRepository.findById(instrumentId)
                 .orElseThrow(() -> new NotFoundException("상품이 존재하지 않습니다."));
+
+        if (LocalDateTime.now().isAfter(instrument.getExpiredAt())) {
+            throw new BadRequestException("유효기간이 지난 상품이므로 가입할 수 없습니다.");
+        }
 
         Account account = accountService.createAccountForInstrument(memberId, instrument);
         List<Account> accounts = instrument.getAccounts();

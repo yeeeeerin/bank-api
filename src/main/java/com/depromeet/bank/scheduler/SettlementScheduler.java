@@ -19,7 +19,7 @@ public class SettlementScheduler {
 
     @Scheduled(cron = "0 0 0 * * *")
     public void settle() {
-        instrumentService.getInstrumentsExpiredAndIncomplete(LocalDateTime.now())
+        instrumentService.getInstrumentsNeedToBeSettled(LocalDateTime.now())
                 .stream()
                 .peek(instrument -> log.warn(instrument.toString()))
                 .map(instrument -> settlementService.updateRuleIsSatisfied(instrument.getInstrumentId()))

@@ -1,12 +1,8 @@
 package com.depromeet.bank.controller;
 
 import com.depromeet.bank.domain.instrument.Instrument;
-import com.depromeet.bank.dto.InstrumentRequest;
-import com.depromeet.bank.dto.InstrumentResponse;
-import com.depromeet.bank.dto.JoinInstrumentRequest;
-import com.depromeet.bank.dto.ResponseDto;
+import com.depromeet.bank.dto.*;
 import com.depromeet.bank.exception.NotFoundException;
-import com.depromeet.bank.repository.InstrumentRepository;
 import com.depromeet.bank.service.InstrumentService;
 import com.depromeet.bank.vo.AdjustmentRuleValue;
 import com.depromeet.bank.vo.InstrumentValue;
@@ -29,9 +25,11 @@ public class InstrumentController {
 
     @GetMapping("/instruments")
     public ResponseDto<List<InstrumentResponse>> getInstruments(@RequestParam(defaultValue = "0") int page,
-                                                                @RequestParam(defaultValue = "20") int size) {
+                                                                @RequestParam(defaultValue = "20") int size,
+                                                                @RequestParam(defaultValue = "all") InstrumentExpirationType expired) {
         Pageable pageable = PageRequest.of(page, size);
-        List<InstrumentResponse> responses = instrumentService.getInstruments(pageable).stream()
+        List<InstrumentResponse> responses = instrumentService.getInstruments(pageable, expired)
+                .stream()
                 .map(InstrumentResponse::from)
                 .collect(Collectors.toList());
         return ResponseDto.of(HttpStatus.OK, "상품 목록 조회에 성공했습니다.", responses);

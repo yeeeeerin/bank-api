@@ -23,42 +23,38 @@ public class Instrument {
     @Id
     @GeneratedValue
     private Long instrumentId;
-
     @Column
     private String name;
-
     @Column
     private String description;
-
     @Column
     private LocalDateTime expiredAt;
-
+    @Column
+    private LocalDateTime toBeSettledAt;
     @Column
     @Convert(converter = SettlementStatusConverter.class)
     private SettlementStatus settlementStatus;
-
     @Column
     @CreatedDate
     private LocalDateTime createdAt;
-
     @Column
     @LastModifiedDate
     private LocalDateTime updatedAt;
-
     @OneToMany
     private List<Account> accounts;
-
     @OneToMany(cascade = CascadeType.ALL)
     private List<AdjustmentRule> adjustmentRules;
 
     private Instrument(String name,
                        String description,
                        LocalDateTime expiredAt,
+                       LocalDateTime toBeSettledAt,
                        List<AdjustmentRule> adjustmentRules) {
         this.instrumentId = null;
         this.name = Objects.requireNonNull(name);
         this.description = Objects.requireNonNull(description);
         this.expiredAt = Objects.requireNonNull(expiredAt);
+        this.toBeSettledAt = Objects.requireNonNull(toBeSettledAt);
         this.settlementStatus = Optional.ofNullable(settlementStatus).orElse(SettlementStatus.INCOMPLETE);
         this.adjustmentRules = new ArrayList<>(adjustmentRules);
     }
@@ -68,7 +64,8 @@ public class Instrument {
         String name = instrumentValue.getName();
         String description = instrumentValue.getDescription();
         LocalDateTime expiredAt = instrumentValue.getExpiredAt();
-        return new Instrument(name, description, expiredAt, Collections.emptyList());
+        LocalDateTime toBeSettledAt = instrumentValue.getToBeSettledAt();
+        return new Instrument(name, description, expiredAt, toBeSettledAt, Collections.emptyList());
     }
 
     public Instrument update(InstrumentValue instrumentValue) {
@@ -84,8 +81,12 @@ public class Instrument {
             this.description = requestedDescription;
         }
         LocalDateTime requestedExpiredAt = instrumentValue.getExpiredAt();
-        if (requestedExpiredAt != null) {
+        if (expiredAt != null) {
             this.expiredAt = requestedExpiredAt;
+        }
+        LocalDateTime requestedToBeSettledAt = instrumentValue.getToBeSettledAt();
+        if (requestedToBeSettledAt != null) {
+            this.toBeSettledAt = requestedToBeSettledAt;
         }
         return this;
     }

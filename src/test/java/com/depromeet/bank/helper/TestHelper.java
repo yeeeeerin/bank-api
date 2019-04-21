@@ -63,12 +63,12 @@ public final class TestHelper {
     public static InstrumentRequest createInstrumentRequest(
             String name,
             String description,
-            LocalDateTime expiredAt,
+            LocalDateTime toBeSettledAt,
             List<AdjustmentRuleRequest> rules) {
         InstrumentRequest instrumentRequest = new InstrumentRequest();
         ReflectionTestUtils.setField(instrumentRequest, "name", name);
         ReflectionTestUtils.setField(instrumentRequest, "description", description);
-        ReflectionTestUtils.setField(instrumentRequest, "expiredAt", expiredAt);
+        ReflectionTestUtils.setField(instrumentRequest, "toBeSettledAt", toBeSettledAt);
         ReflectionTestUtils.setField(instrumentRequest, "rules", rules);
         return instrumentRequest;
     }
