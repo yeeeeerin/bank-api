@@ -32,7 +32,7 @@ public class AirInfoServiceImpl implements AirInfoService {
         return response.getAirPollutions().stream()
                 .map(airPollution -> {
                     LocalDateTime dataTime = airPollution.getDataTime();
-                    AirInfo airInfo = airInfoRepository.findByStationNameAndDataTime(stationName.getValue(), dataTime)
+                    AirInfo airInfo = airInfoRepository.findByStationNameAndDataTime(stationName, dataTime)
                             .orElseGet(() -> new AirInfo(airPollution, stationName));
                     log.info("airinfo : {}", airInfo.toString());
                     return airInfoRepository.save(airInfo);
