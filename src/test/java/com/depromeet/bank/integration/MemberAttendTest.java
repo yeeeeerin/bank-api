@@ -1,5 +1,6 @@
 package com.depromeet.bank.integration;
 
+import com.depromeet.bank.adapter.mail.MailAdapter;
 import com.depromeet.bank.domain.Member;
 import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.account.AccountType;
@@ -45,6 +46,8 @@ public class MemberAttendTest {
     private JwtFactory jwtFactory;
     @MockBean
     private SocialFetchService socialFetchService;
+    @MockBean
+    private MailAdapter mailAdapter;    // 테스트 실행될 때 메일을 발송하지 않습니다.
     @Mock
     private SocialMemberVo socialMemberVo;
 
