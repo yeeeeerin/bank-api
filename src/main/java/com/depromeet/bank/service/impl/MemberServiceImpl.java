@@ -22,9 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -100,6 +98,19 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(() -> new NotFoundException("회원이 존재하지 않습니다. "));
         member.update(memberValue);
         return memberRepository.save(member);
+    }
+
+    @Override
+    @Transactional
+    public Set<Member> getMembersToBeCorrected() {
+        final List<Member> membersNumberIsNull = memberRepository.findByCardinalNumberIsNull();
+        final List<Member> membersUnknownName = memberRepository.findAll()
+                .stream()
+                .filter(member -> !depromeetMembers.getNumberByName(member.getName()).isPresent())
+                .collect(Collectors.toList());
+        final Set<Member> membersToBeCorrected = new HashSet<>(membersNumberIsNull);
+        membersToBeCorrected.addAll(membersUnknownName);
+        return membersToBeCorrected;
     }
 
 }
