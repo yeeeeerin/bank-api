@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -63,10 +63,10 @@ public class MemberServiceImpl implements MemberService {
 
                     // 메일 발송
                     mailAdapter.send(MailValue.of(
-                            "[디즈가즈아] 신규 회원 가입 알림 - " + name,
+                            "[디프가즈아] 신규 회원 가입 알림 - " + name,
                             name + "님이 디프가즈아 서비스에 가입하셨습니다 :D",
-                            Arrays.asList("depromeet.billionaire@gmail.com", "seong0428@gmail.com")
-                    ));
+                            Collections.singletonList("depromeet.billionaire@gmail.com"
+                            )));
                     return createdMember;
                 });
 
