@@ -17,27 +17,21 @@ public class AirInfoSynchronizationResponse {
     @JsonProperty("id")
     private Long airInfoId;
     private String stationName;
-    private Long pm10Value;
-    private Long pm25Value;
-    private Integer pm10Grade;
-    private Integer pm25Grade;
+    private Integer pm10Value;
+    private Integer pm25Value;
     private LocalDateTime dataTime;
     private AirGrade airGrade;
 
     private AirInfoSynchronizationResponse(Long airInfoId,
                                            String stationName,
-                                           Long pm10Value,
-                                           Long pm25Value,
-                                           Integer pm10Grade,
-                                           Integer pm25Grade,
+                                           Integer pm10Value,
+                                           Integer pm25Value,
                                            LocalDateTime dataTime,
                                            AirGrade airGrade) {
         this.airInfoId = airInfoId;
         this.stationName = stationName;
         this.pm10Value = pm10Value;
         this.pm25Value = pm25Value;
-        this.pm10Grade = pm10Grade;
-        this.pm25Grade = pm25Grade;
         this.dataTime = dataTime;
         this.airGrade = airGrade;
     }
@@ -47,11 +41,9 @@ public class AirInfoSynchronizationResponse {
 
         return new AirInfoSynchronizationResponse(
                 airInfo.getId(),
-                airInfo.getStationName(),
+                airInfo.getStationName().getValue(),
                 airInfo.getPm10Value(),
                 airInfo.getPm25Value(),
-                airInfo.getPm10Grade(),
-                airInfo.getPm25Grade(),
                 airInfo.getDataTime(),
                 airInfo.getAirGrade()
         );
