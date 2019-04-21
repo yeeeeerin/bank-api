@@ -21,7 +21,7 @@ public class OpenApiAdapterTest {
 
     @Test
     public void stationName을Enum으로했을때응답이되는지() {
-        AirPollutionResponse response = apiAdaptor.getAirPollutionResponseByStationName(OpenApiStationName.SEOUL);
+        AirPollutionResponse response = apiAdaptor.getAirPollution(OpenApiStationName.SEOUL);
         log.info("{}", response);
         assertThat(response).isNotNull();
     }

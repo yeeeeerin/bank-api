@@ -1,18 +1,24 @@
 package com.depromeet.bank.adapter.openapi;
 
+import lombok.Getter;
+
 import java.util.stream.Stream;
 
+@Getter
 public enum AirGrade {
-    FIRST(1), SECOND(2), THIRD(3), FOURTH(4), FIFTH(5), SIXTH(6), SEVENTH(7), EIGHTH(8);
+    FIRST(1),
+    SECOND(2),
+    THIRD(3),
+    FOURTH(4),
+    FIFTH(5),
+    SIXTH(6),
+    SEVENTH(7),
+    EIGHTH(8);
 
-    private Integer value;
+    private final Integer value;
 
     AirGrade(Integer value) {
         this.value = value;
-    }
-
-    public Integer getValue() {
-        return value;
     }
 
     public static AirGrade from(Integer value) {
@@ -22,15 +28,15 @@ public enum AirGrade {
                 .orElse(null);
     }
 
-    public static AirGrade from(AirPollutionResponse.Body.Item item) {
-        AirGrade pm10Grade = getPM10Grade(item.getPm10Value());
-        AirGrade pm25Grade = getPM25Grade(item.getPm25Value());
+    public static AirGrade from(AirPollution airPollution) {
+        AirGrade pm10Grade = getPM10Grade(airPollution.getPm10Value());
+        AirGrade pm25Grade = getPM25Grade(airPollution.getPm25Value());
         if (pm10Grade.getValue() >= pm25Grade.getValue())
             return pm10Grade;
         return pm25Grade;
     }
 
-    private static AirGrade getPM10Grade(Long pm10Value) {
+    private static AirGrade getPM10Grade(Integer pm10Value) {
         if (pm10Value >= 0 && pm10Value <= 15)
             return AirGrade.FIRST;
         else if (pm10Value >= 16 && pm10Value <= 30)
@@ -48,7 +54,7 @@ public enum AirGrade {
         return AirGrade.EIGHTH;
     }
 
-    private static AirGrade getPM25Grade(Long pm25Value) {
+    private static AirGrade getPM25Grade(Integer pm25Value) {
         if (pm25Value >= 0 && pm25Value <= 8)
             return AirGrade.FIRST;
         else if (pm25Value >= 9 && pm25Value <= 15)
