@@ -1,5 +1,6 @@
 package com.depromeet.bank.config;
 
+import com.depromeet.bank.converter.InstrumentExpirationTypeConverter;
 import com.depromeet.bank.converter.RankTypeConverter;
 import com.depromeet.bank.intercepter.ExceptionInterceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,6 +52,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new RankTypeConverter());
+        registry.addConverter(new InstrumentExpirationTypeConverter());
     }
 
 }

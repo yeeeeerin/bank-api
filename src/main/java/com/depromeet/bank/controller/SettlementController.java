@@ -20,7 +20,7 @@ public class SettlementController {
 
     @PostMapping("/instruments/settle")
     public void settle() {
-        instrumentService.getInstrumentsExpiredAndIncomplete(LocalDateTime.now())
+        instrumentService.getInstrumentsNeedToBeSettled(LocalDateTime.now())
                 .stream()
                 .map(instrument -> settlementService.updateRuleIsSatisfied(instrument.getInstrumentId()))
                 .forEach(instrument -> settlementService.settle(instrument.getInstrumentId()));

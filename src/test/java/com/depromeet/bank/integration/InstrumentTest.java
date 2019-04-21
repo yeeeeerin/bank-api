@@ -52,6 +52,7 @@ public class InstrumentTest {
     private static final String INSTRUMENT_NAME_BEFORE = "beforeInstrumentName";
     private static final String INSTRUMENT_DESCRIPTION_BEFORE = "beforeInstrumentDescription";
     private static final LocalDateTime INSTRUMENT_EXPIRED_AT_BEFORE = LocalDateTime.of(2019, 4, 7, 23, 59, 0);
+    private static final LocalDateTime INSTRUMENT_TO_BE_SETTLED_AT_BEFORE = LocalDateTime.of(2019, 4, 7, 23, 59, 0);
 
     @Autowired
     private MockMvc mockMvc;
@@ -84,7 +85,7 @@ public class InstrumentTest {
                 .andExpect(jsonPath("$.status").value(201))
                 .andExpect(jsonPath("$.response.name").value(request.getName()))
                 .andExpect(jsonPath("$.response.description").value(request.getDescription()))
-                .andExpect(jsonPath("$.response.expiredAt")
+                .andExpect(jsonPath("$.response.toBeSettledAt")
                         .value(request.getExpiredAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)));
     }
 
@@ -166,7 +167,7 @@ public class InstrumentTest {
         ResponseDto<InstrumentResponse> instrumentResponseDto = objectMapper.readValue(createResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
         Long instrumentId = instrumentResponseDto.getResponse().getId();
         // when
-        String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest("afterName", null, null, null));
+        String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest("afterName", null, null, null, null));
         MvcResult mvcResult = mockMvc.perform(put("/api/instruments/{instrumentId}", instrumentId)
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -191,7 +192,7 @@ public class InstrumentTest {
         ResponseDto<InstrumentResponse> instrumentResponseDto = objectMapper.readValue(createResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
         Long instrumentId = instrumentResponseDto.getResponse().getId();
         // when
-        String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest(null, "afterDescription", null, null));
+        String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest(null, "afterDescription", null, null, null));
         MvcResult mvcResult = mockMvc.perform(put("/api/instruments/{instrumentId}", instrumentId)
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -241,7 +242,7 @@ public class InstrumentTest {
         ResponseDto<InstrumentResponse> instrumentResponseDto = objectMapper.readValue(createResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
         Long instrumentId = instrumentResponseDto.getResponse().getId();
         // when
-        String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest(null, null, null, null));
+        String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest(null, null, null,null, null));
         MvcResult mvcResult = mockMvc.perform(put("/api/instruments/{instrumentId}", instrumentId)
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -262,7 +263,7 @@ public class InstrumentTest {
     public void 상품_수정__상품이_존재하지_않으면_404_응답() throws Exception {
         // given
         // when
-        String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest("afterName", "afterDescription", null, null));
+        String requestBody = objectMapper.writeValueAsString(TestHelper.createInstrumentRequest("afterName", "afterDescription", null, null,null));
         mockMvc.perform(put("/api/instruments/{instrumentId}", 1000L)
                 .header(AUTHORIZATION_HEADER_NAME, authorizationHeader)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -313,6 +314,7 @@ public class InstrumentTest {
                 INSTRUMENT_NAME_BEFORE,
                 INSTRUMENT_DESCRIPTION_BEFORE,
                 INSTRUMENT_EXPIRED_AT_BEFORE,
+                INSTRUMENT_TO_BE_SETTLED_AT_BEFORE,
                 Collections.singletonList(createAdjustmentRuleRequest())
         );
     }

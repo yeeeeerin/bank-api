@@ -17,12 +17,18 @@ public class InstrumentResponse {
     private String name;
     private String description;
     private LocalDateTime expiredAt;
+    private LocalDateTime toBeSettledAt;
 
-    private InstrumentResponse(Long id, String name, String description, LocalDateTime expiredAt) {
+    private InstrumentResponse(Long id,
+                               String name,
+                               String description,
+                               LocalDateTime expiredAt,
+                               LocalDateTime toBeSettledAt) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.expiredAt = expiredAt;
+        this.toBeSettledAt = toBeSettledAt;
     }
 
     public static InstrumentResponse from(Instrument instrument) {
@@ -30,7 +36,8 @@ public class InstrumentResponse {
         Long id = instrument.getInstrumentId();
         String name = instrument.getName();
         String description = instrument.getDescription();
-        LocalDateTime expiredAt = instrument.getExpiredAt();
-        return new InstrumentResponse(id, name, description, expiredAt);
+        LocalDateTime expiredAt = instrument.getToBeSettledAt();
+        LocalDateTime toBeSettledAt = instrument.getToBeSettledAt();
+        return new InstrumentResponse(id, name, description, expiredAt, toBeSettledAt);
     }
 }
