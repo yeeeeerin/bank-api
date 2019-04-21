@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface MemberService {
 
@@ -18,4 +19,6 @@ public interface MemberService {
     Optional<Member> getMember(Long memberId);
 
     Member updateMember(Long memberId, MemberValue memberValue);
+
+    Set<Member> getMembersToBeCorrected();
 }

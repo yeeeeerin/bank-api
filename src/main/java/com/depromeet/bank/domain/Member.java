@@ -3,6 +3,7 @@ package com.depromeet.bank.domain;
 
 import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.vo.MemberValue;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.Assert;
@@ -12,8 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Setter
-@Getter
+@Data
 public class Member {
     public static final Long SYSTEM_MEMBER_ID = 0L;
 
