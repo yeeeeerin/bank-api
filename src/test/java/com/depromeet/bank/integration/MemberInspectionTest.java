@@ -71,7 +71,7 @@ public class MemberInspectionTest {
         // when
         Collection<Member> members = memberService.getMembersToBeCorrected();
         // then
-        assertThat(members.size()).isEqualTo(1);
+        assertThat(members.size()).isGreaterThanOrEqualTo(1);
         assertThat(members.contains(member)).isTrue();
     }
 }
