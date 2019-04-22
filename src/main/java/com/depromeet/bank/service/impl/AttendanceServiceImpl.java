@@ -15,12 +15,14 @@ import com.depromeet.bank.vo.AttendanceValue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -88,5 +90,12 @@ public class AttendanceServiceImpl implements AttendanceService {
             throw new InternalServerErrorException("데이터가 올바르지 않습니다.");
         }
         return fetch(depromeetSessionType);
+    }
+
+    @Override
+    public List<Attendance> getAttendances(Pageable pageable) {
+        return attendanceRepository.findAll(pageable)
+                .stream()
+                .collect(Collectors.toList());
     }
 }

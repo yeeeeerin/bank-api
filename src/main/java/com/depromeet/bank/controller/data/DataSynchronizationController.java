@@ -1,4 +1,4 @@
-package com.depromeet.bank.controller;
+package com.depromeet.bank.controller.data;
 
 import com.depromeet.bank.domain.data.airinfo.AirInfo;
 import com.depromeet.bank.domain.data.attendance.Attendance;
