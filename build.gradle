@@ -36,6 +36,7 @@ dependencies {
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
     compile 'mysql:mysql-connector-java'
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
 }
 
 jacoco {
