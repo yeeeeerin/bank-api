@@ -6,6 +6,7 @@ import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.account.AccountType;
 import com.depromeet.bank.domain.account.JwtFactory;
 import com.depromeet.bank.dto.TokenDto;
+import com.depromeet.bank.helper.TestHelper;
 import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.MemberRepository;
 import com.depromeet.bank.service.SocialFetchService;
@@ -65,24 +66,7 @@ public class MemberAttendTest {
 
     @Before
     public void setUp() throws Exception {
-        // 시스템 계정 생성
-        Member systemMember = new Member();
-        systemMember.setId(Member.SYSTEM_MEMBER_ID);
-        systemMember.setName("SYSTEM");
-        systemMember.setSocialId(0L);
-        systemMember.setProfileHref("");
-        when(memberRepository.findById(Member.SYSTEM_MEMBER_ID)).thenReturn(Optional.of(systemMember));
-
-        // 시스템 계좌 생성
-        Account systemAccount = new Account();
-        systemAccount.setId(Account.SYSTEM_ACCOUNT_ID);
-        systemAccount.setName("SYSTEM_ACCOUNT");
-        systemAccount.setBalance(10000000000000L);
-        systemAccount.setRate(0.0);
-        systemAccount.setMember(systemMember);
-        when(accountRepository.findById(Member.SYSTEM_MEMBER_ID)).thenReturn(Optional.of(systemAccount));
-        when(accountRepository.findByMemberIdAndAccountType(Member.SYSTEM_MEMBER_ID, AccountType.SYSTEM))
-                .thenReturn(Collections.singletonList(systemAccount));
+        TestHelper.createSystemMember(memberRepository, accountRepository);
 
         // 회원 생성
         when(socialFetchService.getSocialUserInfo(isA(TokenDto.class))).thenReturn(socialMemberVo);

@@ -41,7 +41,7 @@ public class Instrument {
     @LastModifiedDate
     private LocalDateTime updatedAt;
     @OneToMany
-    private List<Account> accounts;
+    private List<Account> accounts = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
     private List<AdjustmentRule> adjustmentRules;
 
@@ -81,7 +81,7 @@ public class Instrument {
             this.description = requestedDescription;
         }
         LocalDateTime requestedExpiredAt = instrumentValue.getExpiredAt();
-        if (expiredAt != null) {
+        if (requestedExpiredAt != null) {
             this.expiredAt = requestedExpiredAt;
         }
         LocalDateTime requestedToBeSettledAt = instrumentValue.getToBeSettledAt();

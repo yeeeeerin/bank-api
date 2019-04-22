@@ -58,8 +58,8 @@ public class InstrumentController {
     @PostMapping("/instruments/{instrumentId:\\d+}/join")
     public ResponseDto<Object> joinInstrument(@RequestAttribute(name = "id") Long memberId,
                                               @PathVariable Long instrumentId,
-                                              @RequestBody JoinInstrumentRequest joinInstrumentRequest) {
-        Instrument instrument = instrumentService.joinInstrument(memberId, instrumentId, joinInstrumentRequest.getInvestment());
+                                              @RequestBody InstrumentJoinRequest instrumentJoinRequest) {
+        Instrument instrument = instrumentService.joinInstrument(memberId, instrumentId, instrumentJoinRequest.getInvestment());
         InstrumentResponse instrumentResponse = InstrumentResponse.from(instrument);
         return ResponseDto.of(HttpStatus.OK, "상품 가입에 성공했습니다.", instrumentResponse);
     }

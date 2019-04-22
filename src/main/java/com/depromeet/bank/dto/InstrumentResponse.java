@@ -42,7 +42,7 @@ public class InstrumentResponse {
         Long id = instrument.getInstrumentId();
         String name = instrument.getName();
         String description = instrument.getDescription();
-        LocalDateTime expiredAt = instrument.getToBeSettledAt();
+        LocalDateTime expiredAt = instrument.getExpiredAt();
         LocalDateTime toBeSettledAt = instrument.getToBeSettledAt();
         List<RuleResponse> rules = instrument.getAdjustmentRules()
                 .stream()

@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @ToString
-public class JoinInstrumentRequest {
+public class InstrumentJoinRequest {
     @NotNull
     private Long investment;
 }

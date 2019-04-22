@@ -1,5 +1,6 @@
 package com.depromeet.bank.service.impl;
 
+import com.depromeet.bank.domain.Member;
 import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.instrument.Instrument;
 import com.depromeet.bank.domain.instrument.InstrumentFactory;
@@ -38,7 +39,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Override
     @Transactional(readOnly = true)
     public List<Instrument> getInstruments(Pageable pageable, InstrumentExpirationType expirationType) {
-        switch(expirationType) {
+        switch (expirationType) {
             case ALL:
                 return instrumentRepository.findAll(pageable)
                         .stream()
@@ -96,8 +97,18 @@ public class InstrumentServiceImpl implements InstrumentService {
         }
 
         Account account = accountService.createAccountForInstrument(memberId, instrument);
-        List<Account> accounts = instrument.getAccounts();
-        accounts.add(account);
+        List<Account> instrumentAccounts = instrument.getAccounts();
+
+        boolean hasAlreadyJoined = instrumentAccounts.stream()
+                .map(Account::getMember)
+                .map(Member::getId)
+                .anyMatch(memberId::equals);
+
+        if (hasAlreadyJoined) {
+            throw new BadRequestException("이미 가입한 상품은 가입할 수 없습니다.");
+        }
+
+        instrumentAccounts.add(account);
 
         Account defaultAccount = accountService.getDefaultAccount(memberId);
 

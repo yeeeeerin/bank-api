@@ -2,6 +2,7 @@ package com.depromeet.bank.service.impl;
 
 import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.Member;
+import com.depromeet.bank.domain.account.AccountType;
 import com.depromeet.bank.dto.AccountDto;
 import com.depromeet.bank.helper.TestHelper;
 import com.depromeet.bank.repository.AccountRepository;
@@ -44,7 +45,7 @@ public class AccountServiceImplTest {
         memberRepository.save(member);
 
         for (int i = 0; i < 20; i++) {
-            account = TestHelper.createAccount("하나계좌", 0L, 0.0, member);
+            account = TestHelper.createAccount("하나계좌", 0L, 0.0, AccountType.MEMBER, member);
             accountRepository.save(account);
         }
         log.info("date : " + account.getCreatedAt());

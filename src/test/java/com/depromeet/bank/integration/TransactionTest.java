@@ -2,6 +2,7 @@ package com.depromeet.bank.integration;
 
 import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.Member;
+import com.depromeet.bank.domain.account.AccountType;
 import com.depromeet.bank.dto.TransactionRequest;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.helper.TestHelper;
@@ -48,10 +49,10 @@ public class TransactionTest {
         member = TestHelper.createMember(1l, "yerin", "http://test.png");
         memberRepository.save(member);
 
-        fromAccount = TestHelper.createAccount("11", 1000l, 0.0, member);
+        fromAccount = TestHelper.createAccount("11", 1000l, 0.0, AccountType.MEMBER, member);
         accountRepository.save(fromAccount);
 
-        toAccount = TestHelper.createAccount("22", 1000l, 0.0, member);
+        toAccount = TestHelper.createAccount("22", 1000l, 0.0, AccountType.MEMBER, member);
         accountRepository.save(toAccount);
 
         transactionRequest = TestHelper.createTransactionRequest(fromAccount.getId(), toAccount.getId(), 200l);
