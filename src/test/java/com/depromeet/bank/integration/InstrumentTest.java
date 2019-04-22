@@ -157,6 +157,7 @@ public class InstrumentTest {
                 objectMapper.readValue(mvcResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
         assertThat(responseDto.getStatus()).isEqualTo(200);
         assertThat(responseDto.getResponse().getId()).isEqualTo(instrumentId);
+        assertThat(responseDto.getResponse().getRules().size()).isEqualTo(1);
     }
 
     @Test

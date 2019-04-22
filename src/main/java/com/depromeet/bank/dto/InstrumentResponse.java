@@ -8,6 +8,9 @@ import lombok.ToString;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @ToString
@@ -18,17 +21,20 @@ public class InstrumentResponse {
     private String description;
     private LocalDateTime expiredAt;
     private LocalDateTime toBeSettledAt;
+    private List<RuleResponse> rules;
 
     private InstrumentResponse(Long id,
                                String name,
                                String description,
                                LocalDateTime expiredAt,
-                               LocalDateTime toBeSettledAt) {
+                               LocalDateTime toBeSettledAt,
+                               List<RuleResponse> rules) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.expiredAt = expiredAt;
         this.toBeSettledAt = toBeSettledAt;
+        this.rules = new ArrayList<>(rules);
     }
 
     public static InstrumentResponse from(Instrument instrument) {
@@ -38,6 +44,10 @@ public class InstrumentResponse {
         String description = instrument.getDescription();
         LocalDateTime expiredAt = instrument.getToBeSettledAt();
         LocalDateTime toBeSettledAt = instrument.getToBeSettledAt();
-        return new InstrumentResponse(id, name, description, expiredAt, toBeSettledAt);
+        List<RuleResponse> rules = instrument.getAdjustmentRules()
+                .stream()
+                .map(RuleResponse::from)
+                .collect(Collectors.toList());
+        return new InstrumentResponse(id, name, description, expiredAt, toBeSettledAt, rules);
     }
 }
