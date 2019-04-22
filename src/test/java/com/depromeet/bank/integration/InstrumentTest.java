@@ -1,15 +1,15 @@
 package com.depromeet.bank.integration;
 
 import com.depromeet.bank.domain.Member;
+import com.depromeet.bank.domain.account.Account;
+import com.depromeet.bank.domain.account.AccountType;
 import com.depromeet.bank.domain.account.JwtFactory;
 import com.depromeet.bank.domain.rule.ComparisonType;
 import com.depromeet.bank.domain.rule.DataType;
 import com.depromeet.bank.domain.rule.NotType;
-import com.depromeet.bank.dto.AdjustmentRuleRequest;
-import com.depromeet.bank.dto.InstrumentRequest;
-import com.depromeet.bank.dto.InstrumentResponse;
-import com.depromeet.bank.dto.ResponseDto;
+import com.depromeet.bank.dto.*;
 import com.depromeet.bank.helper.TestHelper;
+import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.MemberRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,8 +19,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +34,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,24 +55,33 @@ public class InstrumentTest {
 
     private static final String INSTRUMENT_NAME_BEFORE = "beforeInstrumentName";
     private static final String INSTRUMENT_DESCRIPTION_BEFORE = "beforeInstrumentDescription";
-    private static final LocalDateTime INSTRUMENT_EXPIRED_AT_BEFORE = LocalDateTime.of(2019, 4, 7, 23, 59, 0);
-    private static final LocalDateTime INSTRUMENT_TO_BE_SETTLED_AT_BEFORE = LocalDateTime.of(2019, 4, 7, 23, 59, 0);
+    private static final LocalDateTime INSTRUMENT_EXPIRED_AT_BEFORE = LocalDateTime.now().plusDays(1L);
+    private static final LocalDateTime INSTRUMENT_TO_BE_SETTLED_AT_BEFORE = LocalDateTime.now().plusDays(2L);
 
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
     private JwtFactory jwtFactory;
+
+    @SpyBean
+    private MemberRepository memberRepository;
+    @SpyBean
+    private AccountRepository accountRepository;
+
     private String authorizationHeader;
 
     @Before
     public void setup() {
+        TestHelper.createSystemMember(memberRepository, accountRepository);
+
         Member haeseong = TestHelper.createMember(1L, "전해성", "http://test.png");
         memberRepository.save(haeseong);
         authorizationHeader = "Bearer " + jwtFactory.generateToken(haeseong);
+
+        Account account = TestHelper.createAccount("기본계좌", 10000L, 0.0, AccountType.MEMBER, haeseong);
+        accountRepository.save(account);
     }
 
     @Test
@@ -85,8 +98,10 @@ public class InstrumentTest {
                 .andExpect(jsonPath("$.status").value(201))
                 .andExpect(jsonPath("$.response.name").value(request.getName()))
                 .andExpect(jsonPath("$.response.description").value(request.getDescription()))
+                .andExpect(jsonPath("$.response.expiredAt")
+                        .value(request.getExpiredAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
                 .andExpect(jsonPath("$.response.toBeSettledAt")
-                        .value(request.getExpiredAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)));
+                        .value(request.getToBeSettledAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)));
     }
 
     @Test
@@ -135,7 +150,7 @@ public class InstrumentTest {
         // then 2
         ResponseDto<InstrumentResponse> responseDto =
                 objectMapper.readValue(mvcResult.getResponse().getContentAsString(), TYPE_REFERENCE_IR_LIST);
-        assertThat(responseDto.getStatus()).isEqualTo(404);
+        assertThat(responseDto.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
         assertThat(responseDto.getResponse()).isNull();
     }
 
@@ -155,7 +170,7 @@ public class InstrumentTest {
         // then 2
         ResponseDto<InstrumentResponse> responseDto =
                 objectMapper.readValue(mvcResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
-        assertThat(responseDto.getStatus()).isEqualTo(200);
+        assertThat(responseDto.getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(responseDto.getResponse().getId()).isEqualTo(instrumentId);
         assertThat(responseDto.getResponse().getRules().size()).isEqualTo(1);
     }
@@ -299,6 +314,29 @@ public class InstrumentTest {
                 // then
                 .andExpect(status().isNoContent())
                 .andExpect(jsonPath("$").doesNotExist());
+    }
+
+    @Test
+    public void 상품_가입__이미_가입한_상품은_두_번_가입할_수_없음() throws Exception {
+        // given
+        InstrumentRequest request = this.createInstrumentRequest();
+        MvcResult createResult = createInstrument(request);
+        ResponseDto<InstrumentResponse> instrumentResponseDto = objectMapper.readValue(createResult.getResponse().getContentAsString(), TYPE_REFERENCE_INSTRUMENT_RESPONSE);
+        Long instrumentId = instrumentResponseDto.getResponse().getId();
+        InstrumentJoinRequest instrumentJoinRequest = new InstrumentJoinRequest();
+        ReflectionTestUtils.setField(instrumentJoinRequest, "investment", 5000L);
+        mockMvc.perform(post("/api/instruments/{instrumentId}/join", instrumentId)
+                .header(AUTHORIZATION_HEADER_NAME, authorizationHeader)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(instrumentJoinRequest)))
+                .andExpect(status().isOk());
+        // when
+        mockMvc.perform(post("/api/instruments/{instrumentId}/join", instrumentId)
+                .header(AUTHORIZATION_HEADER_NAME, authorizationHeader)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(instrumentJoinRequest)))
+                // then
+                .andExpect(status().isBadRequest());
     }
 
     private MvcResult createInstrument(InstrumentRequest request) throws Exception {

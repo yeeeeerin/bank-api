@@ -81,7 +81,7 @@ public class AccountServiceImpl implements AccountService {
     public Account getDefaultAccount(Long memberId) {
         List<Account> accounts = accountRepository.findByMemberIdAndAccountType(memberId, AccountType.MEMBER);
         if (CollectionUtils.isEmpty(accounts)) {
-            throw new NotFoundException("There is not default account. memberId:" + memberId);
+            throw new NotFoundException("There is no default account. memberId:" + memberId);
         }
         return accounts.get(0);
     }

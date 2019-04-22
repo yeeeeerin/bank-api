@@ -3,6 +3,7 @@ package com.depromeet.bank.helper;
 import com.depromeet.bank.domain.Member;
 import com.depromeet.bank.domain.Transaction;
 import com.depromeet.bank.domain.TransactionClassify;
+import com.depromeet.bank.domain.account.AccountType;
 import com.depromeet.bank.domain.data.attendance.Attendance;
 import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.rule.ComparisonType;
@@ -20,10 +21,9 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
+import static org.mockito.Mockito.when;
 
 public final class TestHelper {
     // noninstantiable utility class
@@ -48,16 +48,38 @@ public final class TestHelper {
         return member;
     }
 
-    public static Account createAccount(String name, Long balance, Double rate, Member member) {
+    public static Account createAccount(String name, Long balance, Double rate, AccountType accountType, Member member) {
 
         Account account = new Account();
         account.setName(name);
         account.setBalance(balance);
         account.setRate(rate);
+        account.setAccountType(accountType);
         account.setMember(member);
 
         return account;
+    }
 
+    public static void createSystemMember(MemberRepository memberRepository,
+                                          AccountRepository accountRepository) {
+        // 시스템 계정 생성
+        Member systemMember = new Member();
+        systemMember.setId(Member.SYSTEM_MEMBER_ID);
+        systemMember.setName("SYSTEM");
+        systemMember.setSocialId(0L);
+        systemMember.setProfileHref("");
+        when(memberRepository.findById(Member.SYSTEM_MEMBER_ID)).thenReturn(Optional.of(systemMember));
+
+        // 시스템 계좌 생성
+        Account systemAccount = new Account();
+        systemAccount.setId(Account.SYSTEM_ACCOUNT_ID);
+        systemAccount.setName("SYSTEM_ACCOUNT");
+        systemAccount.setBalance(10000000000000L);
+        systemAccount.setRate(0.0);
+        systemAccount.setMember(systemMember);
+        when(accountRepository.findById(Member.SYSTEM_MEMBER_ID)).thenReturn(Optional.of(systemAccount));
+        when(accountRepository.findByMemberIdAndAccountType(Member.SYSTEM_MEMBER_ID, AccountType.SYSTEM))
+                .thenReturn(Collections.singletonList(systemAccount));
     }
 
     public static InstrumentRequest createInstrumentRequest(

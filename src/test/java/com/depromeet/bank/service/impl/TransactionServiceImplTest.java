@@ -2,6 +2,7 @@ package com.depromeet.bank.service.impl;
 
 import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.Member;
+import com.depromeet.bank.domain.account.AccountType;
 import com.depromeet.bank.dto.TransactionRequest;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.exception.UnauthorizedException;
@@ -41,9 +42,9 @@ public class TransactionServiceImplTest {
 
         member = TestHelper.createMember(1L, "yerin", "http://test.png");
         member.setId(1l);
-        fromAccount = TestHelper.createAccount("", 10000l, 0.0, member);
+        fromAccount = TestHelper.createAccount("", 10000l, 0.0, AccountType.MEMBER, member);
         fromAccount.setId(1l);
-        toAccount = TestHelper.createAccount("", 10000l, 0.0, member);
+        toAccount = TestHelper.createAccount("", 10000l, 0.0, AccountType.MEMBER, member);
         toAccount.setId(2l);
 
         transactionRequest = TestHelper.createTransactionRequest(fromAccount.getId(), toAccount.getId(), 2000l);
