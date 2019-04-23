@@ -2,7 +2,7 @@ package com.depromeet.bank.controller.data;
 
 import com.depromeet.bank.domain.data.airinfo.AirInfo;
 import com.depromeet.bank.domain.data.attendance.Attendance;
-import com.depromeet.bank.dto.AirInfoSynchronizationResponse;
+import com.depromeet.bank.dto.AirPollutionResponse;
 import com.depromeet.bank.dto.AttendanceResponse;
 import com.depromeet.bank.dto.ResponseDto;
 import com.depromeet.bank.service.AirInfoService;
@@ -34,12 +34,12 @@ public class DataSynchronizationController {
     }
 
     @PostMapping("/airinfos/{airInfoId:\\d+}/sync")
-    public ResponseDto<AirInfoSynchronizationResponse> synchronizeAirInfo(@PathVariable Long airInfoId) {
+    public ResponseDto<AirPollutionResponse> synchronizeAirInfo(@PathVariable Long airInfoId) {
         AirInfo airInfo = airInfoService.synchronize(airInfoId);
         return ResponseDto.of(
                 HttpStatus.OK,
                 "미세먼지 정보 동기화에 성공했습니다.",
-                AirInfoSynchronizationResponse.from(airInfo)
+                AirPollutionResponse.from(airInfo)
         );
     }
 
