@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 @NoArgsConstructor
-public class AirInfoSynchronizationResponse {
+public class AirPollutionResponse {
     @JsonProperty("id")
     private Long airInfoId;
     private String stationName;
@@ -22,12 +22,12 @@ public class AirInfoSynchronizationResponse {
     private LocalDateTime dataTime;
     private AirGrade airGrade;
 
-    private AirInfoSynchronizationResponse(Long airInfoId,
-                                           String stationName,
-                                           Integer pm10Value,
-                                           Integer pm25Value,
-                                           LocalDateTime dataTime,
-                                           AirGrade airGrade) {
+    private AirPollutionResponse(Long airInfoId,
+                                 String stationName,
+                                 Integer pm10Value,
+                                 Integer pm25Value,
+                                 LocalDateTime dataTime,
+                                 AirGrade airGrade) {
         this.airInfoId = airInfoId;
         this.stationName = stationName;
         this.pm10Value = pm10Value;
@@ -36,10 +36,10 @@ public class AirInfoSynchronizationResponse {
         this.airGrade = airGrade;
     }
 
-    public static AirInfoSynchronizationResponse from(AirInfo airInfo) {
+    public static AirPollutionResponse from(AirInfo airInfo) {
         Assert.notNull(airInfo, "'airInfo' must not be null");
 
-        return new AirInfoSynchronizationResponse(
+        return new AirPollutionResponse(
                 airInfo.getId(),
                 airInfo.getStationName().getValue(),
                 airInfo.getPm10Value(),
