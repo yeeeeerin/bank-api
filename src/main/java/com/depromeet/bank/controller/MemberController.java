@@ -7,8 +7,8 @@ import com.depromeet.bank.service.MemberService;
 import com.depromeet.bank.service.VisitService;
 import com.depromeet.bank.vo.MemberValue;
 import com.depromeet.bank.vo.VisitValue;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -20,11 +20,19 @@ import java.util.stream.Collectors;
 @RestController
 @Slf4j
 @RequestMapping("/api")
-@RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
     private final VisitService visitService;
+    private final VisitService testVisitService;
+
+    public MemberController(MemberService memberService,
+                            @Qualifier("visitService") VisitService visitService,
+                            @Qualifier("testVisitService") VisitService testVisitService) {
+        this.memberService = memberService;
+        this.visitService = visitService;
+        this.testVisitService = testVisitService;
+    }
 
     @PostMapping("/members/login")
     public ResponseDto<TokenDto> join(@RequestBody TokenDto tokenDto) {
@@ -86,6 +94,17 @@ public class MemberController {
     @PostMapping("/members/me/attend")
     public ResponseDto<MemberAttendResponse> attendMember(@RequestAttribute(name = "id") Long memberId) {
         VisitValue visitValue = visitService.attend(memberId);
+        MemberAttendResponse memberAttendResponse = MemberAttendResponse.from(visitValue);
+        return ResponseDto.of(
+                HttpStatus.OK,
+                "출석 요청이 성공했습니다.",
+                memberAttendResponse
+        );
+    }
+
+    @PostMapping("/members/me/attend/test")
+    public ResponseDto<MemberAttendResponse> attendMemberTest(@RequestAttribute(name = "id") Long memberId) {
+        VisitValue visitValue = testVisitService.attend(memberId);
         MemberAttendResponse memberAttendResponse = MemberAttendResponse.from(visitValue);
         return ResponseDto.of(
                 HttpStatus.OK,
