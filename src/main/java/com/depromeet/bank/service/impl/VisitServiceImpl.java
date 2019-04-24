@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service("visitService")
 @RequiredArgsConstructor
 public class VisitServiceImpl implements VisitService {
     private static final long DEFAULT_ATTENDANCE_POINT = 10000L;
