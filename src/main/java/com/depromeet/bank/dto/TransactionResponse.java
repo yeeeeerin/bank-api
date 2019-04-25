@@ -1,7 +1,7 @@
 package com.depromeet.bank.dto;
 
-import com.depromeet.bank.domain.Transaction;
 import com.depromeet.bank.domain.TransactionClassify;
+import com.depromeet.bank.vo.TransactionValue;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -19,15 +19,28 @@ public class TransactionResponse {
 
     private String guid;
 
-    private TransactionResponse(Long amount, LocalDateTime dateTime, TransactionClassify transactionClassify, String guid) {
+    private Long balance;
+
+    private TransactionResponse(Long amount,
+                                LocalDateTime dateTime,
+                                TransactionClassify transactionClassify,
+                                String guid,
+                                Long balance) {
         this.amount = amount;
         this.dateTime = dateTime;
         this.transactionClassify = transactionClassify;
         this.guid = guid;
+        this.balance = balance;
     }
 
-    public static TransactionResponse from(Transaction transaction) {
-        return new TransactionResponse(transaction.getAmount(), transaction.getDateTime(), transaction.getTransactionClassify(), transaction.getGuid());
+    public static TransactionResponse from(TransactionValue transactionValue) {
+        return new TransactionResponse(
+                transactionValue.getAmount(),
+                transactionValue.getDateTime(),
+                transactionValue.getTransactionClassify(),
+                transactionValue.getGuid(),
+                transactionValue.getBalance()
+        );
     }
 
 }
