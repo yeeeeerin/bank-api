@@ -1,4 +1,4 @@
-package com.depromeet.bank.github;
+package com.depromeet.bank.git;
 
 
 import org.jsoup.Connection;
@@ -8,12 +8,11 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Component
-public class CommitPaser {
+public class CommitParser {
 
-    public Optional<Integer> paser(String url) throws IOException {
+    public int parser(String url) throws IOException {
 
         Document document = Jsoup.connect(url)
                 .method(Connection.Method.GET)
@@ -22,10 +21,9 @@ public class CommitPaser {
 
         Elements elements = document.select("g[transform=translate(561, 0)] rect");
 
-        Integer sum = elements.stream()
+        return elements.stream()
                 .mapToInt(element -> Integer.valueOf(element.attr("data-count")))
                 .sum();
 
-        return Optional.ofNullable(sum);
     }
 }
