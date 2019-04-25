@@ -15,6 +15,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
@@ -65,9 +67,9 @@ public class TransactionServiceImplTest {
     @Test(expected = NotFoundException.class)
     public void 이체_내역들을_가져올때_계좌가_없으면_NotFoundException() {
         //given
-
+        Pageable pageable = PageRequest.of(0, 20);
         //when
-        transactionService.getTransaction(1l, 1l, 0);
+        transactionService.getTransaction(1l, 1l, pageable);
 
         //then
 

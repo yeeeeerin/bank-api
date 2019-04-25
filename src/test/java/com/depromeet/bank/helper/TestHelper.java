@@ -3,9 +3,9 @@ package com.depromeet.bank.helper;
 import com.depromeet.bank.domain.Member;
 import com.depromeet.bank.domain.Transaction;
 import com.depromeet.bank.domain.TransactionClassify;
+import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.account.AccountType;
 import com.depromeet.bank.domain.data.attendance.Attendance;
-import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.rule.ComparisonType;
 import com.depromeet.bank.domain.rule.DataType;
 import com.depromeet.bank.domain.rule.NotType;
@@ -111,12 +111,25 @@ public final class TestHelper {
         return transactionRequest;
     }
 
-    private static TransactionValue transactionValue(Long amount, TransactionClassify transactionClassify, Account account) {
-        return TransactionValue.of(amount, transactionClassify, account, UUID.randomUUID().toString());
+    private static TransactionValue createTransactionValue(Long amount,
+                                                           TransactionClassify transactionClassify,
+                                                           Account account,
+                                                           Long balance) throws Exception {
+        Constructor<TransactionValue> constructor = TransactionValue.class.getDeclaredConstructor(
+                Long.class,
+                LocalDateTime.class,
+                TransactionClassify.class,
+                Account.class,
+                String.class,
+                Long.class);
+        constructor.setAccessible(true);
+        return constructor.newInstance(amount, LocalDateTime.now(), transactionClassify, account, "guid", balance);
     }
 
-    public static Transaction createTransaction(Long amount, TransactionClassify transactionClassify, Account account) {
-        TransactionValue transactionValue = transactionValue(amount, transactionClassify, account);
+    public static Transaction createTransaction(Long amount,
+                                                TransactionClassify transactionClassify,
+                                                Account account, Long balance) throws Exception {
+        TransactionValue transactionValue = createTransactionValue(amount, transactionClassify, account, balance);
         return Transaction.from(transactionValue);
     }
 

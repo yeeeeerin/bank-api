@@ -4,7 +4,6 @@ import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.Transaction;
 import com.depromeet.bank.domain.TransactionClassify;
 import com.depromeet.bank.dto.TransactionRequest;
-import com.depromeet.bank.dto.TransactionResponse;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.exception.ServiceUnavailableException;
 import com.depromeet.bank.exception.UnauthorizedException;
@@ -56,23 +55,18 @@ public class TransactionServiceImpl implements TransactionService {
         String guid = UUID.randomUUID().toString();
         Long amount = transactionRequest.getAmount();
 
-        TransactionValue fromTransactionValue =
-                TransactionValue.of(amount, TransactionClassify.WITHDRAWAL, fromAccount, guid);
         fromAccount.setBalance(fromAccount.getBalance() - amount);
-        transactionRepository.save(Transaction.from(fromTransactionValue));
+        Transaction withdrawal = Transaction.of(amount, TransactionClassify.WITHDRAWAL, fromAccount, guid, fromAccount.getBalance());
+        transactionRepository.save(withdrawal);
 
-
-        TransactionValue toTransactionValue =
-                TransactionValue.of(amount, TransactionClassify.DEPOSIT, toAccount, guid);
         toAccount.setBalance(toAccount.getBalance() + amount);
-        transactionRepository.save(Transaction.from(toTransactionValue));
-
-
+        Transaction deposit = Transaction.of(amount, TransactionClassify.DEPOSIT, toAccount, guid, toAccount.getBalance());
+        transactionRepository.save(deposit);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<TransactionResponse> getTransaction(Long memberId, Long accountId, int page) {
+    public List<TransactionValue> getTransaction(Long memberId, Long accountId, Pageable pageable) {
         Assert.notNull(memberId, "'memberId' must not be null");
         Assert.notNull(accountId, "'accountId' must not be null");
 
@@ -85,10 +79,9 @@ public class TransactionServiceImpl implements TransactionService {
             throw new UnauthorizedException();
         }
 
-        Pageable pageable = PageRequest.of(page, 10);
         return transactionRepository.findAllByAccount_Id(accountId, pageable)
                 .stream()
-                .map(TransactionResponse::from)
+                .map(TransactionValue::from)
                 .collect(Collectors.toList());
     }
 
@@ -111,19 +104,13 @@ public class TransactionServiceImpl implements TransactionService {
                                     if (account.getBalance() <= t.getAmount()) {
                                         throw new ServiceUnavailableException("There is not enough balance");
                                     }
-                                    TransactionValue fromTransactionValue =
-                                            TransactionValue.of(t.getAmount(), TransactionClassify.WITHDRAWAL, account, cancelGuid);
                                     account.setBalance(account.getBalance() - t.getAmount());
-                                    transactionRepository.save(Transaction.from(fromTransactionValue));
-
-
+                                    Transaction withdrawal = Transaction.of(t.getAmount(), TransactionClassify.WITHDRAWAL, account, cancelGuid, account.getBalance());
+                                    transactionRepository.save(withdrawal);
                                 } else if (t.getTransactionClassify() == TransactionClassify.WITHDRAWAL) {
-
-                                    TransactionValue fromTransactionValue =
-                                            TransactionValue.of(t.getAmount(), TransactionClassify.DEPOSIT, account, cancelGuid);
                                     account.setBalance(account.getBalance() + t.getAmount());
-                                    transactionRepository.save(Transaction.from(fromTransactionValue));
-
+                                    Transaction deposit = Transaction.of(t.getAmount(), TransactionClassify.DEPOSIT, account, cancelGuid, account.getBalance());
+                                    transactionRepository.save(deposit);
                                 }
                             });
 
