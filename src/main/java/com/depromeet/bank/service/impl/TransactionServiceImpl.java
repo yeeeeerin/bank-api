@@ -1,8 +1,8 @@
 package com.depromeet.bank.service.impl;
 
-import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.Transaction;
 import com.depromeet.bank.domain.TransactionClassify;
+import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.dto.TransactionRequest;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.exception.ServiceUnavailableException;
@@ -10,9 +10,7 @@ import com.depromeet.bank.exception.UnauthorizedException;
 import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.TransactionRepository;
 import com.depromeet.bank.service.TransactionService;
-import com.depromeet.bank.vo.TransactionValue;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,7 +64,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<TransactionValue> getTransaction(Long memberId, Long accountId, Pageable pageable) {
+    public List<Transaction> getTransaction(Long memberId, Long accountId, Pageable pageable) {
         Assert.notNull(memberId, "'memberId' must not be null");
         Assert.notNull(accountId, "'accountId' must not be null");
 
@@ -81,7 +79,6 @@ public class TransactionServiceImpl implements TransactionService {
 
         return transactionRepository.findAllByAccount_Id(accountId, pageable)
                 .stream()
-                .map(TransactionValue::from)
                 .collect(Collectors.toList());
     }
 
