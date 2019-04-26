@@ -1,0 +1,8 @@
+POST http://localhost:8080/api/members/login
+Content-Type: application/json
+
+{
+  "token": "Bsc-ubqlFOWYpCpIvfhtMbSAf-XfJzDhCTUjOwopyNoAAAFp-H2qXQ"
+}
+
+###

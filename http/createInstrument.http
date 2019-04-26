@@ -1,0 +1,22 @@
+POST http://localhost:8080/api/instruments
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5ZXJpbiIsIlVTRVJOQU1FIjoi7J207JiI66awIiwiSUQiOjF9.7sl8zOjlnZ2Lup9Am8ihPgfGzyvcBQ_OU3C437lawt8
+
+{
+	"name": "상품이름",
+	"description": "상품 설명",
+	"expiredAt": "2019-04-07T23:59:00",
+	"rules": [
+		{
+			"dataType": "NUMBER_OF_ATTENDEE",
+			"comparisonType": "GREATER_THAN",
+			"notType": "POSITIVE",
+			"goal": 50,
+			"criterion": 1,
+			"fromAt": "2019-04-06T00:00:00",
+			"toAt": "2019-04-06T23:59:00",
+			"rate": 1
+		}
+    ]
+}
+
+###
