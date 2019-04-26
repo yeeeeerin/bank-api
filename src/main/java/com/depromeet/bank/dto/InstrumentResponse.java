@@ -1,6 +1,9 @@
 package com.depromeet.bank.dto;
 
 import com.depromeet.bank.domain.instrument.Instrument;
+import com.depromeet.bank.domain.rule.AdjustmentRule;
+import com.depromeet.bank.domain.rule.Condition;
+import com.depromeet.bank.domain.rule.DataType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +22,7 @@ public class InstrumentResponse {
     private Long id;
     private String name;
     private String description;
+    private DataType dataType;
     private LocalDateTime expiredAt;
     private LocalDateTime toBeSettledAt;
     private List<RuleResponse> rules;
@@ -26,12 +30,14 @@ public class InstrumentResponse {
     private InstrumentResponse(Long id,
                                String name,
                                String description,
+                               DataType dataType,
                                LocalDateTime expiredAt,
                                LocalDateTime toBeSettledAt,
                                List<RuleResponse> rules) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.dataType = dataType;
         this.expiredAt = expiredAt;
         this.toBeSettledAt = toBeSettledAt;
         this.rules = new ArrayList<>(rules);
@@ -42,12 +48,18 @@ public class InstrumentResponse {
         Long id = instrument.getInstrumentId();
         String name = instrument.getName();
         String description = instrument.getDescription();
+        DataType dataType = instrument.getAdjustmentRules()
+                .stream()
+                .findFirst()
+                .map(AdjustmentRule::getCondition)
+                .map(Condition::getDataType)
+                .orElse(DataType.UNKNOWN);
         LocalDateTime expiredAt = instrument.getExpiredAt();
         LocalDateTime toBeSettledAt = instrument.getToBeSettledAt();
         List<RuleResponse> rules = instrument.getAdjustmentRules()
                 .stream()
                 .map(RuleResponse::from)
                 .collect(Collectors.toList());
-        return new InstrumentResponse(id, name, description, expiredAt, toBeSettledAt, rules);
+        return new InstrumentResponse(id, name, description, dataType, expiredAt, toBeSettledAt, rules);
     }
 }
