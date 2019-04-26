@@ -34,6 +34,16 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional
     public void createTransaction(Long memberId, TransactionRequest transactionRequest) {
+        createTransactionWithName(memberId, transactionRequest, "계좌 이체");
+    }
+
+    @Override
+    @Transactional
+    public void createTransaction(Long memberId, TransactionRequest transactionRequest, String name) {
+        createTransactionWithName(memberId, transactionRequest, name);
+    }
+
+    private void createTransactionWithName(Long memberId, TransactionRequest transactionRequest, String name) {
         Assert.notNull(memberId, "'memberId' must not be null");
         Assert.notNull(transactionRequest, "'transactionRequest' must not be null");
 
@@ -54,11 +64,11 @@ public class TransactionServiceImpl implements TransactionService {
         Long amount = transactionRequest.getAmount();
 
         fromAccount.setBalance(fromAccount.getBalance() - amount);
-        Transaction withdrawal = Transaction.of(amount, TransactionClassify.WITHDRAWAL, fromAccount, guid, fromAccount.getBalance());
+        Transaction withdrawal = Transaction.of(amount, TransactionClassify.WITHDRAWAL, fromAccount, guid, fromAccount.getBalance(), name);
         transactionRepository.save(withdrawal);
 
         toAccount.setBalance(toAccount.getBalance() + amount);
-        Transaction deposit = Transaction.of(amount, TransactionClassify.DEPOSIT, toAccount, guid, toAccount.getBalance());
+        Transaction deposit = Transaction.of(amount, TransactionClassify.DEPOSIT, toAccount, guid, toAccount.getBalance(), name);
         transactionRepository.save(deposit);
     }
 
@@ -102,11 +112,11 @@ public class TransactionServiceImpl implements TransactionService {
                                         throw new ServiceUnavailableException("There is not enough balance");
                                     }
                                     account.setBalance(account.getBalance() - t.getAmount());
-                                    Transaction withdrawal = Transaction.of(t.getAmount(), TransactionClassify.WITHDRAWAL, account, cancelGuid, account.getBalance());
+                                    Transaction withdrawal = Transaction.of(t.getAmount(), TransactionClassify.WITHDRAWAL, account, cancelGuid, account.getBalance(), "거래 취소");
                                     transactionRepository.save(withdrawal);
                                 } else if (t.getTransactionClassify() == TransactionClassify.WITHDRAWAL) {
                                     account.setBalance(account.getBalance() + t.getAmount());
-                                    Transaction deposit = Transaction.of(t.getAmount(), TransactionClassify.DEPOSIT, account, cancelGuid, account.getBalance());
+                                    Transaction deposit = Transaction.of(t.getAmount(), TransactionClassify.DEPOSIT, account, cancelGuid, account.getBalance(), "거래 취소");
                                     transactionRepository.save(deposit);
                                 }
                             });

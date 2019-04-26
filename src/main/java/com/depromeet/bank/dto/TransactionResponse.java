@@ -21,16 +21,20 @@ public class TransactionResponse {
 
     private Long balance;
 
+    private String name;
+
     private TransactionResponse(Long amount,
                                 LocalDateTime dateTime,
                                 TransactionClassify transactionClassify,
                                 String guid,
-                                Long balance) {
+                                Long balance,
+                                String name) {
         this.amount = amount;
         this.dateTime = dateTime;
         this.transactionClassify = transactionClassify;
         this.guid = guid;
         this.balance = balance;
+        this.name = name;
     }
 
     public static TransactionResponse from(Transaction transaction) {
@@ -39,7 +43,8 @@ public class TransactionResponse {
                 transaction.getDateTime(),
                 transaction.getTransactionClassify(),
                 transaction.getGuid(),
-                transaction.getBalance()
+                transaction.getBalance(),
+                transaction.getName()
         );
     }
 

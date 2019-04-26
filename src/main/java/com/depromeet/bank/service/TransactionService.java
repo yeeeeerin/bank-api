@@ -10,6 +10,8 @@ import java.util.UUID;
 public interface TransactionService {
     void createTransaction(Long memberId, TransactionRequest transactionRequest);
 
+    void createTransaction(Long memberId, TransactionRequest transactionRequest, String name);
+
     List<Transaction> getTransaction(Long memberId, Long accountId, Pageable pageable);
 
     void deleteTransaction(Long memberId, UUID guid);

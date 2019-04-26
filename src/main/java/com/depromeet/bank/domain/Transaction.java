@@ -29,6 +29,8 @@ public class Transaction {
 
     private Long balance;
 
+    private String name;
+
     @CreatedDate
     private LocalDateTime dateTime;
 
@@ -43,25 +45,29 @@ public class Transaction {
                         TransactionClassify transactionClassify,
                         Account account,
                         String guid,
-                        Long balance) {
+                        Long balance,
+                        String name) {
         this.amount = amount;
         this.transactionClassify = transactionClassify;
         this.account = account;
         this.guid = guid;
         this.balance = balance;
+        this.name = name;
     }
 
     public static Transaction of(Long amount,
                                  TransactionClassify transactionClassify,
                                  Account account,
                                  String guid,
-                                 Long balance) {
+                                 Long balance,
+                                 String name) {
         return new Transaction(
                 amount,
                 transactionClassify,
                 account,
                 guid,
-                balance
+                balance,
+                name
         );
     }
 
