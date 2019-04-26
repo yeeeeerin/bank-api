@@ -12,6 +12,7 @@ import com.depromeet.bank.vo.VisitValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Random;
 
 @Service("testVisitService")
@@ -35,7 +36,9 @@ public class TestVisitService implements VisitService {
         // 출석 포인트 증정
         Account account = accountService.getDefaultAccount(memberId);
         TransactionRequest transactionRequest = TransactionRequest.forAttendancePoint(account.getId(), point);
-        transactionService.createTransaction(Member.SYSTEM_MEMBER_ID, transactionRequest);
+        LocalDateTime now = LocalDateTime.now();
+        String transactionName = now.getMonthValue() + "월 " + now.getDayOfMonth() + "일 출석";
+        transactionService.createTransaction(Member.SYSTEM_MEMBER_ID, transactionRequest, transactionName);
 
         // 출석 기록 생성
         Visitor visitor = Visitor.of(memberId, numberOfVisitor, point);

@@ -59,7 +59,8 @@ public class SettlementServiceImpl implements SettlementService {
                 .reduce(0.0, Double::sum);
         instrument.getAccounts().forEach(account -> transactionService.createTransaction(
                 SYSTEM_MEMBER_ID,
-                TransactionRequest.forSettlement(account.getId(), account.getBalance(), rate)
+                TransactionRequest.forSettlement(account.getId(), account.getBalance(), rate),
+                "상품 정산"
         ));
         instrument.setAsCompleted();
         instrumentRepository.save(instrument);

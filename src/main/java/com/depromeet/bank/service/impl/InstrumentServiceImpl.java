@@ -117,7 +117,7 @@ public class InstrumentServiceImpl implements InstrumentService {
                 account.getId(),
                 investment
         );
-        transactionService.createTransaction(memberId, transactionRequest);
+        transactionService.createTransaction(memberId, transactionRequest, "상품 가입");
         return instrumentRepository.save(instrument);
     }
 
