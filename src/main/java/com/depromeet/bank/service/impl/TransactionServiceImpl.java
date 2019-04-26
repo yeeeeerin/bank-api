@@ -1,8 +1,8 @@
 package com.depromeet.bank.service.impl;
 
-import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.domain.Transaction;
 import com.depromeet.bank.domain.TransactionClassify;
+import com.depromeet.bank.domain.account.Account;
 import com.depromeet.bank.dto.TransactionRequest;
 import com.depromeet.bank.exception.NotFoundException;
 import com.depromeet.bank.exception.ServiceUnavailableException;
@@ -10,9 +10,7 @@ import com.depromeet.bank.exception.UnauthorizedException;
 import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.TransactionRepository;
 import com.depromeet.bank.service.TransactionService;
-import com.depromeet.bank.vo.TransactionValue;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +34,16 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional
     public void createTransaction(Long memberId, TransactionRequest transactionRequest) {
+        createTransactionWithName(memberId, transactionRequest, "계좌 이체");
+    }
+
+    @Override
+    @Transactional
+    public void createTransaction(Long memberId, TransactionRequest transactionRequest, String name) {
+        createTransactionWithName(memberId, transactionRequest, name);
+    }
+
+    private void createTransactionWithName(Long memberId, TransactionRequest transactionRequest, String name) {
         Assert.notNull(memberId, "'memberId' must not be null");
         Assert.notNull(transactionRequest, "'transactionRequest' must not be null");
 
@@ -56,17 +64,17 @@ public class TransactionServiceImpl implements TransactionService {
         Long amount = transactionRequest.getAmount();
 
         fromAccount.setBalance(fromAccount.getBalance() - amount);
-        Transaction withdrawal = Transaction.of(amount, TransactionClassify.WITHDRAWAL, fromAccount, guid, fromAccount.getBalance());
+        Transaction withdrawal = Transaction.of(amount, TransactionClassify.WITHDRAWAL, fromAccount, guid, fromAccount.getBalance(), name);
         transactionRepository.save(withdrawal);
 
         toAccount.setBalance(toAccount.getBalance() + amount);
-        Transaction deposit = Transaction.of(amount, TransactionClassify.DEPOSIT, toAccount, guid, toAccount.getBalance());
+        Transaction deposit = Transaction.of(amount, TransactionClassify.DEPOSIT, toAccount, guid, toAccount.getBalance(), name);
         transactionRepository.save(deposit);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<TransactionValue> getTransaction(Long memberId, Long accountId, Pageable pageable) {
+    public List<Transaction> getTransaction(Long memberId, Long accountId, Pageable pageable) {
         Assert.notNull(memberId, "'memberId' must not be null");
         Assert.notNull(accountId, "'accountId' must not be null");
 
@@ -81,7 +89,6 @@ public class TransactionServiceImpl implements TransactionService {
 
         return transactionRepository.findAllByAccount_Id(accountId, pageable)
                 .stream()
-                .map(TransactionValue::from)
                 .collect(Collectors.toList());
     }
 
@@ -105,11 +112,11 @@ public class TransactionServiceImpl implements TransactionService {
                                         throw new ServiceUnavailableException("There is not enough balance");
                                     }
                                     account.setBalance(account.getBalance() - t.getAmount());
-                                    Transaction withdrawal = Transaction.of(t.getAmount(), TransactionClassify.WITHDRAWAL, account, cancelGuid, account.getBalance());
+                                    Transaction withdrawal = Transaction.of(t.getAmount(), TransactionClassify.WITHDRAWAL, account, cancelGuid, account.getBalance(), "거래 취소");
                                     transactionRepository.save(withdrawal);
                                 } else if (t.getTransactionClassify() == TransactionClassify.WITHDRAWAL) {
                                     account.setBalance(account.getBalance() + t.getAmount());
-                                    Transaction deposit = Transaction.of(t.getAmount(), TransactionClassify.DEPOSIT, account, cancelGuid, account.getBalance());
+                                    Transaction deposit = Transaction.of(t.getAmount(), TransactionClassify.DEPOSIT, account, cancelGuid, account.getBalance(), "거래 취소");
                                     transactionRepository.save(deposit);
                                 }
                             });

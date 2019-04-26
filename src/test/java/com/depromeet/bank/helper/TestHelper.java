@@ -15,7 +15,6 @@ import com.depromeet.bank.dto.TransactionRequest;
 import com.depromeet.bank.repository.AccountRepository;
 import com.depromeet.bank.repository.MemberRepository;
 import com.depromeet.bank.vo.SocialMemberVo;
-import com.depromeet.bank.vo.TransactionValue;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.lang.reflect.Constructor;
@@ -111,26 +110,17 @@ public final class TestHelper {
         return transactionRequest;
     }
 
-    private static TransactionValue createTransactionValue(Long amount,
-                                                           TransactionClassify transactionClassify,
-                                                           Account account,
-                                                           Long balance) throws Exception {
-        Constructor<TransactionValue> constructor = TransactionValue.class.getDeclaredConstructor(
+    public static Transaction createTransaction(Long amount,
+                                                TransactionClassify transactionClassify,
+                                                Account account, Long balance) throws Exception {
+        Constructor<Transaction> constructor = Transaction.class.getDeclaredConstructor(
                 Long.class,
-                LocalDateTime.class,
                 TransactionClassify.class,
                 Account.class,
                 String.class,
                 Long.class);
         constructor.setAccessible(true);
-        return constructor.newInstance(amount, LocalDateTime.now(), transactionClassify, account, "guid", balance);
-    }
-
-    public static Transaction createTransaction(Long amount,
-                                                TransactionClassify transactionClassify,
-                                                Account account, Long balance) throws Exception {
-        TransactionValue transactionValue = createTransactionValue(amount, transactionClassify, account, balance);
-        return Transaction.from(transactionValue);
+        return constructor.newInstance(amount, transactionClassify, account, "guid", balance);
     }
 
     public static Attendance createAttendance(Long id,

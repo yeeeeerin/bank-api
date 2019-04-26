@@ -1,14 +1,12 @@
 package com.depromeet.bank.domain;
 
 import com.depromeet.bank.domain.account.Account;
-import com.depromeet.bank.vo.TransactionValue;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -31,6 +29,8 @@ public class Transaction {
 
     private Long balance;
 
+    private String name;
+
     @CreatedDate
     private LocalDateTime dateTime;
 
@@ -45,37 +45,29 @@ public class Transaction {
                         TransactionClassify transactionClassify,
                         Account account,
                         String guid,
-                        Long balance) {
+                        Long balance,
+                        String name) {
         this.amount = amount;
         this.transactionClassify = transactionClassify;
         this.account = account;
         this.guid = guid;
         this.balance = balance;
-    }
-
-    public static Transaction from(TransactionValue transactionValue) {
-        Assert.notNull(transactionValue, "'transactionValue' must not be null");
-
-        Long amount = transactionValue.getAmount();
-        TransactionClassify transactionClassify = transactionValue.getTransactionClassify();
-        Account account = transactionValue.getAccount();
-        String guid = transactionValue.getGuid();
-        Long balance = transactionValue.getBalance();
-
-        return new Transaction(amount, transactionClassify, account, guid, balance);
+        this.name = name;
     }
 
     public static Transaction of(Long amount,
                                  TransactionClassify transactionClassify,
                                  Account account,
                                  String guid,
-                                 Long balance) {
+                                 Long balance,
+                                 String name) {
         return new Transaction(
                 amount,
                 transactionClassify,
                 account,
                 guid,
-                balance
+                balance,
+                name
         );
     }
 
