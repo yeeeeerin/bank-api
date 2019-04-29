@@ -1,23 +1,22 @@
 package com.depromeet.bank.git;
 
-
 import com.depromeet.bank.exception.NotFoundException;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
-public class CommitParser {
+public class GitAccountParser {
 
-    public int parser(String url) {
-
+    public List<String> accountParser() {
         Document document;
         try {
-            document = Jsoup.connect(url)
+            document = Jsoup.connect("https://github.com/orgs/depromeet/teams/6/members")
                     .method(Connection.Method.GET)
                     .execute()
                     .parse();
@@ -25,11 +24,12 @@ public class CommitParser {
             throw new NotFoundException();
         }
 
-        Elements elements = document.select("g[transform=translate(561, 0)] rect");
 
-        return elements.stream()
-                .mapToInt(element -> Integer.valueOf(element.attr("data-count")))
-                .sum();
+        return document.getElementsByAttribute("data-bulk-actions-id")
+                .stream()
+                .map(account -> account.attr("data-bulk-actions-id"))
+                .collect(Collectors.toList());
 
     }
+
 }
