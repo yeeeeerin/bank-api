@@ -5,7 +5,7 @@ import com.depromeet.bank.exception.NotFoundException;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -25,11 +25,9 @@ public class CommitParser {
             throw new NotFoundException();
         }
 
-        Elements elements = document.select("g[transform=translate(561, 0)] rect");
+        Element element = document.select("g[transform=translate(572, 0)] rect").last();
 
-        return elements.stream()
-                .mapToInt(element -> Integer.valueOf(element.attr("data-count")))
-                .sum();
+        return Integer.parseInt(element.attr("data-count"));
 
     }
 }
