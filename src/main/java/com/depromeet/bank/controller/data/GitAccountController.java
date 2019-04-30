@@ -17,7 +17,7 @@ public class GitAccountController {
 
     private final GitAccountService gitAccountService;
 
-    @PostMapping("/gitAccount")
+    @PostMapping("/git-accounts")
     public ResponseDto saveAccount(@RequestBody GitAccountRequest gitAccountRequest) {
 
         gitAccountService.saveAccount(gitAccountRequest);

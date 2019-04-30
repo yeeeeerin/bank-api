@@ -8,5 +8,5 @@ import javax.validation.constraints.NotNull;
 public class GitAccountRequest {
 
     @NotNull
-    String url;
+    private String url;
 }

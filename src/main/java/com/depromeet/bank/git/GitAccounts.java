@@ -3,7 +3,7 @@ package com.depromeet.bank.git;
 import lombok.Getter;
 
 @Getter
-public enum GitAccount {
+public enum GitAccounts {
     YEIRN("https://github.com/yeeeeerin"),
     HAESUNG("https://github.com/junhaesung"),
     MUNSEONG("https://github.com/Puterism"),
@@ -12,7 +12,7 @@ public enum GitAccount {
 
     private String url;
 
-    GitAccount(String url) {
+    GitAccounts(String url) {
         this.url = url;
     }
 

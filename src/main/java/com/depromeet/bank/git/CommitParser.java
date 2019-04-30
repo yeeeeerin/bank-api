@@ -1,7 +1,6 @@
 package com.depromeet.bank.git;
 
 
-import com.depromeet.bank.exception.NotFoundException;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,7 +12,7 @@ import java.io.IOException;
 @Component
 public class CommitParser {
 
-    public int parser(String url) {
+    public int parse(String url) {
 
         Document document;
         try {
@@ -22,12 +21,22 @@ public class CommitParser {
                     .execute()
                     .parse();
         } catch (IOException e) {
-            throw new NotFoundException();
+            return 0;
         }
 
-        Element element = document.select("g[transform=translate(572, 0)] rect").last();
 
-        return Integer.parseInt(element.attr("data-count"));
+        Element element = document.select("g[transform=translate(572, 0)] rect").last();
+        String commit;
+        if (element != null) {
+            commit = element.attr("data-count");
+        } else {
+            commit = "0";
+        }
+
+
+        System.out.println(commit);
+
+        return Integer.parseInt(commit);
 
     }
 }

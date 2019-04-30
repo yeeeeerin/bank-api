@@ -13,7 +13,7 @@ public class CommitScheduler implements Fetchable {
     private final CommitService commitService;
 
     @Override
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 58 23 * * *")
     public void fetch() {
         commitService.createCommitCount();
     }
