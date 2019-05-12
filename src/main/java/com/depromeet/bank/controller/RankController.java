@@ -19,6 +19,12 @@ import java.util.stream.Collectors;
 public class RankController {
     private final RankService rankService;
 
+    /**
+     * 자산을 기준으로 정렬한 결과를 돌려줍니다.
+     *
+     * @param type 정렬 기준
+     * @return 순위 화면에 필요한 정보 리스트
+     */
     @PostMapping("/members/rank")
     public List<RankResponse> getUsers(@RequestParam RankType type) {
         if (type == RankType.UNKNOWN) {
