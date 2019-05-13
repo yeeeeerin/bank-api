@@ -23,7 +23,7 @@ public class RankServiceImpl implements RankService {
     @Override
     @Transactional(readOnly = true)
     public List<RankValue> getRankedMembers() {
-        return memberService.getMembers(PageRequest.of(0, 1000))
+        final List<RankValue> rankValues = memberService.getMembers(PageRequest.of(0, 1000))
                 .stream()
                 .map(member -> RankValue.of(
                         member,
@@ -34,5 +34,19 @@ public class RankServiceImpl implements RankService {
                 ))
                 .sorted((a, b) -> (-1) * a.compareTo(b))
                 .collect(Collectors.toList());
+        setRankNumber(rankValues);
+        return rankValues;
+    }
+
+    private void setRankNumber(List<RankValue> rankValues) {
+        // TODO: O(N) 안으로 계산하기. 현재 O(N^2)
+        for (RankValue rankValue : rankValues) {
+            Long assetValue = rankValue.getAssetValue();
+            long rankNumber = rankValues.stream()
+                    .map(RankValue::getAssetValue)
+                    .filter(value -> value > assetValue)
+                    .count();
+            rankValue.setRankNumber((int) rankNumber + 1);
+        }
     }
 }
